@@ -50,6 +50,10 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'unique' => array(
+		        'rule' => 'isUnique',
+		        'message' => 'This username has already been taken.'
+		    ),
 		),
 		/*+++++++++++++++++++++++++++++FIN+++++++++++++++++++++++++++++++*/
 		'password' => array(
@@ -179,7 +183,10 @@ class User extends AppModel {
 			array_key_exists('password', $data['User']),
 		);
 	
-		if(!($t[0] and $t[1] and $t[2] and $t[3]))
+//		if(!($t[0] and $t[1] and $t[2] and $t[3]))
+		/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
+		if(!($t[0] and $t[1] and $t[2]))
+		/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 			return false;
 	
 		$data['User']['is_administrator'] = false;

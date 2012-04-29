@@ -38,7 +38,7 @@
         <div class="yui-u first">
         	<div class="padded">
 				<strong class="mini-header">Repositories in your watchlist</strong>
-				<!--<?php if(count($watched_repos) > 0): ?>
+				<?php if(count($watched_repos) > 0): ?>
 				<ul>
 					<?php foreach($watched_repos as $r) { ?>
 					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['url']); ?></li>
@@ -46,10 +46,8 @@
 				</ul>
 				<?php else: ?>
 				<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't repositories here</span></div>
-				<?php endif; ?>-->
-                <!--INI-->
-    			<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't repositories here</span></div>
-                <!--FIN-->
+				<?php endif; ?>
+                
 			</div>
 	    </div>
         <div class="yui-u">
