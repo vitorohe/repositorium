@@ -38,7 +38,7 @@
   		$('.textboxlist-autocomplete-results').hide();
   	});
   	
-	function add_textboxlist(selector){ 
+	/*function add_textboxlist(selector){ 
 		$("" + selector).textboxlist({
 			unique : true,
 			bitsOptions : {
@@ -54,7 +54,7 @@
 						url: '<?php echo $this->Html->url(array('controller' => 'tags', 'action' => 'autocomplete')); ?>'					
 					}
 			}}});
-	}
+	}*/
 	
 	//Improve the flashMessage
 	$("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");
@@ -87,7 +87,10 @@
                         <li><?php echo $this->Html->link('Sign up', array('controller' => 'register'), array('escape' => false)); ?></li>
                         <li><?php echo $this->Html->link('Log in', array('controller' => 'login'), array('escape' => false)); ?></li>
                         <?php } else {
-                            $nombre = $this->Session->read('User.first_name');
+                            //$nombre = $this->Session->read('User.first_name');
+                            /*++++++++++++++++++++++INI++++++++++++++++++++*/
+                            $nombre = $this->Session->read('User.username');
+                            /*++++++++++++++++++++++FIN++++++++++++++++++++*/
                             $points = $this->Session->read('User.points');
                         ?>
                         <li>Hey, <?php echo $nombre.'!' . $points;?></li>
@@ -109,8 +112,9 @@
                     	<?php if($this->Session->read('User.esAdmin')): ?>
 	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
                     	<?php endif; ?>
-                    	
-                    	<li><?php echo $this->Html->link('Search', array('controller' => 'tags', 'action' => 'index')); ?></li>
+                    	<!--INI-->
+                    	<li><?php echo $this->Html->link('Search','http://www.google.cl' /*,array('controller' => 'tags', 'action' => 'index')*/); ?></li>
+                      <!--FIN-->
                     	
                         <li><?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?></li>
                         <?php if($this->Session->check('User.id') and $this->Session->read('User.id') > 1): ?>

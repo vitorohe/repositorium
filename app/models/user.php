@@ -3,7 +3,10 @@ class User extends AppModel {
 	var $name = 'User';
 	var $displayField = 'email';
 	var $virtualFields = array(
-		'full_name' => 'CONCAT(first_name, \' \', last_name)'
+		//'full_name' => 'CONCAT(first_name, \' \', last_name)'
+		/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
+		'full_name' => 'username'
+		/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 	);
 	var $validate = array(
 		'email' => array(
@@ -16,7 +19,7 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'first_name' => array(
+		/*'first_name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
 				'message' => 'Please give your first name',
@@ -35,7 +38,20 @@ class User extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+		),*/
+		/*+++++++++++++++++++++++++++++INI+++++++++++++++++++++++++++++++*/
+
+		'username' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'Please give your username',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
 		),
+		/*+++++++++++++++++++++++++++++FIN+++++++++++++++++++++++++++++++*/
 		'password' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
@@ -83,7 +99,7 @@ class User extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Expert' => array(
+		/*'Expert' => array(
 			'className' => 'Expert',
 			'foreignKey' => 'user_id',
 			'dependent' => true,
@@ -95,7 +111,7 @@ class User extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
+		),*/
 		'Repository' => array(
 			'className' => 'Repository',
 			'foreignKey' => 'user_id',
@@ -155,8 +171,11 @@ class User extends AppModel {
 	
 		$t = array(
 			array_key_exists('email', $data['User']),
-			array_key_exists('first_name', $data['User']),
-			array_key_exists('last_name', $data['User']),
+			/*array_key_exists('first_name', $data['User']),
+			array_key_exists('last_name', $data['User']),*/
+			/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
+			array_key_exists('username', $data['User']),
+			/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 			array_key_exists('password', $data['User']),
 		);
 	
@@ -226,7 +245,7 @@ class User extends AppModel {
 	}
 	
 	
-	function afterFind($results, $primary) {
+	/*function afterFind($results, $primary) {
 		$i = 0;
 		foreach($results as $r) {
 			if(!empty($r['Expert'])) {
@@ -235,7 +254,7 @@ class User extends AppModel {
 			$i += 1;
 		}
 		return $results;
-	}
+	}*/
 	
 	/**
 	 * UNTESTED

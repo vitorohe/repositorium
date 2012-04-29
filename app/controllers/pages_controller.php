@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Repository', 'Expert', 'RepositoriesUser');
+	var $uses = array('Repository', /*'Expert', */'RepositoriesUser');
 	
 /**
  * @var string 
@@ -132,10 +132,10 @@ class PagesController extends AppController {
 			'recursive' => -1
 		));
 		
-		$this->Expert->unbindModel(array('belongsTo' => array('User')));
+		/*$this->Expert->unbindModel(array('belongsTo' => array('User')));
 		$collaborator_repos = $this->Expert->find('all', array(
 			'conditions' => $collaborator,
-		));
+		));*/
 
 		$this->RepositoriesUser->unbindModel(array('belongsTo' => array('User')));
 		$watched_repos = $this->RepositoriesUser->find('all', array(

@@ -4,7 +4,7 @@ class CheckContentsController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'CheckText';
-	var $uses = array('Document', 'User', 'Repository', 'ConstituentsKit', 'Attachfile');
+	var $uses = array('Document', 'User', 'Repository',/* 'ConstituentsKit',*/ 'Attachfile');
 
 	function check_text(){
 		

@@ -4,7 +4,7 @@ class ChecksController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Checks';
-	var $uses = array('Document', 'User', 'Repository', 'ConstituentsKit', 'Attachfile');
+	var $uses = array('Document', 'User', 'Repository', /*'ConstituentsKit', */'Attachfile');
 
 	function check_title(){
 		

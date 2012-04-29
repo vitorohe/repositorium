@@ -118,14 +118,14 @@ class Repository extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'Kit' => array(
+		)//,
+		/*'Kit' => array(
 			'className' => 'Kit',
 			'foreignKey' => 'kit_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''			
-		)
+		)*/
 	);
 
 	var $hasMany = array(
@@ -155,7 +155,7 @@ class Repository extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Expert' => array(
+		/*'Expert' => array(
 			'className' => 'Expert',
 			'foreignKey' => 'repository_id',
 			'dependent' => true,
@@ -167,7 +167,7 @@ class Repository extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
+		),*/
 		'RepositoriesUser' => array(
 			'className' => 'RepositoriesUser',
 			'foreignKey' => 'repository_id',

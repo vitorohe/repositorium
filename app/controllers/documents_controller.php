@@ -4,7 +4,7 @@ class DocumentsController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Documents';
-	var $uses = array('Document', 'User', 'Repository','Tag', 'ConstituentsKit', 'Attachfile');
+	var $uses = array('Document', 'User', 'Repository',/*'Tag', 'ConstituentsKit',*/ 'Attachfile');
 	
 	/**
 	 * User Model

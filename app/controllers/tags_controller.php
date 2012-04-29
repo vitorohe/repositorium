@@ -12,7 +12,7 @@
 class TagsController extends AppController {
 
 	var $helpers = array('Js' => array('Jquery'));
-	var $uses = array('Criteria', 'Tag', 'Document', 'Attachfile', 'ConstituentsKit');
+	var $uses = array('Criteria', /*'Tag',*/ 'Document', 'Attachfile', 'ConstituentsKit');
 	
 	/**
 	 * Criteria Model

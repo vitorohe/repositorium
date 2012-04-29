@@ -11,7 +11,7 @@
 
 class AdminDocumentosController extends AppController {
   
-  var $uses = array('Criteria', 'Document', 'CriteriasDocument', 'Tag', 'User', 'Expert', 'Attachfile', 'ConstituentsKit');
+  var $uses = array('Criteria', 'Document', 'CriteriasDocument', /*'Tag',*/ 'User', /*'Expert',*/ 'Attachfile'/*, 'ConstituentsKit'*/);
   var $helpers = array('Text', 'Number');
   var $paginate = array(
 	'CriteriasDocument' => array(

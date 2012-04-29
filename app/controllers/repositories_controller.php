@@ -28,7 +28,7 @@ class RepositoriesController extends AppController {
 	
 	var $name = 'Repositories';
 	
-	var $uses = array('Repository', 'RepositoriesUser', 'User', 'Document', 'Tag', 'Criteria','Constituent', 'Restriction', 'Kit', 'ConstituentsKit', 'KitsRestriction');
+	var $uses = array('Repository', 'RepositoriesUser', 'User', 'Document', /*'Tag',*/ 'Criteria'/*,'Constituent', 'Restriction', 'Kit', 'ConstituentsKit', 'KitsRestriction'*/);
 	
 	/*@rmeruane*/
 	private function make_seed()

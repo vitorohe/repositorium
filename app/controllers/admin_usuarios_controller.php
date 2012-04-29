@@ -10,7 +10,7 @@
  */
 
 class AdminUsuariosController extends AppController {
-  var $uses = array('User','Expert', 'Repository');
+  var $uses = array('User',/*'Expert',*/ 'Repository');
   var $paginate = array(
 	  'User' => array(
 		'limit' => '15',

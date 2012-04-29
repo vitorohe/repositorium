@@ -45,7 +45,8 @@ class Document extends AppModel {
 
 	var $hasMany = array(
 		'Tag' => array(
-			'className' => 'Tag',
+			//'className' => 'Tag',
+			'className' => 'Criteria',
 			'foreignKey' => 'document_id',
 			'dependent' => true,
 			'conditions' => '',

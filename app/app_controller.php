@@ -74,7 +74,7 @@ class AppController extends Controller {
 		'User' => array('id' => 1, 'is_administrator' => 0)
 	);
 	
-	var $uses = array('Expert', 'User', 'Repository');
+	var $uses = array(/*'Expert',*/ 'User', 'Repository');
 	
 	var $helpers = array('Repo', 'Session', 'Html', 'Form');
 	
@@ -93,8 +93,11 @@ class AppController extends Controller {
 			$this->Session->delete('Challenge');
 			
 			$this->Session->write('User.id', $user['User']['id']);
-			$this->Session->write('User.first_name', $user['User']['first_name']);
-			$this->Session->write('User.last_name', $user['User']['last_name']);
+			/*$this->Session->write('User.first_name', $user['User']['first_name']);
+			$this->Session->write('User.last_name', $user['User']['last_name']);*/
+			/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
+			$this->Session->write('User.username', $user['User']['username']);
+			/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 
 			if($this->isAdmin()) {
 				$this->Session->write('User.esAdmin', true);
@@ -107,7 +110,10 @@ class AppController extends Controller {
 				$this->Session->write('User.points', $this->User->get_user_points($user['User']['id'], $repository['Repository']['id']));
 			}
 			
-			$this->Session->setFlash('Welcome, ' . $user['User']['first_name']);
+			//$this->Session->setFlash('Welcome, ' . $user['User']['first_name']);
+			/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
+			$this->Session->setFlash('Welcome, ' . $user['User']['username']);
+			/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 			
 			CakeLog::write('activity',
 				'User '. $user['User']['email'] . ' (' .$user['User']['id'] . ') has logged in');
@@ -200,14 +206,14 @@ class AppController extends Controller {
 	function isExpert() {
 		$repo = $this->requireRepository();
 		$user = $this->getConnectedUser();
-		
-		$expert = $this->Expert->find('first', array(
+		$expert;
+		/*$expert = $this->Expert->find('first', array(
   			'conditions' => array(
   				'repository_id' => $repo['Repository']['id'],
   				'user_id' => $user['User']['id']
 			),
 		  	'recursive' => -1
-		));
+		));*/
 		
 		if(empty($expert)) {
 			return false;
