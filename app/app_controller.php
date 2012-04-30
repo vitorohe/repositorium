@@ -127,7 +127,7 @@ class AppController extends Controller {
 	function setRepositorySession($repo) {
 		if(!empty($repo)) {
 			$this->Session->delete('Repository');
-			$this->Session->write('Repository.current', $repo['Repository']['url']);
+			$this->Session->write('Repository.current', $repo['Repository']['name']);
 			$this->Session->write('Repository.name', $repo['Repository']['name']);
 		}
 		
@@ -177,7 +177,7 @@ class AppController extends Controller {
 		}
 		
 		if(!is_null($repo)) {
-			$data = $this->Repository->find('first', array('conditions' => array('Repository.url' => $repo)));
+			$data = $this->Repository->find('first', array('conditions' => array('Repository.name' => $repo), 'recursive' => -1));
 			if(!is_null($data) && !empty($data)) {
 				return $data;
 			}

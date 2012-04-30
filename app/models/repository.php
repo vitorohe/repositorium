@@ -13,7 +13,7 @@ class Repository extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'url' => array(
+		/*'url' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				'message' => 'Repository url cannot be empty',
@@ -55,7 +55,7 @@ class Repository extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			
-		),
+		),*/
 // 		'min_points' => array(
 // 			'positive' => array(
 // 				'rule' => array('positive', 'min_points'),
@@ -129,7 +129,7 @@ class Repository extends AppModel {
 	);
 
 	var $hasMany = array(
-		'Criteria' => array(
+		/*'Criteria' => array(
 			'className' => 'Criteria',
 			'foreignKey' => 'repository_id',
 			'dependent' => true,
@@ -141,7 +141,7 @@ class Repository extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
+		),*/
 		'Document' => array(
 			'className' => 'Document',
 			'foreignKey' => 'repository_id',
@@ -185,7 +185,7 @@ class Repository extends AppModel {
 				return null;
 			}
 			
-			$expert = array(
+			/*$expert = array(
 				'Expert' => array(
 					'user_id' => $data['Repository']['user_id'],
 					'repository_id' => $this->getLastInsertID()
@@ -195,7 +195,7 @@ class Repository extends AppModel {
 			if(!$this->Expert->save($expert)) {
 				$ds->rollback($this);
 				return null;
-			}
+			}*/
 			
 					
 		$ds->commit($this);
@@ -203,8 +203,8 @@ class Repository extends AppModel {
 	}
 	
 	function afterSave($created) {
-		if($created)
-			$this->RepositoriesUser->massCreateAfterRepository($repository_id = $this->id);
+		//if($created)
+		//	$this->RepositoriesUser->massCreateAfterRepository($repository_id = $this->id);
 	}
 	
 	

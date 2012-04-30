@@ -33,10 +33,10 @@
 	<p><?php echo str_replace("\n", '<br />', Sanitize::html(ucfirst($r['description']))); ?> </p>
 	<div class="padded">
 		<ul>
-			<li><span class="gray">Creator:</span> <?php echo $creator['User']['first_name'] . ' ' . $creator['User']['last_name']; ?></li>
+			<li><span class="gray">Creator:</span> <?php echo $creator['User']['name']; ?></li>
 			<li><span class="gray">Documents:</span> <?php echo $documents; ?></li>
-			<li><span class="gray">Quality criteria:</span> <?php echo $criterias; ?></li>
-			<li><span class="gray">Different tags:</span> <?php echo $tags; ?></li>			
+			<li><span class="gray">Quality criteria:</span> <?php //echo $criterias; ?></li>
+			<li><span class="gray">Different tags:</span> <?php //echo $tags; ?></li>			
 		</ul>
 	</div>
 <!-- rmeruane-->
@@ -53,7 +53,7 @@
 		so.addVariable("hicolor", "0xff0000");
 		so.addVariable("tspeed", "100");
 		so.addVariable("distr", "true");
-		so.addVariable("tagcloud", "<?php echo $cloud_data; ?>");
+		so.addVariable("tagcloud", "<?php //echo $cloud_data; ?>");
 		so.write("tagCloudId");
 	</script>
 	</p>

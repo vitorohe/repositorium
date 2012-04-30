@@ -72,7 +72,7 @@ class RepositoriesController extends AppController {
 				'conditions' => array(
 					'User.id' => $repository['Repository']['user_id']
 				),
-				'fields' => array('User.first_name', 'User.last_name'),
+				'fields' => array('User.name'),
 				'recursive' => -1,
 			));
 			
@@ -83,7 +83,7 @@ class RepositoriesController extends AppController {
 				'recursive' => -1,
 			));
 			/*@rmeruane*/
-			$tags_name_count = $this->Tag->find('all', array(
+			/*$tags_name_count = $this->Tag->find('all', array(
 				'conditions' => array(
 					'Document.repository_id' => $repository['Repository']['id']
 				),
@@ -112,14 +112,14 @@ class RepositoriesController extends AppController {
 				'fields' => 'DISTINCT tag'
 			));
 			
-			$criterias = $this->Criteria->find('count', array(
+			/*$criterias = $this->Criteria->find('count', array(
 				'conditions' => array(
 					'Criteria.repository_id' => $repository['Repository']['id']
 				),
 				'recursive' => -1
-			));
+			));*/
 			
-			$this->set(compact('repository', 'watching', 'creator', 'documents', 'tags', 'criterias', 'cloud_data'));
+			$this->set(compact('repository', 'watching', 'creator', 'documents'/*, 'tags', 'cloud_data'*/));
 		} else {
 			$this->e404();
 		}		
@@ -139,7 +139,7 @@ class RepositoriesController extends AppController {
 		if(isset($data['repo_url'])) {
 			$repo = $this->Repository->find('first', array(
 				'conditions' => array(
-					'Repository.url' => $data['repo_url']
+					'Repository.name' => $data['repo_url']
 				),
 				'recursive' => -1,
 			));
@@ -196,7 +196,7 @@ class RepositoriesController extends AppController {
 			$this->data['Repository']['user_id'] = $user['User']['id'];
 			
 			// adding Constituents to a new Kit
-			$selectConstituents = $this->data['Repository']['Constituents'];
+			/*$selectConstituents = $this->data['Repository']['Constituents'];
 			$this->Kit->save();
 			foreach($selectConstituents as $constituent){
 				$this->ConstituentsKit->create();
@@ -205,7 +205,11 @@ class RepositoriesController extends AppController {
 				$this->ConstituentsKit->save();
 			}
 			// update Repository kit_id
-			$this->data['Repository']['kit_id'] = $this->Kit->id;
+			$this->data['Repository']['kit_id'] = $this->Kit->id;*/
+			
+			$this->data['Repository']['activation_id'] = 'A';
+			$this->data['Repository']['internalstate_id'] = 'A';
+			$this->data['Repository']['internal_name'] = 'A';
 			
 			$this->Repository->set($this->data);
 			
@@ -217,21 +221,21 @@ class RepositoriesController extends AppController {
 					$this->redirect('/');
 				}
 				
-				$this->_make_user_expert();
+				//$this->_make_user_expert();
 
 				if(Configure::read('App.subdomains')) {
 					$dom = Configure::read('App.domain');
 					$this->redirect("http://{$repository['Repository']['url']}.{$dom}");
 				} else {
-					$this->redirect(array('action' => 'index', $repository['Repository']['url']));
+					$this->redirect(array('action' => 'index', $repository['Repository']['name']));
 				}
 
 			} else {
 				$this->Session->setFlash($this->Repository->invalidFields(), 'flash_errors');
 			}	
 		}
-		$constituents =  $this->Constituent->find('superlist', array('fields'=>array('id','name','description'), 'separator'=>': '));
-		$this->set(compact('constituents'));
+		//$constituents =  $this->Constituent->find('superlist', array('fields'=>array('id','name','description'), 'separator'=>': '));
+		//$this->set(compact('constituents'));
 	}
 
 	

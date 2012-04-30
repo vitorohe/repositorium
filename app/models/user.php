@@ -189,8 +189,10 @@ class User extends AppModel {
 		/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 			return false;
 	
-		$data['User']['is_administrator'] = false;
-	
+		$data['User']['is_administrator'] = '0';
+		$data['User']['activation_id'] = 'A';
+		$data['User']['internalstate_id'] = 'A';
+		
 		// register user
 		$user = $this->save($data);
 		return $user;
@@ -219,23 +221,23 @@ class User extends AppModel {
 	 *  @TODO EXPERTS AND REPOSITORIES!!!
 	 */
 	function afterSave($created) {
-		if($created) {	
+		/*if($created) {	
 			/* on create */
-			if(!empty($this->data['User']['es_experto'])) {
+			/*if(!empty($this->data['User']['es_experto'])) {
 				$this->_expert_create($this->id);
 			}			
 			$this->CriteriasUser->massCreateAfterUser($this->id);
 			$this->RepositoriesUser->massCreateAfterUser($this->id);
 			CakeLog::write('activity', 'User '.$this->id. ' created');
-		} else {
+		}/* else {
 			/* on update */
-			if($this->data['User']['es_experto'] == 1) {
+			/*if($this->data['User']['es_experto'] == 1) {
 				$this->_expert_create($this->id);
 			} else {
 				$this->_expert_delete($this->id);
 			}
 			CakeLog::write('activity', 'User '.$this->id. ' updated');
-		}
+		}*/
 	}
 	
 	function _expert_create($id) {

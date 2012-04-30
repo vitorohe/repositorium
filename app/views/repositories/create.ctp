@@ -13,24 +13,26 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('name'); ?>
 
-<?php echo $this->Form->input('url', array('label' => 'URL of this repository: ______.repositorium.cl')); ?>
+<?php //echo $this->Form->input('url', array('label' => 'URL of this repository: ______.repositorium.cl')); ?>
 
 <?php echo $this->Form->input('description'); ?>
 
 <!-- source types for repo -->
+
+<!-- 
 <div class="select required">
 	<label for="constituent_id">Select some modifiers for this Repository</label>
 	<input type="hidden" name="data[Repository][Constituents][0]" value="0" id="RepositoryConstituents0">
 	<?php
 	# cgajardo: fix to persist "content" selection even when it's actually disabled, using javascript
-	$constituents[0] = array(
+	/*$constituents[0] = array(
 		'name' => $constituents[0]." (required)",
 		'value' => '0',
 		'onClick' => 'this.checked=true'
 	);
 	echo $this->Form->input("Constituents", array("type"=>"select", "multiple"=>"checkbox", "default"=>"0", "options"=>$constituents));
-	?>
-</div> 
+	*/?>
+</div> -->
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 
