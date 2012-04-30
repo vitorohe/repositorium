@@ -1,9 +1,9 @@
 <?php
 class Document extends AppModel {
 	var $name = 'Document';
-	var $displayField = 'title';
+	var $displayField = 'name';
 	var $validate = array(
-		'title' => array(
+		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
 				'message' => 'Document title cannot be empty',
@@ -13,7 +13,7 @@ class Document extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'content' => array(
+		'description' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
 				'message' => 'Document content cannot be empty',
@@ -217,10 +217,10 @@ class Document extends AppModel {
 	// done: multiples criterios
 	// done: multiple repositories
 	function afterSave($created) {
-		if($created) {
+		/*if($created) {
 			$doc = $this->read(null, $this->id);
 			$this->CriteriasDocument->massCreateAfterDocument($this->id, $doc['Document']['repository_id']);
-		}
+		}*/
 	}
 	
 	function afterFind($results) {

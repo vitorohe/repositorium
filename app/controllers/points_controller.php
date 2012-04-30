@@ -106,29 +106,29 @@ class PointsController extends AppController {
 				}
 			} elseif($upload) {
 				// determine $cost
-				$cost = $repo['Repository']['upload_cost'];
+				//$cost = $repo['Repository']['upload_cost'];
 			} else {
 				// ERROR invalid action
 				$this->_cancel_everything('Action not recognized');
 			}
 			// check $cost against user points
 			
-			$user_points = $this->RepositoriesUser->find('first', array(
+			/*$user_points = $this->RepositoriesUser->find('first', array(
 				'conditions' => array(
 					'RepositoriesUser.repository_id' => $repo['Repository']['id'],
 					'RepositoriesUser.user_id' => $user['User']['id']
 				),
 				'fields' => array('points'),
 				'recursive' => -1
-			));
-			$user_points = $user_points['RepositoriesUser']['points'];
+			));*/
+			//$user_points = $user_points['RepositoriesUser']['points'];
 			
 			//if user points > cost, doesnt need a challenge
-			if($user_points >= $cost) {
+			//if($user_points >= $cost) {
 				return false;
-			} else {
-				return true;
-			}
+			//} else {
+			//	return true;
+			//}
 		}
 	}
 	

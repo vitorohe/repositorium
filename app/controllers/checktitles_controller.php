@@ -15,7 +15,7 @@ class CheckTitlesController extends AppController {
 		$repo = $this->requireRepository();
 		$id= $repo['Repository']['id'];
 		
-		$result= $this->Document->find('count', array('conditions' =>array('Document.title' => trim($q),'Document.repository_id' => $id)));
+		$result= $this->Document->find('count', array('conditions' =>array('Document.name' => trim($q),'Document.repository_id' => $id)));
 		
 		if($result!=0){
 		 	echo '<strong>A document with a similar title already exists</strong>';

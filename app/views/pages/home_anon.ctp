@@ -13,7 +13,7 @@
 			<?php if(count($latest_repos) > 0): ?>
 			<ul>
 				<?php foreach($latest_repos as $r) { ?>
-				<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['url']); ?></li>
+				<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['name']); ?></li>
 				<?php } ?>
 			</ul>
 			<?php else: ?>

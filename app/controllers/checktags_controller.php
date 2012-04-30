@@ -11,6 +11,12 @@ class CheckTagsController extends AppController {
 	 */
 	var $Document;
 	
+	/**
+	 * Tag Model
+	 * @var Tag
+	 */
+	var $Tag;
+	
 	function check_tag(){
 		// echo 'Entro al check_tag';
 		// echo '<pre>';
@@ -27,20 +33,20 @@ class CheckTagsController extends AppController {
 		//$tags_val=$this->Tag->findTagsCount($id, $tags);
 		//$tags_val=$this->Document->Tag->findTagsCount($id, $tags);
 		//$tags_val=$Document->Tag->findTagsCount($id, $tags);
-		$tags_val=$this->Tag->findTagsCount($id, $tags,'');
+		//$tags_val=$this->Tag->findTagsCount($id, $tags,'');
 		//echo $tags_val;
 		///$result= $this->Document->find('count', array('conditions' =>array('Document.title' => $q,'Document.repository_id' => $id)));
 		
-		if($tags_val > 0){
-		 	echo '<strong>There are already '.$tags_val.' document(s) with the same tags</strong>';
-			die();
-			}
-		else{
+		//if($tags_val > 0){
+		 //	echo '<strong>There are already '.$tags_val.' document(s) with the same tags</strong>';
+			//die();
+			//}
+		//else{
 			 echo'<strong>Tags are ok</strong>';
 			 //echo'<strong>There are no problem with your tags</strong>';
 			 die();
-			}
-			die();
+			//}
+			//die();
 			//$this->redirect($this->referer());
 	}
 	function index(){

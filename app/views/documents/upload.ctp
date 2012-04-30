@@ -17,22 +17,22 @@ $(document).ready(function() {
 
 <fieldset class="datafields">
 <?php echo $this->Form->create(null, array('url' => '/documents/upload', 'type' => 'file', 'inputDefaults' => array('error' => false)));?>
-<?php echo $this->Form->input('Document.title', array('class' => 'ingresar-documento', 'label' => 'Title', 'default' => '', 'size' => 50, 'onChange'=>"CheckTitle(DocumentTitle.value)"));?> 
+<?php echo $this->Form->input('Document.name', array('class' => 'ingresar-documento', 'label' => 'Title', 'default' => '', 'size' => 50, 'onChange'=>"CheckTitle(DocumentTitle.value)"));?> 
 <?php echo $ajax->div('checked_title'); 
 	  echo $ajax->divEnd('checked_title'); ?>
 <?php
-	foreach($constituents as $constituent){
-		echo $this->element($constituent."/form", array('flag' => 'value'));
+	//foreach($constituents as $constituent){
+		echo $this->element('content'."/form", array('flag' => 'value'));
 		
-		if ($constituent=='content'){
+	//	if ($constituent=='content'){
 			
 			echo("<div id='checked_content'></div>");
-		}
-		if ($constituent=='attachFile'){
-			
-			echo("<div id='checked_attachFile'></div>");
-		}
-	}
+	//	}
+	//	if ($constituent=='attachFile'){
+	//	echo $this->element('attachFile'."/form", array('flag' => 'value'));
+	//	echo("<div id='checked_attachFile'></div>");
+	//	}
+	//}
 	//DocumentFileAttach.value
 	//echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
 ?>

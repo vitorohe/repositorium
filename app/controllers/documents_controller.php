@@ -47,30 +47,30 @@ class DocumentsController extends AppController {
   function upload() {
   	$repo = $this->requireRepository();
   	
-  	$constituents = $this->ConstituentsKit->find('list', array(
-  		  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
-  		  				'recursive' => 1,
-  		  				'fields'=>array('Constituent.sysname')));
+  	//$constituents = $this->ConstituentsKit->find('list', array(
+  		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
+  		  //				'recursive' => 1,
+  		  	//			'fields'=>array('Constituent.sysname')));
   	
   	if(!empty($this->data)) {
 		//attach necesary behaviors
-		foreach ($constituents as $constituent){
+		/*foreach ($constituents as $constituent){
 			$configArray = array('cod'=> 1);
 			$configArray['data'] =& $this->data;
 			$configArray['session'] =& $this->Session;
-  			$this->Document->Behaviors->attach($constituent, $configArray);
-		}
+  			//$this->Document->Behaviors->attach($constituent, $configArray);
+		}*/
   		
 		//En la siguiente linea se guardan los documentos
 		$this->save($this->data);
 				
-  		foreach ($constituents as $constituent){
+  		/*foreach ($constituents as $constituent){
   			$this->Document->Behaviors->detach($constituent);
-  		}
+  		}*/
   	}
   	
   	
-	$this->set(compact('constituents'));
+	//$this->set(compact('constituents'));
   }
 
   
@@ -213,8 +213,8 @@ class DocumentsController extends AppController {
   function set_warned(&$data){
   $repo = $this->requireRepository();
   	$max_sim=100;
-	$aux_title=$this->data['Document']['title'];
-	$aux_text=$this->data['Document']['content'];
+	$aux_title=$this->data['Document']['name'];
+	$aux_text=$this->data['Document']['description'];
 	$title_val=0;
 	$text_val=0;
 	$tags_val=0;
@@ -238,22 +238,22 @@ class DocumentsController extends AppController {
 		
 		}
 
-	$tags_val=$this->Tag->findTagsCount($id, $tags,$this);
-	$result_title= $this->Document->find('count', array('conditions' =>array('Document.title' => $aux_title,'Document.repository_id' => $id)));
-	$title_array=$this->Document->find('list', array('conditions' =>array('Document.title' => $aux_title,'Document.repository_id' => $id)));
+	//$tags_val=$this->Tag->findTagsCount($id, $tags,$this);
+	$result_title= $this->Document->find('count', array('conditions' => array('Document.name' => $aux_title,'Document.repository_id' => $id)));
+	$title_array=$this->Document->find('list', array('conditions' => array('Document.name' => $aux_title,'Document.repository_id' => $id)));
 	$title_keys=array_keys($title_array);
 	$this->Session->write("sim_titles", $title_keys);
-	$result_text= $this->Document->find('count', array('conditions' =>array('Document.content' => $aux_text,'Document.repository_id' => $id )));
-	$text_array=$this->Document->find('list', array('conditions' =>array('Document.content' => $aux_text,'Document.repository_id' => $id )));
+	$result_text= $this->Document->find('count', array('conditions' =>array('Document.description' => $aux_text,'Document.repository_id' => $id )));
+	$text_array=$this->Document->find('list', array('conditions' =>array('Document.description' => $aux_text,'Document.repository_id' => $id )));
 	$text_keys=array_keys($text_array);
 	$this->Session->write("sim_texts", $text_keys);
 	if($result_title!=0){$title_val=1;}
 	if($result_text!=0){$text_val=1;}
 	if($tags_val > 0){$all_tags=1;}
-	$title_pdr = $repo['Repository']['pdr_tittle'];
-	$text_pdr = $repo['Repository']['pdr_text'];
-	$tags_pdr = $repo['Repository']['pdr_tags'];
-	$files_pdr = $repo['Repository']['pdr_files'];
+	//$title_pdr = $repo['Repository']['pdr_tittle'];
+	//$text_pdr = $repo['Repository']['pdr_text'];
+	//$tags_pdr = $repo['Repository']['pdr_tags'];
+	//$files_pdr = $repo['Repository']['pdr_files'];
 	//$total_pdr=($title_pdr*$title_val)+($text_pdr*$text_val)+($tags_pdr*$all_tags)+($files_pdr*$files_val)+($files_pdr*$files_sha_val);	//old total_pdr
 	$total_pdr=($title_pdr*$result_title)+($text_pdr*$result_text)+($tags_pdr*$tags_val)+($files_pdr*$files_val)+($files_pdr*$files_sha_val);	//pdr nuevo
 	$results_not_used= array("result_title" => $result_title,"result_text" => $result_text,"tags_val" => $tags_val);
@@ -283,8 +283,11 @@ class DocumentsController extends AppController {
   	$user = $this->getConnectedUser(); 
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
-  	$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
-	$this->set_warned($this->data);
+  	//$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
+	//$this->set_warned($this->data);
+	$this->data['Document']['activation_id'] = 'A';
+	$this->data['Document']['internalstate_id'] = 'A';
+	$this->data['Document']['document_state_id'] = 2;
   	$this->Document->set($this->data);
   	 
   	// errors
@@ -296,7 +299,7 @@ class DocumentsController extends AppController {
   	} else if(!$this->Document->saveWithTags($this->data)) {
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');
   	} else {
-		if($this->data['Document']['warned'] == 1){
+		if(false){//$this->data['Document']['warned'] == 1){
 		$str_dup='Document saved and will be reviewed by an admin because it may be duplicated';
 		//$this->Session->setFlash('Document saved but its gonna be reviewed by an admin because it may be duplicated');
 		//$this->Session->setFlash($str_dup);
@@ -309,10 +312,10 @@ class DocumentsController extends AppController {
 		}
 		//if(false){}
 		else{
-  		$this->Session->setFlash('Document saved successfuly');
+  		$this->Session->setFlash('Document saved successfully');
 		}
   		$this->_clean_session();
-  		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['url']));
+  		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['name']));
 		
   	}
   }
