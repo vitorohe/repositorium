@@ -105,6 +105,7 @@
                         &nbsp;&nbsp;&nbsp;
                     </div>-->
                     <ul class="nav subtopmenu">
+             	        <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
                         <?php if($this->Session->read('User.esExperto')): ?>
 	                    <li><?php echo $this->Html->link('Manage Repository', array('controller' => 'admin_documentos'));?></li>
                     	<?php endif; ?>

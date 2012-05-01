@@ -13,7 +13,7 @@ class CriteriasController extends AppController {
   
 //   var $helpers = array('Session', 'Form');
 
-  function beforeFilter() {
+  /*function beforeFilter() {
 	if(!$this->isExpert()) {	  
 	  	$this->Session->setFlash('You do not have permission to access this page');
 	  	$this->redirect('/');		
@@ -30,7 +30,7 @@ class CriteriasController extends AppController {
 			'Criteria.repository_id' => $repo['Repository']['id']
 		);
 	}
-  }
+  }*/
 
   function index() {
   	if(!empty($this->data)) {  		
@@ -127,6 +127,36 @@ class CriteriasController extends AppController {
   		}
   	}
   	$this->redirect($this->referer());  	
+  }
+  
+  function create(){
+  	if($this->getConnectedUser() == $this->anonymous)
+  		$this->redirect(array('controller' => 'login'));
+  	
+  	if(!empty($this->data)) {
+  		$user = $this->getConnectedUser();
+
+  		$this->data['Criteria']['user_id'] = $user['User']['id'];
+  		$this->data['Criteria']['activation_id'] = 'A';
+  		$this->data['Criteria']['internalstate_id'] = 'A';
+  			
+  		$this->Criteria->set($this->data);
+  			
+  		if($this->Criteria->validates()) {
+  			$criteria = $this->Criteria->createNewCriteria($this->data, $user);
+  			CakeLog::write('activity', "Criteria [name=\"{$criteria['Criteria']['name']}\"] created");
+  			if(is_null($criteria)) {
+  				$this->Session->setFlash('An error occurred creating the criteria. Please, blame the developer');
+  				$this->redirect('/');
+  			}
+  	
+  			$this->Session->setFlash('Criteria successfully created');
+  			$this->redirect('/');
+  	
+  		} else {
+  			$this->Session->setFlash($this->Repository->invalidFields(), 'flash_errors');
+  		}
+  	}
   }
 
 }

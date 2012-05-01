@@ -13,168 +13,52 @@ class Criteria extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'answer_1' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Must give a answer',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'answer_2' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Must give a answer',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'documentpack_size' => array(
+		'upload_score' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				'message' => 'Document pack size must be a number',
+				'message' => 'Document Upload cost must be a number',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			'positive' => array(
-				'rule' => array('positive', 'documentpack_size'),
-				'message' => 'Document pack size must be a positive number',
+				'rule' => array('positive', 'upload_score'),
+				'message' => 'Document Upload cost must be a positive number',
 			)
 		),
-		'documentpack_cost' => array(
+		'download_score' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				'message' => 'Document pack cost must be a number',
+				'message' => 'Document Download cost must be a number',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			'positive' => array(
-				'rule' => array('positive', 'documentpack_cost'),
-				'message' => 'Document pack cost must be a positive number',
+				'rule' => array('positive', 'download_score'),
+				'message' => 'Document Download cost must be a positive number',
 			)
 		),
-		'documentupload_cost' => array(
+		'collaboration_score' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				'message' => 'Document upload cost must be a number',
+				'message' => 'Challenge reward must be a number',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			'positive' => array(
-				'rule' => array('positive', 'documentupload_cost'),
-				'message' => 'Document upload cost must be a positive number',
+				'rule' => array('positive', 'collaboration_score'),
+				'message' => 'Challenge reward must be a positive number',
 			)
-		),
-		'documentvalidation_reward' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'Document validation points must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-			'positive' => array(
-				'rule' => array('positive', 'documentvalidation_reward'),
-				'message' => 'Document validation points must be a positive number',
-			)
-		),
-		'challenge_reward' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'Challenge points must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-			'positive' => array(
-				'rule' => array('positive', 'challenge_reward'),
-				'message' => 'Challenge points must be a positive number',
-			)
-		),
-		'penalization_a' => array(
-			'decimal' => array(
-				'rule' => array('numeric'),
-				'message' => 'The penalization factor \'a\' must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'penalization_b' => array(
-			'decimal' => array(
-				'rule' => array('numeric'),
-				'message' => 'The penalization factor \'b\' must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'depenalization_a' => array(
-			'decimal' => array(
-				'rule' => array('numeric'),
-				'message' => 'The depenalization factor \'a\' must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'depenalization_b' => array(
-			'decimal' => array(
-				'rule' => array('numeric'),
-				'message' => 'The depenalization factor \'b\' must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'minchallenge_size' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'Min. challenge size must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-			'positive' => array(
-				'rule' => array('positive', 'minchallenge_size'),
-				'message' => 'Min. challenge size must be a positive number',
-			)
-		),
-		'maxchallenge_size' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				'message' => 'Max. challenge size must be a number',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		'positive' => array(
-				'rule' => array('positive', 'maxchallenge_size'),
-				'message' => 'Max. challenge size must be a positive number',
-		)
 		),
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-	var $belongsTo = array(
+	/*var $belongsTo = array(
 		'Repository' => array(
 			'className' => 'Repository',
 			'foreignKey' => 'repository_id',
@@ -182,7 +66,7 @@ class Criteria extends AppModel {
 			'fields' => '',
 			'order' => ''
 		)
-	);
+	);*/
 
 	var $hasMany = array(
 		'CriteriasDocument' => array(
@@ -220,7 +104,7 @@ class Criteria extends AppModel {
 	// actualiza los documentos agregando el nuevo criterio a InfoDesafio
 	// y los usuarios, con TamanoDesafio
 	function afterSave($created) {
-		if($created) {
+		/*if($created) {
 			$cr = $this->read(null, $this->id);
 			
 			$ds = $this->getDataSource();
@@ -232,7 +116,7 @@ class Criteria extends AppModel {
 				$ds->commit($this);
 			else
 				$ds->rollback($this);
-		}
+		}*/
 	}
 	
 	
@@ -317,6 +201,19 @@ class Criteria extends AppModel {
 			}			
 		}
 		return array_unique($filtered);
+	}
+	
+	function createNewCriteria($data) {
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+		
+		if(!$this->save($data)) {
+			$ds->rollback($this);
+			return null;
+		}	
+			
+		$ds->commit($this);
+		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 
 }

@@ -12,8 +12,16 @@ class Repository extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'unique' => array(
+				'rule' => array('isUnique'),
+				'message' => 'Repository name is already taken',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
 		),
-		/*'url' => array(
+		'internal_name' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				'message' => 'Repository url cannot be empty',
@@ -55,7 +63,7 @@ class Repository extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 			
-		),*/
+		),
 // 		'min_points' => array(
 // 			'positive' => array(
 // 				'rule' => array('positive', 'min_points'),
