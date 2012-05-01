@@ -41,7 +41,7 @@ $this->Html->addCrumb($title);
   		<tr>
   			<td><?php echo $cr['Repository']['id']; ?></td>
   			<td><?php echo $this->Html->link($cr['Repository']['name'], array('controller' => 'admin_repositories', 'action' => 'edit', $cr['Repository']['id'])) . ($ast ? '*' : '');?></td>
-  			<td><?php echo $this->Repo->link($this->Repo->url($cr['Repository']['url']), $cr['Repository']['url']);?></td>
+  			<td><?php echo $this->Repo->link($this->Repo->url($cr['Repository']['internal_name']), $cr['Repository']['internal_name']);?></td>
   			<td>  			
 	  			<div class="admin-doc-texto">
 	  			<?php  
@@ -52,7 +52,7 @@ $this->Html->addCrumb($title);
 	  							Sanitize::html($cr['Repository']['description'])),
 	  							100,
 	  							array(
-	  								'ending' => $this->Repo->link('...', $cr['Repository']['url']), 
+	  								'ending' => $this->Repo->link('...', $cr['Repository']['internal_name']), 
 	  								'exact' => false, 
 	  								'html' => true)); 
 	  			?>

@@ -13,7 +13,7 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('name'); ?>
 
-<?php //echo $this->Form->input('url', array('label' => 'URL of this repository: ______.repositorium.cl')); ?>
+<?php echo $this->Form->input('internal_name', array('label' => 'URL of this repository: ______.repositorium.cl')); ?>
 
 <?php echo $this->Form->input('description'); ?>
 

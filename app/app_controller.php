@@ -106,7 +106,7 @@ class AppController extends Controller {
 			if($this->Session->check('Repository.current')) {
 				$repository = $this->getCurrentRepository();
 				$name = $repository['Repository']['name'];
-				$url = $repository['Repository']['url'];
+				$url = $repository['Repository']['internal_name'];
 				$this->Session->write('User.points', $this->User->get_user_points($user['User']['id'], $repository['Repository']['id']));
 			}
 			
@@ -127,7 +127,7 @@ class AppController extends Controller {
 	function setRepositorySession($repo) {
 		if(!empty($repo)) {
 			$this->Session->delete('Repository');
-			$this->Session->write('Repository.current', $repo['Repository']['name']);
+			$this->Session->write('Repository.current', $repo['Repository']['internal_name']);
 			$this->Session->write('Repository.name', $repo['Repository']['name']);
 		}
 		

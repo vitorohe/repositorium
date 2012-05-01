@@ -62,8 +62,12 @@ $this->Html->addCrumb($title);
 	<tr class="ui-widget-header"> 
 	  <th width="10"><?php echo $this->Paginator->sort('Id', 'User.id');?></th>
 	  <th><?php echo $this->Paginator->sort('E-mail', 'User.email'); ?></th>
-	  <th><?php echo $this->Paginator->sort('First name', 'User.first_name'); ?></th>
-	  <th><?php echo $this->Paginator->sort('Last name', 'User.last_name'); ?></th>
+	  <!--<th><?php echo $this->Paginator->sort('First name', 'User.first_name'); ?></th>
+	  <th><?php echo $this->Paginator->sort('Last name', 'User.last_name'); ?></th>-->
+      <!--INI-->
+      <th><?php echo $this->Paginator->sort('Name','User.name'); ?></th>
+      <th><?php echo $this->Paginator->sort('Username','User.username'); ?></th>
+      <!--FIN-->
 	  <th width="200">Options</th>
 	</tr>
   </thead>
@@ -81,8 +85,12 @@ $this->Html->addCrumb($title);
 	<tr>
 	  <td><?php echo $u['User']['id']; ?></td>
 	  <td><?php echo $this->Html->link($u['User']['email'], array('controller' => 'admin_usuarios', 'action' => 'edit', $u['User']['id'])) . ($ast ? '*' : ''); ?></td>
-	  <td><?php echo $u['User']['first_name']; ?></td>
-	  <td><?php echo $u['User']['last_name']; ?></td>
+	  <!--<td><?php echo $u['User']['first_name']; ?></td>
+	  <td><?php echo $u['User']['last_name']; ?></td>-->
+      <!--INI-->
+      <td><?php echo $u['User']['name']; ?></td>
+      <td><?php echo $u['User']['username']; ?></td>
+      <!--FIN-->
 	  <td>
 	  <?php if(strcmp($current,'experts') == 0): ?>
 	  	<div class="admin-doc-edit">

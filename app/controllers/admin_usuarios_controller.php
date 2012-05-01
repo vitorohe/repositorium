@@ -10,22 +10,22 @@
  */
 
 class AdminUsuariosController extends AppController {
-  var $uses = array('User',/*'Expert',*/ 'Repository');
+  var $uses = array('User',/*'Expert', 'Repository'*/);
   var $paginate = array(
 	  'User' => array(
 		'limit' => '15',
 		'conditions' => array('User.id <>' => 1),
-		'order' => array('User.created' => 'desc'),
+//		'order' => array('User.created' => 'desc'),
 		'recursive' => -1,
   	),
   	'Repository' => array(
   		'limit' => '5',
   		'order' => array('Repository.created' => 'desc'),
   	),
-  	'Expert' => array(
+/*  	'Expert' => array(
   		'limit' => '5',
   		'order' => array('Repository.created' => 'desc'),
-  	),
+  	),*/
   );
 
   var $helpers = array('Text', 'Repo');

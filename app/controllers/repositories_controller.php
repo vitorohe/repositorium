@@ -168,7 +168,7 @@ class RepositoriesController extends AppController {
 		
 		$result = $this->_set_repo($data = compact('repo_url'));		
 		if($result[0]) {
-			$this->redirect(array('action' => 'index', $result[1]['Repository']['url']));
+			$this->redirect(array('action' => 'index', $result[1]['Repository']['internal_name']));
 		} else {
 			$this->e404();
 		}		
@@ -180,7 +180,7 @@ class RepositoriesController extends AppController {
 		}
 		$result = $this->_set_repo(compact('repo_id'));		
 		if($result[0]) {
-			$this->redirect(array('action' => 'index', $result[1]['Repository']['url']));
+			$this->redirect(array('action' => 'index', $result[1]['Repository']['internal_name']));
 		} else {
 			$this->e404();
 		}		
@@ -209,7 +209,7 @@ class RepositoriesController extends AppController {
 			
 			$this->data['Repository']['activation_id'] = 'A';
 			$this->data['Repository']['internalstate_id'] = 'A';
-			$this->data['Repository']['internal_name'] = 'A';
+			//$this->data['Repository']['internal_name'] = 'A';
 			
 			$this->Repository->set($this->data);
 			
@@ -225,7 +225,7 @@ class RepositoriesController extends AppController {
 
 				if(Configure::read('App.subdomains')) {
 					$dom = Configure::read('App.domain');
-					$this->redirect("http://{$repository['Repository']['url']}.{$dom}");
+					$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
 				} else {
 					$this->redirect(array('action' => 'index', $repository['Repository']['name']));
 				}

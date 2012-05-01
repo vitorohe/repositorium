@@ -8,7 +8,7 @@
 				<?php if(count($your_repos) > 0): ?>
 				<ul>
 					<?php foreach($your_repos as $r) { ?>
-					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['name']); ?></li>
+					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>
@@ -22,7 +22,7 @@
 				<!--<?php if(count($collaborator_repos) > 0): ?>
 				<ul>
 					<?php foreach($collaborator_repos as $r) { ?>
-					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['url']); ?></li>
+					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>
@@ -41,7 +41,7 @@
 				<?php if(count($watched_repos) > 0): ?>
 				<ul>
 					<?php foreach($watched_repos as $r) { ?>
-					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['url']); ?></li>
+					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>
