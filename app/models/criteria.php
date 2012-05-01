@@ -3,6 +3,20 @@ class Criteria extends AppModel {
 	var $name = 'Criteria';
 	var $displayField = 'question';
 	var $validate = array(
+		'name' => array(
+				'notempty' => array(
+						'rule' => array('notempty'),
+						'message' => 'The question cannot be empty',
+						//'allowEmpty' => false,
+						//'required' => false,
+						//'last' => false, // Stop validation after this rule
+						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+				'forty' => array(
+						'rule' => array('forty', 'name'),
+						'message' => 'Name of the criteria must be of at most 40 characters',
+				)
+		),
 		'question' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
@@ -99,6 +113,10 @@ class Criteria extends AppModel {
 	
 	function positive($value, $key) {
 		return $value[$key] >= 0;
+	}
+	
+	function forty($value, $key){
+		return strlen($value[$key]) <=40;
 	}
 	
 	// actualiza los documentos agregando el nuevo criterio a InfoDesafio

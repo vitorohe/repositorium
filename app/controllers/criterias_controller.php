@@ -154,7 +154,7 @@ class CriteriasController extends AppController {
   			$this->redirect('/');
   	
   		} else {
-  			$this->Session->setFlash($this->Repository->invalidFields(), 'flash_errors');
+  			$this->Session->setFlash($this->Criteria->invalidFields(), 'flash_errors');
   		}
   	}
   }
