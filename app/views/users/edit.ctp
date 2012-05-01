@@ -5,8 +5,7 @@
 </div>
 <?php echo $this->Form->create('User', array('url' => '/users/edit/'. $this->data['User']['id']));?>
 <?php echo $this->Form->input('id', array('type' => 'hidden')); ?>
-<?php echo $this->Form->input('first_name', array('label' => 'Name')); ?><br/>
-<?php echo $this->Form->input('last_name', array('label' => 'Last Name')); ?><br/>
-<?php echo $this->Form->input('tmp_password', array('type' => 'password', 'label' => 'New Password (leave in blank if you don\'t want to change it)'));?><br/>
+<?php echo $this->Form->input('name', array('label' => 'Name')); ?><br/>
+<?php echo $this->Form->input('tmp_password', array('type' => 'password', 'label' => 'New Password (leave it blank if you don\'t want to change it)'));?><br/>
 <?php echo $this->Form->input('tmp_password2', array('type' => 'password', 'label' => 'Repeat New Password'));?><br/>
 <?php echo $this->Form->end('Save Changes'); ?> 

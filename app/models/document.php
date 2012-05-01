@@ -232,11 +232,11 @@ class Document extends AppModel {
 					'conditions' => array(
 						'User.id' => $r['Document']['user_id']
 					),
-					'fields' => 'User.first_name, User.last_name', 
+					'fields' => 'User.name', 
 					'recursive' => -1
 			));
 			$u = $u['User'];
-			$results[$i]['Document']['nombre_autor'] = $u['first_name'] . ' ' . $u['last_name'];
+			$results[$i]['Document']['nombre_autor'] = $u['name'];
 			$i++;
 		}
 		return $results;
