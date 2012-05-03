@@ -6,7 +6,7 @@ class Criteria extends AppModel {
 		'name' => array(
 				'notempty' => array(
 						'rule' => array('notempty'),
-						'message' => 'The question cannot be empty',
+						'message' => 'The name cannot be empty',
 						//'allowEmpty' => false,
 						//'required' => false,
 						//'last' => false, // Stop validation after this rule

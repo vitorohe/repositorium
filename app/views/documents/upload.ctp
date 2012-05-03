@@ -52,7 +52,7 @@ $(function() {
 });
 </script>
 
-<table class="criterias_selector" border="5">
+<table class="criterias_selector" border="5" width="500">
     <tr>
         <th align="center"><strong>Criterias</strong></th>
         <th align="center"><strong>Chosen Criterias</strong></th>

@@ -181,8 +181,8 @@ class Document extends AppModel {
 					return false;
 				}
 			}
-
 			$dataSource->commit($this);
+			
 		}
 		return true;
 	}

@@ -86,7 +86,7 @@ class CriteriasDocument extends AppModel {
 			$this->create();
 			$this->set(
 			$criteria_document = array(
-				'CriteriaDocument' => array(
+				'CriteriasDocument' => array(
 		    	   'criteria_id' => $criteria_id,
 	               'document_id' => $id,
 	               'internalstate_id' => 'A',
@@ -95,7 +95,7 @@ class CriteriasDocument extends AppModel {
                )
 			);
 
-			if(!$this->save($criteria_document)){
+			if(!$this->save()){
 				$ds->rollback($this);
 				return false;
 			}

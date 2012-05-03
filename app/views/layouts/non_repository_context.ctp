@@ -111,11 +111,11 @@
                         &nbsp;&nbsp;&nbsp;
                     </div>
                     <ul class="nav subtopmenu">
+                        <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
                         <?php if($this->Session->check('User.esAdmin')): ?>
 	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
                     	<?php endif; ?>
-                    	<li><?php echo $this->Html->link('Create new Repository', array('controller' => 'repositories', 'action' => 'create'));?></li>
-                    	<li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>    
+                    	<li><?php echo $this->Html->link('Create new Repository', array('controller' => 'repositories', 'action' => 'create'));?></li>  
                     </ul>                    
                 </div>
             </div>
