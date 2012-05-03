@@ -1,3 +1,25 @@
+/*criterias selector*/
+
+#sortable1, #sortable2 
+{ 
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0 0 2.5em; 
+	float: left; 
+	margin-right: 10px; 
+	width: 200px; 
+	height: 250px; 
+	overflow-y: scroll; 
+	overflow: auto;
+}
+#sortable1 li, #sortable2 li 
+{ 
+	margin: 0 5px 5px 5px; 
+	padding: 5px; 
+	font-size: 1.2em; 
+	width: 120px; 
+}
+
 .link-avoid{
 	color : #346E9C !important;
 	font-weight: bold;

@@ -2,7 +2,7 @@
 class CriteriasDocument extends AppModel {
 	var $name = 'CriteriasDocument';
 	var $validate = array(
-		'total_answers_1' => array(
+		/*'total_answers_1' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -41,7 +41,7 @@ class CriteriasDocument extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
-		),
+		),*/
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -64,12 +64,47 @@ class CriteriasDocument extends AppModel {
 	
 	
 	/* virtualFields ftw! */
-	var $virtualFields = array(
+	/*var $virtualFields = array(
 	    	'total_respuestas' => 'total_answers_1 + total_answers_2',
 	    	'consenso' => 'ABS(total_answers_2 - total_answers_1)*100/(total_answers_1 + total_answers_2)',
 	    	'total_app' => 'total_answers_2*100/(total_answers_1 + total_answers_2)'
 	);
-	
+	*/
+
+
+	function saveCriteriaDocument($criterias = null, $id = null) {
+
+		if(empty($criterias))
+			return false;
+
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+		
+		foreach($criterias as $criteria) {
+			$criteria_id = substr($criteria, strpos($criteria, '=')+1);
+
+			$this->create();
+			$this->set(
+			$criteria_document = array(
+				'CriteriaDocument' => array(
+		    	   'criteria_id' => $criteria_id,
+	               'document_id' => $id,
+	               'internalstate_id' => 'A',
+	               'activation_id' => 'A'
+	             )
+               )
+			);
+
+			if(!$this->save($criteria_document)){
+				$ds->rollback($this);
+				return false;
+			}
+		}
+
+		$ds->commit($this);
+		return true;
+	}
+
 	function massCreateAfterCriteria($id_criterio = null, $repository_id = null) {
 		if(!is_null($id_criterio) && !is_null($repository_id)) {
 			$docs = $this->Document->find('all', array(

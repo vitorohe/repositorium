@@ -6,11 +6,6 @@ $title = "Add new document";
 $this->viewVars['title_for_layout'] = $title;
 $this->Html->addCrumb($title);
 ?>
-<script type="text/javascript">
-$(document).ready(function() {
-	add_textboxlist("#DocumentTags");
-});
-</script>
 
 <?php echo $this->Html->image('add_doc.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon" style="margin-top: 15px;"><?php echo $title;?></h1>
 <div class="clearicon"></div>
@@ -36,14 +31,58 @@ $(document).ready(function() {
 	//DocumentFileAttach.value
 	//echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
 ?>
-<div style="width:400px">
-	<?php echo $this->Form->input('Document.tags', array('class' => 'ingresar-documento', 'size' => 100,'onChange'=>"CheckTag(DocumentTitle.value)", 'label' => 'Tags (You may add more tags separating them by commas (,))'));?>     
-</div>
-<?php echo $ajax->div('checked_tags'); 
-	  echo $ajax->divEnd('checked_tags');
-	echo '<input type="button" id="tag_aux_button" name="tag_aux_button" value="Check tags"  OnClick="CheckTag(DocumentTags.value)" />';	  
-?>
-	  
+
+</br>
+</br>
+</br>
+
+<!--INI-->
+
+<script>
+$(function() {
+    $( "#sortable1, #sortable2" ).sortable({
+        connectWith: ".connectedSortable"
+    }).disableSelection();
+
+    $('form').submit(function(){ 
+        $('#thedata').val($( "#sortable2" ).sortable("serialize"));
+        //return false;
+    });
+
+});
+</script>
+
+<table class="criterias_selector" border="5">
+    <tr>
+        <th align="center"><strong>Criterias</strong></th>
+        <th align="center"><strong>Chosen Criterias</strong></th>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="criterias">
+                <ul id="sortable1" class="connectedSortable">
+                    <?php
+                        foreach ($criterias as $criteria) {
+                            echo "<li class=\"ui-state-default\"";
+                            echo "id =\"criterias_".$criteria['Criteria']['id']."\">";
+                            echo $criteria['Criteria']['name'];
+                            echo "</li>";
+                        }
+                        
+                    ?>
+                </ul>
+            </div>
+            <input type="hidden" name="data[Document][criterias]" id="thedata">
+            <div class="chosen_criterias">
+                <ul id="sortable2" name="hola" class="connectedSortable">
+                </ul>
+            </div>
+        </td>
+    </tr>
+</table>
+<!--FIN-->
+
+
 <?php echo $this->Form->end('Done'); ?>
 </fieldset>
 

@@ -24,14 +24,9 @@
       echo $this->Html->script('jquery-ui-1.8.13.custom.min');
       echo $this->Html->css('anchors');
       echo $this->Html->css('jqueryui');
-	  echo $this->Html->css('style2');
+	    echo $this->Html->css('style2');
 	  
       echo $scripts_for_layout;
-      //Include TextBoxList
-      echo $this->Html->script('GrowingInput');
-      echo $this->Html->script('TextboxList');
-      echo $this->Html->css('TextboxList');
-      echo $this->Html->script('TextboxList.Autocomplete');
  ?>
   <script type="text/javascript" language="javascript">
   	$(document).ready(function() {
@@ -106,7 +101,7 @@
                     </div>-->
                     <ul class="nav subtopmenu">
              	        <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
-                        <?php if($this->Session->read('User.esExperto')): ?>
+                      <?php if($this->Session->read('User.esExperto')): ?>
 	                    <li><?php echo $this->Html->link('Manage Repository', array('controller' => 'admin_documentos'));?></li>
                     	<?php endif; ?>
                     	
@@ -117,11 +112,12 @@
                     	<li><?php echo $this->Html->link('Search','http://www.google.cl' /*,array('controller' => 'tags', 'action' => 'index')*/); ?></li>
                       <!--FIN-->
                     	
-                        <li><?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?></li>
-                        <?php if($this->Session->check('User.id') and $this->Session->read('User.id') > 1): ?>
-                        <li><?php echo $this->Html->link('Earn points', array('controller' => 'points', 'action' => 'earn')); ?></li>
-                        <?php endif; ?>
-                        &nbsp;&nbsp;
+                      
+                      <li><?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?></li>
+                      <?php if($this->Session->check('User.id') and $this->Session->read('User.id') > 1): ?>
+                      <li><?php echo $this->Html->link('Earn points', array('controller' => 'points', 'action' => 'earn')); ?></li>
+                      <?php endif; ?>
+                      &nbsp;&nbsp;
                     </ul>                    
                 </div>
             </div>

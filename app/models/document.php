@@ -44,7 +44,7 @@ class Document extends AppModel {
 	);
 
 	var $hasMany = array(
-		'Tag' => array(
+		/*'Tag' => array(
 			//'className' => 'Tag',
 			'className' => 'Criteria',
 			'foreignKey' => 'document_id',
@@ -57,23 +57,10 @@ class Document extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
-		'Attachfile' => array(
-			'className' => 'Attachfile',
-			'foreignKey' => 'document_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
+		),*/
 		'CriteriasDocument' => array(
 			'className' => 'CriteriasDocument',
-			'foreignKey' => 'criteria_id',
+			'foreignKey' => array('criteria_id', 'document_id'),
 			'dependent' => true,
 		)
 	);
@@ -157,60 +144,47 @@ class Document extends AppModel {
 	/**
 	 * 
 	 * @TODO handle tags with spaces
-	 * saves a document and its tags
+	 * saves a document and its criterias
 	 * @param array $data
 	 * @param string $delimiter (of tags)
 	 * @return true if successfully, false otherwise
 	 */
-	function saveWithTags(&$data = array(), $delimiter = ',') {
+	function saveWithCriterias(&$data = array(), $delimiter = '&') {
 		if(!empty($data)) {
 			$this->create();
 	
-			$there_are_tags = false;
-			if(isset($data['Document']['tags'])) {
-				$dataSource = $this->getDataSource();
-				$there_are_tags = true;
-				$dataSource->begin($this); // BEGIN
+			$there_are_criterias = false;
+			$dataSource = $this->getDataSource();
+			$dataSource->begin($this); // BEGIN
+			if(isset($data['Document']['criterias'])) {
+				$there_are_criterias = true;
 			}
-	
-			if($there_are_tags) {
-				$tags = explode($delimiter, $data['Document']['tags']);
-				$tags = array_map("trim", $tags);
-				unset($data['Document']['tags']);
+
+
+			if($there_are_criterias) {
+				$criterias = explode($delimiter, $data['Document']['criterias']);
+				$criterias = array_map("trim", $criterias);
+				unset($data['Document']['criterias']);
 			}
-	
-			$this->set($data);
-			if(!$this->save()) {
-				if($there_are_tags)
-					$dataSource->rollback($this); // ROLLBACK
+			
+			//$this->set($data);
+			if(!$this->save($data)) {
+				$dataSource->rollback($this); // ROLLBACK
 				return false;
 			}
 			
-			$id = $this->id;
-			
-			if($there_are_tags) {
-				$tagData = array();
-				$i = 0;
-				foreach($tags as $tag) {
-					//cgajardo: issue #37
-					if($tag=="") continue;
-					$tagData[$i]['Tag'] = array(
-	        	            'tag' => $tag,
-	        	            'document_id' => $id
-					);
-					$i += 1;
-				}
-				 
-				if($this->Tag->saveAll($tagData)) {
-					$dataSource->commit($this); // C0MMIT
-					
-					return true;
-				} else {
+			$id = $this->getLastInsertID();	
+
+			if(true) {
+				if(!$this->CriteriasDocument->saveCriteriaDocument($criterias, $id)){
 					$dataSource->rollback($this); // ROLLBACK
+					return false;
 				}
 			}
+
+			$dataSource->commit($this);
 		}
-		return false;
+		return true;
 	}
 	
 	

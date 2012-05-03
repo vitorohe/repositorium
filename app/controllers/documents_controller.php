@@ -4,7 +4,7 @@ class DocumentsController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Documents';
-	var $uses = array('Document', 'User', 'Repository',/*'Tag', 'ConstituentsKit',*/ 'Attachfile');
+	var $uses = array('Document', 'User', 'Repository','Criteria',/*'Tag', 'ConstituentsKit',*/ 'Attachfile');
 	
 	/**
 	 * User Model
@@ -25,10 +25,10 @@ class DocumentsController extends AppController {
 	var $Session;
 	
 	function beforeFilter() {
-		if(!$this->Session->check('Document.continue')) {
+		/*if(!$this->Session->check('Document.continue')) {
 			$this->Session->write('Action.type', $this->action);			
 			$this->redirect(array('controller' => 'points', 'action' => 'process'));	
-		}
+		}*/
 	}
 	
   function index() {
@@ -46,7 +46,12 @@ class DocumentsController extends AppController {
    */
   function upload() {
   	$repo = $this->requireRepository();
+    if($this->isAnonymous()){
+      $this->Session->setFlash('You must log in first', 'flash_errors');
+      $this->redirect(array('controller' => 'login', 'action' => 'index'));
+    }
   	
+    $criterias = $this->Criteria->find('all');
   	//$constituents = $this->ConstituentsKit->find('list', array(
   		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
   		  //				'recursive' => 1,
@@ -63,13 +68,13 @@ class DocumentsController extends AppController {
   		
 		//En la siguiente linea se guardan los documentos
 		$this->save($this->data);
-				
+		
   		/*foreach ($constituents as $constituent){
   			$this->Document->Behaviors->detach($constituent);
   		}*/
   	}
   	
-  	
+  	$this->set(compact('criterias'));    
 	//$this->set(compact('constituents'));
   }
 
@@ -277,6 +282,8 @@ class DocumentsController extends AppController {
 		$this->data['Document']['warned_score_files']=$files_pdr*$files_val;
 		$this->data['Document']['warned_score_files_sha']=$files_pdr*$files_sha_val;
   }
+
+
   function save(&$data){
   	
   	$repo = $this->requireRepository();
@@ -285,31 +292,31 @@ class DocumentsController extends AppController {
   	$this->data['Document']['user_id'] = $user['User']['id'];
   	//$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
 	//$this->set_warned($this->data);
-	$this->data['Document']['activation_id'] = 'A';
-	$this->data['Document']['internalstate_id'] = 'A';
-	$this->data['Document']['document_state_id'] = 2;
+  	$this->data['Document']['activation_id'] = 'A';
+  	$this->data['Document']['internalstate_id'] = 'A';
+  	$this->data['Document']['document_state_id'] = 1;
   	$this->Document->set($this->data);
-  	 
+
   	// errors
-  	if(empty($this->data['Document']['tags'])) {
-  		$this->Session->setFlash('You must include at least one tag');
+  	if(empty($this->data['Document']['criterias'])) {
+  		$this->Session->setFlash('You must include at least one criteria');
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
   		$this->Session->setFlash($errors, 'flash_errors');
-  	} else if(!$this->Document->saveWithTags($this->data)) {
+  	} else if(!$this->Document->saveWithCriterias($this->data)) {
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');
   	} else {
 		if(false){//$this->data['Document']['warned'] == 1){
 		$str_dup='Document saved and will be reviewed by an admin because it may be duplicated';
 		//$this->Session->setFlash('Document saved but its gonna be reviewed by an admin because it may be duplicated');
 		//$this->Session->setFlash($str_dup);
-		if($this->Session->read("sha_files_count")>0){
-		//$this->Session->setFlash('Warned by sha');
-		$str_sha= "There are " .$this->Session->read("sha_files_count"). " documents with the same content of one (or more) of your uploaded files";
-		$this->Session->setFlash(nl2br($str_dup."\n".$str_sha));
-		}
-		else{$this->Session->setFlash($str_dup);}
-		}
+  		if($this->Session->read("sha_files_count")>0){
+  		//$this->Session->setFlash('Warned by sha');
+  		$str_sha= "There are " .$this->Session->read("sha_files_count"). " documents with the same content of one (or more) of your uploaded files";
+  		$this->Session->setFlash(nl2br($str_dup."\n".$str_sha));
+  		}
+  		else{$this->Session->setFlash($str_dup);}
+  		}
 		//if(false){}
 		else{
   		$this->Session->setFlash('Document saved successfully');
