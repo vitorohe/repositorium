@@ -64,7 +64,10 @@ class RepositoriesController extends AppController {
 						'Repository.user_id <>' => $user['User']['id']),
 // 					'recursive' => -1 
 				));				
-				$watching = $r['RepositoriesUser']['watching'];				
+				//$watching = $r['RepositoriesUser']['watching'];
+				/*----------------------------INI------------------------------*/
+				$joined = $r;				
+				/*----------------------------FIN------------------------------*/
 			}
 			
 			// stats
@@ -119,7 +122,7 @@ class RepositoriesController extends AppController {
 				'recursive' => -1
 			));*/
 			
-			$this->set(compact('repository', 'watching', 'creator', 'documents'/*, 'tags', 'cloud_data'*/));
+			$this->set(compact('repository', /*'watching',*//*INI*/'joined', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags', 'cloud_data'*/));
 		} else {
 			$this->e404();
 		}		
@@ -239,7 +242,7 @@ class RepositoriesController extends AppController {
 	}
 
 	
-	function watch($id = null) {
+	function join($id = null) {
 		if(is_null($id)) {
 			$this->Session->setFlash('Repository not found');
 			$this->redirect('/');
@@ -251,19 +254,36 @@ class RepositoriesController extends AppController {
 		$user = $this->getConnectedUser(); 
 		$repo = $this->RepositoriesUser->find('first', array('conditions' => array('user_id' => $user['User']['id'], 'repository_id' => $id), 'recursive' => -1));
 		
-		if(empty($repo)) {
+		/*if(empty($repo)) {
 			$this->Session->setFlash('Repository not found');
 			$this->redirect('/');
+		}*/
+		
+		$joined = false;
+
+		if(empty($repo)) {
+
+			if($user['User']['is_administrator'])
+				$is_admin = 1;
+			else
+				$is_admin = 2;
+
+			if(!$this->RepositoriesUser->saveRepositoryUser($user['User']['id'], $id, $is_admin)) {
+				$this->Session->setFlash('Joining failed','flash_errors');
+				$this->redirect('/');
+			}
+
 		}
+
+
+//		$joined = $repo['RepositoriesUser']['joined'];
 		
-		$watching = $repo['RepositoriesUser']['watching'];
+//		$this->RepositoriesUser->read(null, $repo['RepositoriesUser']['id']);
+//		$this->RepositoriesUser->set('joined', !$joined);
+//		$this->RepositoriesUser->save();
 		
-		$this->RepositoriesUser->read(null, $repo['RepositoriesUser']['id']);
-		$this->RepositoriesUser->set('watching', !$watching);
-		$this->RepositoriesUser->save();
-		
-		if($watching) $msg = "Repository removed from watchlist";
-		else $msg = "Repository added to watchlist";
+		if($joined) $msg = "You have let gone of the repository";
+		else $msg = "You have joined to the repository";
 		
 		$this->Session->setFlash($msg);
 		$this->redirect(array('action' => 'set_repository_by_id', $id));

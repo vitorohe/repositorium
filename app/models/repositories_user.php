@@ -1,7 +1,7 @@
 <?php
 class RepositoriesUser extends AppModel {
 	var $name = 'RepositoriesUser';
-	var $validate = array(
+	/*var $validate = array(
 		'points' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
@@ -16,7 +16,7 @@ class RepositoriesUser extends AppModel {
 				'message' => 'Points cannot be negative',
 			)
 		),
-	);
+	);*/
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 	var $belongsTo = array(
 		'Repository' => array(
@@ -34,6 +34,35 @@ class RepositoriesUser extends AppModel {
 			'order' => ''
 		)
 	);
+
+
+	function saveRepositoryUser($user_id, $repository_id, $is_admin) {
+
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+
+		$this->create();
+
+		$this->set(
+		array(
+			'RepositoriesUser' => array(
+				'activation_id' => 'A',
+				'internalstate_id' => 'A',
+				'user_id' => $user_id,
+				'repository_id' => $repository_id,
+				'user_type' => $is_admin
+				)
+			)
+		);
+
+		if(!$this->save()){
+			$ds->rollback($this);
+			return false;
+		}
+
+		$ds->commit($this);
+		return true;
+	}
 	
 	function positive($value) {
 		return $value['points'] >= 0;
