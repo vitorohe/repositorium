@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 29-04-2012 a las 21:08:27
+-- Tiempo de generación: 04-05-2012 a las 19:43:50
 -- Versión del servidor: 5.5.20
 -- Versión de PHP: 5.3.10
 
@@ -121,7 +121,15 @@ CREATE TABLE IF NOT EXISTS `criterias` (
   KEY `criterios_01` (`activation_id`),
   KEY `criterios_02` (`internalstate_id`),
   KEY `criterios_03` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `criterias`
+--
+
+INSERT INTO `criterias` (`id`, `name`, `question`, `upload_score`, `download_score`, `collaboration_score`, `register_date`, `register_ip`, `activation_id`, `internalstate_id`, `user_id`) VALUES
+(1, 'Perro', 'is it a perro?', 1, 1, 1, '0000-00-00 00:00:00', '', 'A', 'A', 2),
+(2, 'gato', 'is it a cat?', 1, 1, 1, '0000-00-00 00:00:00', '', 'A', 'A', 2);
 
 -- --------------------------------------------------------
 
@@ -140,7 +148,14 @@ CREATE TABLE IF NOT EXISTS `criterias_documents` (
   KEY `documento_criterios_02` (`internalstate_id`),
   KEY `documento_criterios_03` (`document_id`),
   KEY `documento_criterios_04` (`criteria_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `criterias_documents`
+--
+
+INSERT INTO `criterias_documents` (`id`, `activation_id`, `internalstate_id`, `document_id`, `criteria_id`) VALUES
+(1, 'A', 'A', 36, 1);
 
 -- --------------------------------------------------------
 
@@ -193,7 +208,21 @@ CREATE TABLE IF NOT EXISTS `documents` (
   KEY `documentos_05` (`document_state_id`),
   KEY `documentos_03` (`user_id`),
   KEY `documentos_04` (`repository_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Documentos subidos por los Usuarios al Repositorio' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Documentos subidos por los Usuarios al Repositorio' AUTO_INCREMENT=37 ;
+
+--
+-- Volcado de datos para la tabla `documents`
+--
+
+INSERT INTO `documents` (`id`, `name`, `description`, `register_date`, `register_ip`, `registration_date`, `registration_ip`, `activation_id`, `internalstate_id`, `user_id`, `repository_id`, `document_state_id`) VALUES
+(5, 'jkkjkj', 'kjkjkj', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(30, 'hjjhhjjhklfdskm', 'jhbskjdngkjdsnjkd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(31, 'kjkjkjjkdfsklgm', 'msfdmgdsmklg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(32, 'jkkjkjdfs', 'fdsklgdsk', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(33, 'saffasf', 'klasdogfsakofoas', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(34, 'dsgdslhsdlkdslk', 'flksglkdsajgkldsjhdkl', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(35, 'fdsg', 'fsklgdsmkl', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
+(36, 'hola', 'hola', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -342,7 +371,15 @@ CREATE TABLE IF NOT EXISTS `repositories` (
   KEY `repositorios_01` (`activation_id`),
   KEY `repositorios_02` (`internalstate_id`),
   KEY `repositorios_03` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Repositorio de Documentos del Sistema' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Repositorio de Documentos del Sistema' AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `repositories`
+--
+
+INSERT INTO `repositories` (`id`, `name`, `internal_name`, `description`, `created`, `modifed`, `activation_id`, `internalstate_id`, `user_id`) VALUES
+(1, 'prueba', 'prueba', 'prueba', '2012-04-30 02:47:58', NULL, 'A', 'A', 3),
+(2, 'prueba2', 'prueba2', 'prueba2', '2012-05-01 00:38:29', NULL, 'A', 'A', 2);
 
 -- --------------------------------------------------------
 
@@ -357,14 +394,20 @@ CREATE TABLE IF NOT EXISTS `repositories_users` (
   `user_id` int(6) NOT NULL COMMENT 'Clave Foranea Usuarios',
   `repository_id` int(6) NOT NULL COMMENT 'Clave Foranea Repositorios',
   `user_type_id` int(2) NOT NULL COMMENT 'Clave Foranea Tipo_Usuarios',
-  `watching` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `usuario_repositorios_01` (`activation_id`),
   KEY `usuario_repositorios_02` (`internalstate_id`),
   KEY `usuario_repositorios_03` (`user_id`),
   KEY `usuario_repositorios_04` (`repository_id`),
   KEY `usuario_repositorios_05` (`user_type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `repositories_users`
+--
+
+INSERT INTO `repositories_users` (`id`, `activation_id`, `internalstate_id`, `user_id`, `repository_id`, `user_type_id`) VALUES
+(2, 'A', 'A', 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -450,14 +493,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `users_01` (`activation_id`),
   KEY `users_02` (`internalstate_id`),
   KEY `users_03` (`is_administrator`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Usuarios del Sistema' AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Usuarios del Sistema' AUTO_INCREMENT=4 ;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `salt`, `is_administrator`, `activation_id`, `internalstate_id`) VALUES
-(1, 'admin', 'admin@example.com', 'admin', 'fbe82ab72970b9940724512227185348eac9d7fd', '1738993739', '1', 'A', 'A');
+(2, 'admin', 'admin@example.com', 'admin', 'fbe82ab72970b9940724512227185348eac9d7fd', '1738993739', '1', 'A', 'A'),
+(3, 'victor', 'vitorohe@gmail.com', 'vitorohe', '9abbf9bf2d11d1399a58f282576b86821b945aca', '1974672534', '0', 'A', 'A');
 
 -- --------------------------------------------------------
 

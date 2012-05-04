@@ -50,7 +50,7 @@ class RepositoriesUser extends AppModel {
 				'internalstate_id' => 'A',
 				'user_id' => $user_id,
 				'repository_id' => $repository_id,
-				'user_type' => $is_admin
+				'user_type_id' => $is_admin
 				)
 			)
 		);

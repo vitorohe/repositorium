@@ -37,10 +37,12 @@
     <div class="yui-g">
         <div class="yui-u first">
         	<div class="padded">
-				<strong class="mini-header">Repositories in your watchlist</strong>
-				<?php if(count($watched_repos) > 0): ?>
+				<strong class="mini-header">Repositories you have joined</strong>
+				<?php //if(count($watched_repos) > 0): ?>
+				<?php if(count($joined_repos) > 0): ?>
 				<ul>
-					<?php foreach($watched_repos as $r) { ?>
+					<?php //foreach($watched_repos as $r) { ?>
+					<?php foreach($joined_repos as $r) { ?>
 					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>

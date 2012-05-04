@@ -75,7 +75,7 @@ class RepositoriesController extends AppController {
 				'conditions' => array(
 					'User.id' => $repository['Repository']['user_id']
 				),
-				'fields' => array('User.name'),
+				'fields' => array('User.id', 'User.name'),
 				'recursive' => -1,
 			));
 			
@@ -282,7 +282,7 @@ class RepositoriesController extends AppController {
 //		$this->RepositoriesUser->set('joined', !$joined);
 //		$this->RepositoriesUser->save();
 		
-		if($joined) $msg = "You have let gone of the repository";
+		if($joined) $msg = "You have left the repository";
 		else $msg = "You have joined to the repository";
 		
 		$this->Session->setFlash($msg);

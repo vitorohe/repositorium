@@ -1,9 +1,9 @@
 <?php $r = $repository['Repository']; ?>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#repo-watch").click(function(e) {
+		$("#repo-join").click(function(e) {
 			e.preventDefault();
-			$(window.location).attr('href', '<?php echo $this->Html->url(array('controller' => 'repositories', 'action' => 'watch', $r['id']));?>');
+			$(window.location).attr('href', '<?php echo $this->Html->url(array('controller' => 'repositories', 'action' => 'join', $r['id']));?>');
 		});	
 		$("#repo-search").click(function(e) {
 			e.preventDefault();
@@ -15,6 +15,7 @@
 <div id="expert-tools">
 	<div class="adm-mass">
 		<?php
+		/*
 		if(!is_null($watching)) :
 			if($watching)
 				$msg = 'Remove from watchlist';
@@ -22,6 +23,23 @@
 				$msg = 'Add to watchlist';
 			echo $this->Form->button($msg, array('id' => 'repo-watch'));
 		endif;
+		*/
+
+		/*-------------------INI-----------------------*/
+		/*Verifying that user loged is not the creator of the repo to display the msg*/
+		$is_joining = false;
+		if(!is_null($joined) && $creator['User']['id']!= $user['User']['id']) {
+			if($joined) {
+				$msg = 'Leave the repository';
+			}
+			else {
+				$msg = 'Join to the repository';
+				$is_joining = true;
+			}
+			
+			echo $this->Form->button($msg, array('id' => 'repo-join'));
+		}
+		/*-------------------FIN-----------------------*/
 		echo '&nbsp;&nbsp;&nbsp;';			
 		// echo $this->Form->button('Search a Document', array('id' => 'repo-search'));
 		?>
