@@ -28,7 +28,7 @@
 		/*-------------------INI-----------------------*/
 		/*Verifying that user loged is not the creator of the repo to display the msg*/
 		$is_joining = false;
-		if(!is_null($joined) && $creator['User']['id']!= $user['User']['id']) {
+		if($creator['User']['id']!= $user['User']['id']) {
 			if($joined) {
 				$msg = 'Leave the repository';
 			}

@@ -66,7 +66,15 @@ class RepositoriesController extends AppController {
 				));				
 				//$watching = $r['RepositoriesUser']['watching'];
 				/*----------------------------INI------------------------------*/
-				$joined = $r;				
+				if(is_null($r)) {
+					$joined = false;
+				}				
+				elseif ($r['RepositoriesUser']['activation_id'] === 'N') {
+					$joined = false;
+				}
+				else {
+					$joined = true;
+				}
 				/*----------------------------FIN------------------------------*/
 			}
 			
@@ -311,7 +319,6 @@ class RepositoriesController extends AppController {
 		$joined = false;
 
 		if(empty($repo)) {
-
 			if($user['User']['is_administrator'])
 				$is_admin = 1;
 			else
@@ -323,7 +330,19 @@ class RepositoriesController extends AppController {
 			}
 
 		}
-
+		elseif ($repo['RepositoriesUser']['activation_id'] === 'A') {
+			$repo['RepositoriesUser']['activation_id'] = 'N';
+			
+			$this->create();
+			$this->RepositoriesUser->save($repo);				
+			$joined = true;
+		}
+		else {
+			$repo['RepositoriesUser']['activation_id'] = 'A';
+			
+			$this->create();
+			$this->RepositoriesUser->save($repo);
+		}
 
 //		$joined = $repo['RepositoriesUser']['joined'];
 		
