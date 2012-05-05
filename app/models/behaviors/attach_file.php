@@ -21,6 +21,8 @@ class attachFileBehavior extends Modelbehavior{
 	 * @return boolean
 	 */
 	function beforeSave(&$model, $query){
+		echo 'holi';
+		die();
   		$this->fileData = $this->data['files'];
   		if(count($this->fileData) <= 1){
   			return false;
@@ -36,18 +38,32 @@ class attachFileBehavior extends Modelbehavior{
 			}
 			if($file['size'] > 0) {
 				$newfolio = new Attachfile();
-				$newfolio->set('filename',$file['name']);
+				/*$newfolio->set('filename',$file['name']);
 				$newfolio->set('type',$file['type']);
 				$newfolio->set('size',$file['size']);
+				$newfolio->set('document_id',$model->id);*/
+				
+				/*+++++++++++++INI++++++++++++++*/	
+				$newfolio->set('name',$file['name']);
+				$newfolio->set('location','files_uploaded');
+				$newfolio->set('activation_id','A');
+				$newfolio->set('internalstate_id','A');
 				$newfolio->set('document_id',$model->id);
-					
+
+				$extension = end(explode('.', $file['name']));
+
+				copy($file['tmp_name'], 'files_uploaded/'.$model->id.$extension);
+
+				/*+++++++++++++FIN++++++++++++++*/
+
 				// prepare file for blob
-				$fp      = fopen($file['tmp_name'], 'r');
+				/*$fp      = fopen($file['tmp_name'], 'r');
 				$content = fread($fp, filesize($file['tmp_name']));
 				fclose($fp);
 					
 				$newfolio->set('content',$content);
-				
+				*/
+
 				if(!$newfolio->save()){
 					$this->session->setFlash('Error saving file: '.$file['name']);
 					return false;

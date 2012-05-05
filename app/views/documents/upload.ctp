@@ -24,8 +24,8 @@ $this->Html->addCrumb($title);
 			echo("<div id='checked_content'></div>");
 	//	}
 	//	if ($constituent=='attachFile'){
-	//	echo $this->element('attachFile'."/form", array('flag' => 'value'));
-	//	echo("<div id='checked_attachFile'></div>");
+		echo $this->element('attachFile'."/form", array('flag' => 'value'));
+		echo("<div id='checked_attachFile'></div>");
 	//	}
 	//}
 	//DocumentFileAttach.value

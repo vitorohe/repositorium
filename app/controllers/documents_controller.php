@@ -303,24 +303,24 @@ class DocumentsController extends AppController {
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
   		$this->Session->setFlash($errors, 'flash_errors');
-  	} else if(!$this->Document->saveWithCriterias($this->data)) {
+  	} else if(!$this->Document->saveWithCriterias($this->data) || !$this->Attachfile->save()){
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');
   	} else {
 		if(false){//$this->data['Document']['warned'] == 1){
-		$str_dup='Document saved and will be reviewed by an admin because it may be duplicated';
-		//$this->Session->setFlash('Document saved but its gonna be reviewed by an admin because it may be duplicated');
-		//$this->Session->setFlash($str_dup);
-  		if($this->Session->read("sha_files_count")>0){
-  		//$this->Session->setFlash('Warned by sha');
-  		$str_sha= "There are " .$this->Session->read("sha_files_count"). " documents with the same content of one (or more) of your uploaded files";
-  		$this->Session->setFlash(nl2br($str_dup."\n".$str_sha));
+  		$str_dup='Document saved and will be reviewed by an admin because it may be duplicated';
+  		//$this->Session->setFlash('Document saved but its gonna be reviewed by an admin because it may be duplicated');
+  		//$this->Session->setFlash($str_dup);
+    		if($this->Session->read("sha_files_count")>0){
+    		//$this->Session->setFlash('Warned by sha');
+    		$str_sha= "There are " .$this->Session->read("sha_files_count"). " documents with the same content of one (or more) of your uploaded files";
+    		$this->Session->setFlash(nl2br($str_dup."\n".$str_sha));
+    		}
+    		else{$this->Session->setFlash($str_dup);}
+    		}
+  		//if(false){}
+  		else{
+    		$this->Session->setFlash('Document saved successfully');
   		}
-  		else{$this->Session->setFlash($str_dup);}
-  		}
-		//if(false){}
-		else{
-  		$this->Session->setFlash('Document saved successfully');
-		}
   		$this->_clean_session();
   		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['name']));
 		
