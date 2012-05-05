@@ -2,6 +2,7 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
+  var $uses = array('Document', 'Criteria', 'CriteriasDocument');
   var $paginate = array(
 	'Criteria' => array(
 	  'limit' => 5,
@@ -10,6 +11,8 @@ class CriteriasController extends AppController {
 	  )
 	)
   );
+  
+
   
 //   var $helpers = array('Session', 'Form');
 
@@ -50,6 +53,45 @@ class CriteriasController extends AppController {
   	); 
   
   	$this->set($params);	
+  }
+  
+  function search() {
+  	$repo = $this->requireRepository();
+  	$options['joins'] = array(
+  			array('table' => 'criterias_documents',
+  					'alias' => 'CriteriasDocument',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasDocument.criteria_id = Criteria.id')
+  			),
+  			array('table' => 'documents',
+  					'alias' => 'Document',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasDocument.document_id = Document.id'
+  					)
+  			),
+  			array('table' => 'repositories',
+  					'alias' => 'Repository',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'Repository.id = Document.repository_id')
+  			)
+  	);
+  	$options['conditions'] = array(
+  			'Repository.id' => $repo['Repository']['id']);
+  
+  	$options['fields'] = array(
+  			'DISTINCT Criteria.id', 'Criteria.name');
+  
+  	$criterias = $this->Criteria->find('all', $options);
+  
+  	/*$constituents = $this->ConstituentsKit->find('list', array(
+  	 'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'),
+  			'recursive' => 1,
+  			'fields'=>array('Constituent.sysname')));*/
+  
+  	$this->set(compact('criterias'));
   }
 
   function add() {
@@ -159,6 +201,52 @@ class CriteriasController extends AppController {
   	}
   }
 
+  function process(){
+  	$data = $this->data;
+  	
+  	$there_are_criterias = false;
+  	if(isset($data['Criteria']['criterias'])) {
+  		$there_are_criterias = true;
+  	}
+  	
+  	
+  	if($there_are_criterias) {
+  		$criterias = explode('&', $data['Criteria']['criterias']);
+  		$criterias = array_map("trim", $criterias);
+  		unset($data['Criteria']['criterias']);
+  	}
+  	
+  	$criteria_ids = array();
+  	foreach($criterias as $criteria) {
+  		$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+  	}
+  	
+  	$options['joins'] = array(
+  			array('table' => 'documents',
+  					'alias' => 'Document',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasDocument.document_id = Document.id'
+  					)
+  			)
+  	);
+  	
+  	$options['conditions'] = array(
+  			'CriteriasDocument.criteria_id' => $criteria_ids);
+  	
+  	$options['fields'] = array(
+  			'DISTINCT Document.id', 'Document.name', 'Document.description');
+  	
+  	$options['group'] = 'Document.id HAVING COUNT(CriteriasDocument.criteria_id) >='.count($criteria_ids);
+  	
+  	$options['recursive'] = -1;
+  	
+  	$documents = $this->CriteriasDocument->find('all', $options);
+  	
+  	$criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));
+  
+  	$this->set(compact('documents', 'criterias_name'));
+  }
 }
 
 ?>

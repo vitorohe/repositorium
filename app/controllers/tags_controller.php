@@ -12,7 +12,7 @@
 class TagsController extends AppController {
 
 	var $helpers = array('Js' => array('Jquery'));
-	var $uses = array('Criteria', /*'Tag',*/ 'Document', 'Attachfile', 'ConstituentsKit');
+	var $uses = array('Criteria', /*'Tag',*/ 'Document', 'Attachfile');
 	
 	/**
 	 * Criteria Model
@@ -20,23 +20,51 @@ class TagsController extends AppController {
 	 */
 	var $Criteria;
 	
+	/**
+	 * CriteriasDocument Model
+	 * @var CriteriasDocument
+	 */
+	var $CriteriasDocument;
+	
+	
+	
   function index() {
 	$repo = $this->requireRepository();
-	$criterias = $this->Criteria->find('all', array(
-		'conditions' => array(
-			'Criteria.repository_id' => $repo['Repository']['id']
-			),
-		'recursive' => -1,
-		'fields' => array('id', 'question'),
-		)
-	);
+	$options['joins'] = array(
+			array('table' => 'criterias_documents',
+					'alias' => 'CriteriasDocument',
+					'type' => 'inner',
+					'conditions' => array(
+							'CriteriasDocument.criteria_id = Criteria.id')
+					),
+			array('table' => 'documents',
+					'alias' => 'Document',
+					'type' => 'inner',
+					'conditions' => array(
+							'CriteriasDocument.document_id = Document.id'
+							)
+					),
+			array('table' => 'repositories',
+					'alias' => 'Repository',
+					'type' => 'inner',
+					'conditions' => array(
+							'Repository.id = Document.repository_id')
+					)
+			);
+	$options['conditions'] = array(
+			'Repository.id' => $repo['Repository']['id']);
 	
-	$constituents = $this->ConstituentsKit->find('list', array(
+	$options['fields'] = array(
+			'Criteria.id', 'Criteria.name');
+	
+	$criterias = $this->Criteria->find('all', $options);
+	
+	/*$constituents = $this->ConstituentsKit->find('list', array(
 					'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
 					'recursive' => 1,
-					'fields'=>array('Constituent.sysname')));
+					'fields'=>array('Constituent.sysname')));*/
 	
-	$this->set(compact('criterias','constituents'));	
+	$this->set(compact('criterias'));	
   }
   
 

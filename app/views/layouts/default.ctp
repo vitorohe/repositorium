@@ -109,7 +109,7 @@
 	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
                     	<?php endif; ?>
                     	<!--INI-->
-                    	<li><?php echo $this->Html->link('Search','http://www.google.cl' /*,array('controller' => 'tags', 'action' => 'index')*/); ?></li>
+                    	<li><?php echo $this->Html->link('Search',array('controller' => 'criterias', 'action' => 'search')); ?></li>
                       <!--FIN-->
                     	
                       

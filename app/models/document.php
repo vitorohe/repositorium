@@ -184,6 +184,8 @@ class Document extends AppModel {
 			$dataSource->commit($this);
 			
 		}
+		else 
+			return false;
 		return true;
 	}
 	
