@@ -52,9 +52,9 @@ class RepositoriesController extends AppController {
 		$result = $this->_set_repo($data = compact('repo_url'));
 		if($result[0]) {			
 			$repository = $result[1];
-			$watching = null;
+			$joined = null;
 			
-			// watching repo
+			// joined repo
 			if($this->isLoggedIn()) {
 				$user = $this->getConnectedUser();
 				$r = $this->RepositoriesUser->find('first', array(
@@ -96,24 +96,73 @@ class RepositoriesController extends AppController {
 				),
 				'group' => 'tag'
 			));
-			
+			*/
+
 			$cloud_data = "<tags>";
 			$tag_factor_crecimiento = 1.5;
 			$tag_min_size = 10; //tamano minimo
 			$tag_max_size = 40; //tamano maximo
-			foreach($tags_name_count as $tag_info){
+
+			//selecting criterias to display in cloudtag
+			/*+++++++++++++++++++++INI+++++++++++++++++++++++*/
+
+			//$repo = $this->requireRepository();
+		  	$options['joins'] = array(
+		  			array('table' => 'criterias_documents',
+		  					'alias' => 'CriteriasDocument',
+		  					'type' => 'inner',
+		  					'conditions' => array(
+		  							'CriteriasDocument.criteria_id = Criteria.id')
+		  			),
+		  			array('table' => 'documents',
+		  					'alias' => 'Document',
+		  					'type' => 'inner',
+		  					'conditions' => array(
+		  							'CriteriasDocument.document_id = Document.id'
+		  					)
+		  			),
+		  			array('table' => 'repositories',
+		  					'alias' => 'Repository',
+		  					'type' => 'inner',
+		  					'conditions' => array(
+		  							'Repository.id = Document.repository_id')
+		  			)
+		  	);
+		  	$options['conditions'] = array(
+		  			'Repository.id' => $repository['Repository']['id']);
+		  
+		  	$options['fields'] = array(
+		  			'DISTINCT Criteria.id', 'Criteria.name');
+		  
+		  	$criterias = $this->Criteria->find('all', $options);
+
+
+
+			//$this->Criteria->unbindModel(array('hasMany' => array('CriteriasDocument', 'CriteriasUser')));
+			//$criterias = $this->Criteria->find('all');
+			/*+++++++++++++++++++++FIN+++++++++++++++++++++++*/
+
+			/*foreach($tags_name_count as $tag_info){
 				$tag_size = round($tag_factor_crecimiento*$tag_info[0]['cantidad']+$tag_min_size);
 				if($tag_size>$tag_max_size) $tag_size = $tag_max_size;
 				$cloud_data .= "<a href='".Router::url(array('controller' => 'tags', 'action' => 'index'), true)."/?tag_value=".$tag_info['Tag']['tag']."' style='".$tag_size."' color='0x".$this->color_aleatorio()."' hicolor='0x".$this->color_aleatorio()."'>".$tag_info['Tag']['tag']."</a>";
+			}*/
+
+			/*+++++++++++++++++++++INI+++++++++++++++++++++++*/
+			$criteria_size = 30;
+			foreach($criterias as $criteria){
+				$cloud_data .= "<a href='".""/*Router::url(array('controller' => 'search', 'action' => 'index'), true)*/."/?criteria_value=".$criteria['Criteria']['name']."' style='".$criteria_size."' color='0x".$this->color_aleatorio()."' hicolor='0x".$this->color_aleatorio()."'>".$criteria['Criteria']['name']."</a>";
 			}
+			/*+++++++++++++++++++++FIN+++++++++++++++++++++++*/
+
 			$cloud_data .= "</tags>";
 
-			$tags = $this->Tag->find('count', array(
+			/*$tags = $this->Tag->find('count', array(
 				'conditions' => array(
 					'Document.repository_id' => $repository['Repository']['id']
 				),
 				'fields' => 'DISTINCT tag'
-			));
+			));*/
 			
 			/*$criterias = $this->Criteria->find('count', array(
 				'conditions' => array(
@@ -122,7 +171,7 @@ class RepositoriesController extends AppController {
 				'recursive' => -1
 			));*/
 			
-			$this->set(compact('repository', /*'watching',*//*INI*/'joined', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags', 'cloud_data'*/));
+			$this->set(compact('repository', /*'watching',*//*INI*/'joined', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags',*/, 'cloud_data'));
 		} else {
 			$this->e404();
 		}		
