@@ -191,7 +191,7 @@ class Document extends AppModel {
 	
 
 	/*save attached files*/
-	/*function saveAttachedFiles(&$data = array()) {
+	/function saveAttachedFiles(&$data = array()) {
 
 		if(!empty($data)) {
 			
@@ -203,7 +203,7 @@ class Document extends AppModel {
 		else 
 			return false;
 
-	}*/
+	}
 	
 	// done: multiples criterios
 	// done: multiple repositories

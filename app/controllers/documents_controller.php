@@ -303,7 +303,7 @@ class DocumentsController extends AppController {
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
   		$this->Session->setFlash($errors, 'flash_errors');
-  	} else if(!$this->Document->saveWithCriterias($this->data) || !$this->Attachfile->save()){
+  	} else if(!$this->Document->saveWithCriterias($this->data) || !$this->Document->saveAttachedFiles($this->data)){
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');
   	} else {
 		if(false){//$this->data['Document']['warned'] == 1){
