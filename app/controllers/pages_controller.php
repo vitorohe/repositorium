@@ -124,6 +124,7 @@ class PagesController extends AppController {
 		/*++++++++++++++INI++++++++++++*/
 		$joined = array(
 			'RepositoriesUser.user_id' => $user['User']['id'],
+			'RepositoriesUser.activation_id' => 'A'
 			);
 		/*++++++++++++++FIN++++++++++++*/
 		
