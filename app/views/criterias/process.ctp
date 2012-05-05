@@ -7,9 +7,12 @@ $this->viewVars['title_for_layout'] = $title;
 <h1 class="h1icon" style="margin-top: 15px;"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
 
-<?php echo '<span>Search result for: ';
+<?php if(empty($documents))
+		echo '<span>There aren\'t results for: ';
+	else 
+		echo '<span>Search result for: ';
 	foreach($criterias_name as $name){
-		echo $name . ' ';
+		echo $name['Criteria']['name'] . ' ';
 	}
 	echo '</span>';
 ?>

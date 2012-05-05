@@ -190,19 +190,29 @@ class CriteriasDocument extends AppModel {
 		$quantity 		= $data['quantity'];
 		$repository_id	= $data['repository_id'];
 
-		$ids = $this->find('all', array(
-				'conditions' => array(
-					'CriteriasDocument.criteria_id' => $criteria_id,
-					'CriteriasDocument.validated' => $confirmado,
-					'CriteriasDocument.challengeable' => $preguntable,
-					'Document.user_id <>' => $usuario_id,
-					'Document.repository_id' => $repository_id
+		
+		$options['joins'] = array(
+				array('table' => 'documents',
+						'alias' => 'Document',
+						'type' => 'inner',
+						'conditions' => array(
+								'CriteriasDocument.document_id = Document.id'
+						)
 				)
-			)
 		);
 		
+		$options['conditions'] = array(
+				'CriteriasDocument.criteria_id' => $criteria_id);
+		
+		$options['fields'] = array(
+				'DISTINCT Document.id', 'Document.name', 'Document.description');
+		
+		$options['recursive'] = -1;
+		
+		$ids = $this->find('all', $options);
+		
 		/* cgajardo: this will make attached files available in challenges view. */ 
-		foreach ($ids as $key => $id){
+		/*foreach ($ids as $key => $id){
 			$files = ClassRegistry::init('Attachfile')->find('all', array(
 					'conditions' => array(
 						'Attachfile.document_id' => $id['Document']['id'] 
@@ -210,7 +220,7 @@ class CriteriasDocument extends AppModel {
 					'fields' => array('Attachfile.id', 'Attachfile.filename') 
 			));
 			$ids[$key]['Files'] = $files; 
-		}
+		}*/
 		
 		// shuffles the result and then extract the first $quantity $ids
 		shuffle($ids);
@@ -234,7 +244,7 @@ class CriteriasDocument extends AppModel {
 			if(!isset($d['criteria_id']) || !isset($d['document_id']) || !isset($d['respuesta']))
 				return false;
 	
-			$info = $this->_validatedEntry($d);
+			$info['CriteriasDocument']['official_answer'] = 0;//$this->_validatedEntry($d);
 				
 			if(!is_null($info)) {
 				$answer = $info['CriteriasDocument']['official_answer'];

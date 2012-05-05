@@ -58,7 +58,7 @@
 				<?php if(count($latest_repos) > 0): ?>
 				<ul>
 					<?php foreach($latest_repos as $r) { ?>
-					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['name']); ?></li>
+					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>

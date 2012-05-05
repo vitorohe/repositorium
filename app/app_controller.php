@@ -177,7 +177,7 @@ class AppController extends Controller {
 		}
 		
 		if(!is_null($repo)) {
-			$data = $this->Repository->find('first', array('conditions' => array('Repository.name' => $repo), 'recursive' => -1));
+			$data = $this->Repository->find('first', array('conditions' => array('Repository.internal_name' => $repo), 'recursive' => -1));
 			if(!is_null($data) && !empty($data)) {
 				return $data;
 			}

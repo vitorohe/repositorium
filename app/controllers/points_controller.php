@@ -351,7 +351,14 @@ class PointsController extends AppController {
 			$this->Session->setFlash($this->Session->read('Points.status'));
 				
 		if($action == $this->earn) {
-			$this->redirect('/');
+			$repository = $this->getCurrentRepository();
+			if(Configure::read('App.subdomains')) {
+				$dom = Configure::read('App.domain');
+				$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
+			} else {
+				$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repository['Repository']['name']));
+			}
+			
 		}
 		
 		if($action == $this->upload || $action == $this->download) {

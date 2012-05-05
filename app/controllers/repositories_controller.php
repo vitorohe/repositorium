@@ -191,7 +191,7 @@ class RepositoriesController extends AppController {
 		if(isset($data['repo_url'])) {
 			$repo = $this->Repository->find('first', array(
 				'conditions' => array(
-					'Repository.name' => $data['repo_url']
+					'Repository.internal_name' => $data['repo_url']
 				),
 				'recursive' => -1,
 			));
@@ -279,7 +279,7 @@ class RepositoriesController extends AppController {
 					$dom = Configure::read('App.domain');
 					$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
 				} else {
-					$this->redirect(array('action' => 'index', $repository['Repository']['name']));
+					$this->redirect(array('action' => 'index', $repository['Repository']['internal_name']));
 				}
 
 			} else {

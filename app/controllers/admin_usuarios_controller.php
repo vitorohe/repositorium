@@ -14,8 +14,8 @@ class AdminUsuariosController extends AppController {
   var $paginate = array(
 	  'User' => array(
 		'limit' => '15',
-		'conditions' => array('User.id <>' => 1),
-//		'order' => array('User.created' => 'desc'),
+//		'conditions' => array('User.id <>' => 1),
+		'order' => array('User.name' => 'desc'),
 		'recursive' => -1,
   	),
   	'Repository' => array(
@@ -50,6 +50,7 @@ class AdminUsuariosController extends AppController {
 		'footnotes' => array('Site Administrator'),
 		'cond' => 'admin',
 	);
+	
 	
 	$this->set($params);
   }
@@ -122,15 +123,16 @@ class AdminUsuariosController extends AppController {
   	if(is_null($id))
   		$this->e404();
   	
-  	$this->paginate['Expert']['conditions'] = array(
-  		'Expert.user_id' => $id,
+  	$this->paginate['Repository']['conditions'] = array(
+  		'Repository.user_id' => $id,
   	);
-  	$this->data = $this->paginate('Expert');
+  	
+  	$this->data = $this->paginate('Repository');
   	$user = $this->User->find('first', array('conditions' => compact('id'), 'recursive' => -1));
   	$params = array(
   		'current' => 'usuarios',
   		'menu' => 'menu_admin',
-  		'title' => "Repositories of '{$user['User']['first_name']} {$user['User']['last_name']}'",
+  		'title' => "Repositories of '{$user['User']['name']}'",
   		'cond' => 'owner',
   		'user' => $user,
   		'footnotes' => array('This repository was created by the user'),

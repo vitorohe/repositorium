@@ -137,9 +137,42 @@ class Criteria extends AppModel {
 		}*/
 	}
 	
+	function findRepoCriterias($repository_id){
+		$options['joins'] = array(
+				array('table' => 'criterias_documents',
+						'alias' => 'CriteriasDocument',
+						'type' => 'inner',
+						'conditions' => array(
+								'CriteriasDocument.criteria_id = Criteria.id')
+				),
+				array('table' => 'documents',
+						'alias' => 'Document',
+						'type' => 'inner',
+						'conditions' => array(
+								'CriteriasDocument.document_id = Document.id'
+						)
+				),
+				array('table' => 'repositories',
+						'alias' => 'Repository',
+						'type' => 'inner',
+						'conditions' => array(
+								'Repository.id = Document.repository_id')
+				)
+		);
+		$options['conditions'] = array(
+				'Repository.id' => $repository_id);
+		
+		$options['fields'] = array(
+				'DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question');
+		
+		$options['recursive'] = -1;
+		
+		return $this->find('all', $options);
+	}
+	
 	
 	function getRandomCriteria($repository_id) {
-		$criterios = $this->find('all', array('conditions' => compact('repository_id'), 'recursive' => -1));
+		$criterios = $this->findRepoCriterias($repository_id);
 	
 		if(empty($criterios))
 			return null;
@@ -158,7 +191,7 @@ class Criteria extends AppModel {
 			return null;
 	
 		$criterio_id = $criterio['Criteria']['id'];
-		$c = $this->CriteriasUser->getC($user_id, $criterio_id);
+		$c = 3;//$this->CriteriasUser->getC($user_id, $criterio_id);
 	
 		$qty_of_validated    = ceil($proportion * $c);
 		$qty_of_nonvalidated = floor((1 - $proportion) * $c);
@@ -181,12 +214,12 @@ class Criteria extends AppModel {
 	
 		$validated = $this->CriteriasDocument->getRandomDocuments($v_params);
 	
-		if(count($validated) < $qty_of_validated)
-			$n_params['quantity'] = $qty_of_nonvalidated + ($qty_of_validated - count($validated));
+		/*if(count($validated) < $qty_of_validated)
+			$n_params['quantity'] = $qty_of_nonvalidated + ($qty_of_validated - count($validated));*/
 	
-		$nonvalidated = $this->CriteriasDocument->getRandomDocuments($n_params);
+		//$nonvalidated = $this->CriteriasDocument->getRandomDocuments($n_params);
 	
-		$challenge = array_merge($validated, $nonvalidated);
+		$challenge = $validated;//array_merge($validated, $nonvalidated);
 		shuffle($challenge);
 	
 		return $challenge;

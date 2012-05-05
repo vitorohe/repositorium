@@ -94,20 +94,20 @@
 
 			<h3 style="width:100%">
 				<a href="#">
-				<?php echo Sanitize::html($d['Document']['title']); ?>
+				<?php echo Sanitize::html($d['Document']['name']); ?>
 				<span id="span<?php echo $i; ?>" style="float:right;text-align:right;" class="desafio-not-ready">Not Ready</span>	
 				</a>
 			</h3>
 			<div> 
-				<div><?php echo stripslashes(str_replace("\n", '<br />', Sanitize::html($d['Document']['content']))); ?></div>
+				<div><?php echo stripslashes(str_replace("\n", '<br />', Sanitize::html($d['Document']['description']))); ?></div>
 				<div>
 					<?php
 					
 					$script_click = "setReady(".$i.", ".$total." );" ;
 					
 					$options = array(
-					'1' => $criterio['Criteria']['answer_1'],
-					'2' => $criterio['Criteria']['answer_2']);  	
+					'1' => 'Yes',
+					'2' => 'No');  	
 					$attr = array(
 						'onClick' => $script_click,
 						'label' => true,

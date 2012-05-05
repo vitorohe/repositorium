@@ -101,11 +101,11 @@ class AdminRepositoriesController extends AppController {
 		if(is_null($id))
 			$this->e404();
 		
-		$this->paginate['Expert']['conditions'] = array(
+		/*$this->paginate['Expert']['conditions'] = array(
 			'Expert.repository_id' => $id
-		);
+		);*/
 		
-		$this->data = $this->paginate('Expert');
+		$this->data = $this->paginate('User');
 		$repo = $this->Repository->find('first', array('conditions' => compact('id'), 'recursive' => -1));
 		$data = array(
 			'current' => 'repositories',
@@ -117,6 +117,7 @@ class AdminRepositoriesController extends AppController {
 		);
 		
 		$this->set($data);
+		
 		$this->render('../admin_usuarios/listar');		
 	}
 }

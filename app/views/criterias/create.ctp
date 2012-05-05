@@ -34,11 +34,11 @@ $this->Html->addCrumb($title);
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 
-<?php echo $this->Form->input('download_score', array('label' => 'Cost (in points) of each document with this criteria to be downloaded')); ?>
+<?php //echo $this->Form->input('download_score', array('label' => 'Cost (in points) of each document with this criteria to be downloaded')); ?>
 
-<?php echo $this->Form->input('upload_score', array('label' => 'Cost (in points) of each document with this criteria to be uploaded')); ?>
+<?php //echo $this->Form->input('upload_score', array('label' => 'Cost (in points) of each document with this criteria to be uploaded')); ?>
 
-<?php echo $this->Form->input('collaboration_score', array('label' => 'Score of this criteria to be given, when a user evaluates documents in challenges')); ?>
+<?php //echo $this->Form->input('collaboration_score', array('label' => 'Score of this criteria to be given, when a user evaluates documents in challenges')); ?>
 
 <?php //echo $this->Form->input('challenge_reward', array('label' => 'Amount of points to be rewarded after passing successfuly a challenge')); ?>
 <br /><br />

@@ -95,7 +95,7 @@ class ChallengesController extends AppController {
   	if(count($documentos) == 0)
   		$this->_skip_challenge();
   	
-  	$this->Session->write('Challenge.criterio', $documentos[0]['CriteriasDocument']['criteria_id']);
+  	$this->Session->write('Challenge.criterio', $criterio['Criteria']['id']);
   	$this->Session->write('Challenge.validate', true);
   	
   	$this->set(compact('documentos', 'criterio'));
