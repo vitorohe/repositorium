@@ -62,6 +62,11 @@ class Document extends AppModel {
 			'className' => 'CriteriasDocument',
 			'foreignKey' => array('criteria_id', 'document_id'),
 			'dependent' => true,
+		),
+		'Attachfile' => array(
+			'className' => 'Attachfile',
+			'foreignKey' => array('document_id'),
+			'dependent' => true,
 		)
 	);
 
@@ -191,11 +196,11 @@ class Document extends AppModel {
 	
 
 	/*save attached files*/
-	/function saveAttachedFiles(&$data = array()) {
+	function saveAttachedFiles(&$data = array()) {
 
 		if(!empty($data)) {
 			
-			if(!$this->Attachfile->save())
+			if(!$this->Attachfile->save($data))
 				return false;
 			else
 				return true;		

@@ -322,7 +322,7 @@ class DocumentsController extends AppController {
     		$this->Session->setFlash('Document saved successfully');
   		}
   		$this->_clean_session();
-  		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['name']));
+  		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['internal_name']));
 		
   	}
   }
