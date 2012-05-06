@@ -61,20 +61,13 @@ class RepositoriesController extends AppController {
 					'conditions' => array(
 						'RepositoriesUser.repository_id' => $repository['Repository']['id'],
 						'RepositoriesUser.user_id' => $user['User']['id'],
-						'Repository.user_id <>' => $user['User']['id']),
+						'RepositoriesUser.user_type_id <>' => 1,
+						'RepositoriesUser.activation_id' => 'A'),
 // 					'recursive' => -1 
 				));				
 				//$watching = $r['RepositoriesUser']['watching'];
 				/*----------------------------INI------------------------------*/
-				if(is_null($r)) {
-					$joined = false;
-				}				
-				elseif ($r['RepositoriesUser']['activation_id'] === 'N') {
-					$joined = false;
-				}
-				else {
-					$joined = true;
-				}
+				$joined = $r;				
 				/*----------------------------FIN------------------------------*/
 			}
 			
@@ -332,17 +325,18 @@ class RepositoriesController extends AppController {
 		}
 		elseif ($repo['RepositoriesUser']['activation_id'] === 'A') {
 			$repo['RepositoriesUser']['activation_id'] = 'N';
-			
+
 			$this->create();
 			$this->RepositoriesUser->save($repo);				
 			$joined = true;
 		}
 		else {
 			$repo['RepositoriesUser']['activation_id'] = 'A';
-			
+
 			$this->create();
 			$this->RepositoriesUser->save($repo);
 		}
+
 
 //		$joined = $repo['RepositoriesUser']['joined'];
 		

@@ -188,10 +188,10 @@ class Repository extends AppModel {
 	function createNewRepository($data) {
 		$ds = $this->getDataSource();		
 		$ds->begin($this);
-			if(!$this->save($data)) {
-				$ds->rollback($this);
-				return null;
-			}
+		if(!$this->save($data)) {
+			$ds->rollback($this);
+			return null;
+		}
 			
 			/*$expert = array(
 				'Expert' => array(
@@ -205,8 +205,9 @@ class Repository extends AppModel {
 				return null;
 			}*/
 			
-					
-		$ds->commit($this);
+		if($this->RepositoriesUser->saveRepositoryUser($data['Repository']['user_id'], $this->id, 1))	
+			$ds->commit($this);
+		else return null;
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 	
