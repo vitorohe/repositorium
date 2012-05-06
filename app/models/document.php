@@ -195,21 +195,6 @@ class Document extends AppModel {
 		return true;
 	}
 	
-
-	/*save attached files*/
-	function saveAttachedFiles(&$data = array()) {
-
-		if(!empty($data)) {
-		
-			if(!$this->Attachfile->save($data))
-				return false;
-			else
-				return true;		
-		}
-		else 
-			return false;
-
-	}
 	
 	// done: multiples criterios
 	// done: multiple repositories
