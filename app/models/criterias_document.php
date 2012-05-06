@@ -91,8 +91,8 @@ class CriteriasDocument extends AppModel {
 	               'document_id' => $id,
 	               'internalstate_id' => 'A',
 	               'activation_id' => 'A'
-	             )
-               )
+	             	)
+               	)
 			);
 
 			if(!$this->save()){

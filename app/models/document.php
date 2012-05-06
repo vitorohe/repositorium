@@ -2,6 +2,7 @@
 class Document extends AppModel {
 	var $name = 'Document';
 	var $displayField = 'name';
+	//var $actsAs = array('AttachFile');
 	var $validate = array(
 		'name' => array(
 			'notempty' => array(
@@ -199,7 +200,7 @@ class Document extends AppModel {
 	function saveAttachedFiles(&$data = array()) {
 
 		if(!empty($data)) {
-			
+		
 			if(!$this->Attachfile->save($data))
 				return false;
 			else
