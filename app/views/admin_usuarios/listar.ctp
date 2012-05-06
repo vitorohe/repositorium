@@ -78,7 +78,7 @@ $this->Html->addCrumb($title);
 				if(strcmp($cond, 'admin') == 0) {
 					$ast = $u['User']['is_administrator'];
 				} else if(strcmp($cond, 'owner') == 0) {
-					$ast = $u['User']['id'] == $repo['Repository']['user_id'];
+					$ast = $u['User']['id'] == $repo['Repository']['user_id'] || $u['RepositoriesUser']['user_type_id'] == 1;
 				}
 			}
 	?>

@@ -8,16 +8,17 @@
 
 class AdminRepositoriesController extends AppController {
 	var $name = 'AdminRepositories';
-	var $uses = array('Repository');
+	var $uses = array('Repository', 'RepositoriesUser', 'User');
 	var $paginate = array(
 		'Repository' => array(
 		  'limit' => 5,
 		  'recursive' => -1,
 		  'order' => array('Repository.created' => 'desc')
 		),
-		'Expert' => array(
+		'User' => array(
 			'limit' => 5,
-			'order' => array('Expert.created' => 'desc')
+			'recursive' => -1,
+			'order' => array('User.id' => 'asc')
 		)
 	);
 	
@@ -101,11 +102,21 @@ class AdminRepositoriesController extends AppController {
 		if(is_null($id))
 			$this->e404();
 		
-		/*$this->paginate['Expert']['conditions'] = array(
-			'Expert.repository_id' => $id
-		);*/
+		$this->paginate['User']['joins'] = array(
+				array('table' => 'repositories_users',
+						'alias' => 'RepositoriesUser',
+						'type' => 'inner',
+						'conditions' => array(
+								'User.id = RepositoriesUser.user_id')
+						)
+		);
+		
+		$this->paginate['User']['conditions'] = array('RepositoriesUser.repository_id' => $id, 'RepositoriesUser.activation_id' => 'A');
+		$this->paginate['User']['fields'] = array('User.id', 'User.email', 'User.name', 'User.username', 'RepositoriesUser.user_type_id', 'RepositoriesUser.activation_id');
 		
 		$this->data = $this->paginate('User');
+		
+
 		$repo = $this->Repository->find('first', array('conditions' => compact('id'), 'recursive' => -1));
 		$data = array(
 			'current' => 'repositories',
@@ -113,7 +124,7 @@ class AdminRepositoriesController extends AppController {
 			'menu' => 'menu_admin',
 			'title' => "Collaborators of '{$repo['Repository']['name']}' Repository",
 			'cond' => 'owner',
-			'footnotes' => array('Repository owner (only 1)'), 
+			'footnotes' => array('Repository administrator'), 
 		);
 		
 		$this->set($data);
