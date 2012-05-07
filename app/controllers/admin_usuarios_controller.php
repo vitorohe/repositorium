@@ -123,9 +123,24 @@ class AdminUsuariosController extends AppController {
   	if(is_null($id))
   		$this->e404();
   	
-  	$this->paginate['Repository']['conditions'] = array(
-  		'Repository.user_id' => $id,
+  	$this->paginate['Repository']['joins'] = array(
+  			array('table' => 'repositories_users',
+  					'alias' => 'RepositoriesUser',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'Repository.id = RepositoriesUser.repository_id')
+  			)
   	);
+  	
+  	$this->paginate['Repository']['conditions'] = array('RepositoriesUser.user_id' => $id, 'RepositoriesUser.activation_id' => 'A');
+  	$this->paginate['Repository']['fields'] = array(
+  			'Repository.id', 
+  			'Repository.name', 
+  			'Repository.internal_name', 
+  			'Repository.description', 
+  			'RepositoriesUser.user_type_id',
+  			'RepositoriesUser.activation_id'
+  			);
   	
   	$this->data = $this->paginate('Repository');
   	$user = $this->User->find('first', array('conditions' => compact('id'), 'recursive' => -1));
@@ -135,7 +150,7 @@ class AdminUsuariosController extends AppController {
   		'title' => "Repositories of '{$user['User']['name']}'",
   		'cond' => 'owner',
   		'user' => $user,
-  		'footnotes' => array('This repository was created by the user'),
+  		'footnotes' => array('This repository is administered by the user'),
   	);
   	$this->set($params);  	
   	$this->render('../admin_repositories/index');

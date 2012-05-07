@@ -1,7 +1,7 @@
 <?php
 class CriteriasUser extends AppModel {
 	var $name = 'CriteriasUser';
-	var $validate = array(
+	/*var $validate = array(
 		'challenge_size' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
@@ -16,7 +16,7 @@ class CriteriasUser extends AppModel {
 				'message' => 'The challenge size must be a positive number'
 			)
 		),
-	);
+	);*/
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	var $belongsTo = array(
@@ -129,6 +129,61 @@ class CriteriasUser extends AppModel {
 		}
 	
 		return false;
+	}
+	
+	function addPoints($user_id = null, $criteria_id = null, $points = 10) {
+		if(!is_null($user_id) && !is_null($criteria_id)) {
+			$ru = $this->find('first', array('conditions' => compact('user_id', 'criteria_id'), 'recursive' => -1));
+			$new_value = $points + $ru['CriteriasUser']['score_obtained'];
+				
+			$this->id = $ru['CriteriasUser']['id'];
+			if($this->saveField('score_obtained', $new_value))
+				return true;
+		}
+		return false;
+	}
+	
+	function countEvaluation($user_id = null, $criteria_id = null, $challengeCorrect = false){
+		$td = $this->_entry($user_id, $criteria_id);
+		$des = ($challengeCorrect ? 'successful' : 'negative');
+		
+		if(!$td){
+			$td['CriteriasUser'] = array(
+					'successful_evaluation' => 0,
+					'negative_evaluation' => 0,
+					'score_obtained' => 0,
+					'activation_id' => 'A',
+					'internalstate_id' => 'A',
+					'user_id' => $user_id,
+					'criteria_id' => $criteria_id,
+					'quality_user_id' => 2);
+			if(!$this->createNewCriteriasUser($td))
+				return false;
+		}
+		$cr = $td['Criteria'];
+		$value = $td['CriteriasUser'][$des . '_evaluation'];
+		
+		$new_value = $value + 1;
+
+		$this->id = $td['CriteriasUser']['id'];
+		if($this->saveField('challenge_size', $new_value))
+			return true;
+		
+		return false;
+	}
+	
+	function createNewCriteriasUser($data) {
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+
+
+		if(!$this->save($data)) {
+			$ds->rollback($this);
+			return null;
+		}
+
+		$ds->commit($this);
+		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 }
 ?>

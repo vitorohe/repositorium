@@ -156,9 +156,9 @@ class ChallengesController extends AppController {
   	$user = $this->getConnectedUser();
   	$criterio = $this->Session->read('Challenge.criterio');
   	$desafio_correcto = $this->CriteriasDocument->validateChallenge($data['Desafio']);
-  	$this->CriteriasDocument->saveStatistics($data['Desafio'], $desafio_correcto);
-  	$this->CriteriasUser->saveNextC($user['User']['id'], $criterio, $desafio_correcto);
-  	 
+  	//$this->CriteriasDocument->saveStatistics($data['Desafio'], $desafio_correcto);
+  	//$this->CriteriasUser->saveNextC($user['User']['id'], $criterio, $desafio_correcto);
+  	$this->CriteriasUser->countEvaluation($user['User']['id'], $criterio, $desafio_correcto);
   	$this->_dispatch($desafio_correcto);
   }
   

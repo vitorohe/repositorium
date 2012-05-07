@@ -2,7 +2,7 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
-  var $uses = array('Document', 'Criteria', 'CriteriasDocument');
+  var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'CriteriasUser');
   var $paginate = array(
 	'Criteria' => array(
 	  'limit' => 5,
@@ -147,23 +147,34 @@ class CriteriasController extends AppController {
   	if(!empty($this->data)) {
   		$user = $this->getConnectedUser();
 
+  		$cu = array('CriteriasUser' => array(
+  					'successful_evaluation' => 0,
+  					'negative_evaluation' => 0,
+  					'score_obtained' => 0,
+  					'activation_id' => 'A',
+  					'internalstate_id' => 'A',
+  					'user_id' => $user['User']['id'],
+  					'quality_user_id' => 1));
+  		
   		$this->data['Criteria']['user_id'] = $user['User']['id'];
   		$this->data['Criteria']['activation_id'] = 'A';
   		$this->data['Criteria']['internalstate_id'] = 'A';
   		$this->data['Criteria']['upload_score'] = 5;
   		$this->data['Criteria']['download_score'] = 10;
   		$this->data['Criteria']['collaboration_score'] = 5;
+  		
+  		
   			
   		$this->Criteria->set($this->data);
   			
   		if($this->Criteria->validates()) {
-  			$criteria = $this->Criteria->createNewCriteria($this->data, $user);
+  			$criteria = $this->Criteria->createNewCriteria($this->data, $cu);
   			CakeLog::write('activity', "Criteria [name=\"{$criteria['Criteria']['name']}\"] created");
   			if(is_null($criteria)) {
   				$this->Session->setFlash('An error occurred creating the criteria. Please, blame the developer');
   				$this->redirect('/');
   			}
-  	
+  			
   			$this->Session->setFlash('Criteria successfully created');
   			$this->redirect('/');
   	

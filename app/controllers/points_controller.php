@@ -7,7 +7,7 @@
  */
 class PointsController extends AppController {
 	var $name = 'Points';
-	var $uses = array('RepositoriesUser', 'Criteria');
+	var $uses = array('RepositoriesUser', 'Criteria', 'CriteriasUser');
 	
 	var $earn = 1;
 	var $upload = 2;
@@ -269,12 +269,12 @@ class PointsController extends AppController {
 		if(!$criteria) {
 			$this->_cancel_everything('Criteria not found');
 		}
-		$reward = $criteria['Criteria']['challenge_reward'];
+		$reward = $criteria['Criteria']['collaboration_score'];
 			
-		if($this->RepositoriesUser->addPoints($user['User']['id'], $repo['Repository']['id'], $reward))	{	
+		if($this->CriteriasUser->addPoints($user['User']['id'], $criteria_id, $reward))	{	
 			$this->Session->write('Points.status', "Congratulations! you have won {$reward} points");
 		} else {
-			$this->Session->write("Points.status", "An error occurred adding points. Please blame to the administrator or the developer");
+			$this->Session->write("Points.status", "An error occurred adding points. Please blame the administrator or the developer");
 			$this->Session->write("Points.proceed", false);
 		}
 	}
@@ -356,7 +356,7 @@ class PointsController extends AppController {
 				$dom = Configure::read('App.domain');
 				$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
 			} else {
-				$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repository['Repository']['name']));
+				$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repository['Repository']['internal_name']));
 			}
 			
 		}

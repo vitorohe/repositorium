@@ -36,14 +36,15 @@ $this->Html->addCrumb($title);
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 
-<?php echo $this->Form->input('download_cost', array('label' => 'Cost (in points) of each document to be downloaded')); ?>
+<?php //echo $this->Form->input('download_cost', array('label' => 'Cost (in points) of each document to be downloaded')); ?>
 
-<?php echo $this->Form->input('upload_cost', array('label' => 'Cost (in points) of each document to be uploaded')); ?>
+<?php //echo $this->Form->input('upload_cost', array('label' => 'Cost (in points) of each document to be uploaded')); ?>
 
-<?php echo $this->Form->input('documentpack_size', array('label' => 'Size of each pack of documents for document download')); ?>
+<?php //echo $this->Form->input('documentpack_size', array('label' => 'Size of each pack of documents for document download')); ?>
 
 <?php //echo $this->Form->input('challenge_reward', array('label' => 'Amount of points to be rewarded after passing successfuly a challenge')); ?>
 <br /><br />
+<!-- 
 <div name="ponderation_div" class="yui-u padded"> 
 <label for="ponderation_div"> <strong>Duplicate Data Control</strong> </label>
 <label for="ponderation_elements">Score given to each new document if there is already a similar entry in this Repositorium. Upon reaching a score of 100 the document is considered to be a duplicate and labeled as such.</label>
@@ -52,7 +53,7 @@ $this->Html->addCrumb($title);
 <?php echo $this->Form->input('pdr_text', array('label' => 'Points added when text is similar')); ?>
 <?php echo $this->Form->input('pdr_files', array('label' => 'Points added for each file already on the repository')); ?>
 </div>
-<br />
+<br /> -->
 <?php echo $this->Form->end('Done'); ?>
 
 

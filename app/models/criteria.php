@@ -200,7 +200,7 @@ class Criteria extends AppModel {
 				'repository_id' => $repository_id,
 				'criteria_id' => $criterio_id,
 				'user_id' => $user_id,
-				'confirmado' => true,
+				'confirmado' => 1,
 				'quantity' => $qty_of_validated 
 		);
 	
@@ -208,18 +208,18 @@ class Criteria extends AppModel {
 				'repository_id' => $repository_id,
 				'criteria_id' => $criterio_id,
 				'user_id' => $user_id,
-				'confirmado' => false,
+				'confirmado' => 2,
 				'quantity' => $qty_of_nonvalidated 
 		);
 	
 		$validated = $this->CriteriasDocument->getRandomDocuments($v_params);
 	
-		/*if(count($validated) < $qty_of_validated)
-			$n_params['quantity'] = $qty_of_nonvalidated + ($qty_of_validated - count($validated));*/
+		if(count($validated) < $qty_of_validated)
+			$n_params['quantity'] = $qty_of_nonvalidated + ($qty_of_validated - count($validated));
 	
-		//$nonvalidated = $this->CriteriasDocument->getRandomDocuments($n_params);
-	
-		$challenge = $validated;//array_merge($validated, $nonvalidated);
+		$nonvalidated = $this->CriteriasDocument->getRandomDocuments($n_params);
+		
+		$challenge = array_merge($validated, $nonvalidated);
 		shuffle($challenge);
 	
 		return $challenge;
@@ -254,16 +254,30 @@ class Criteria extends AppModel {
 		return array_unique($filtered);
 	}
 	
-	function createNewCriteria($data) {
+	function createNewCriteria($data, $cruser) {
 		$ds = $this->getDataSource();
+		$crds = $this->CriteriasUser->getDataSource();
 		$ds->begin($this);
+		$crds->begin($this->CriteriasUser);
+		
 		
 		if(!$this->save($data)) {
 			$ds->rollback($this);
+			$crds->rollback($this->CriteriasUser);
 			return null;
-		}	
+		}
+		
+		
+		$cruser['CriteriasUser']['criteria_id'] = $this->id;
+		
+		if(!$this->save($data) || !$this->CriteriasUser->save($cruser)) {
+			$ds->rollback($this);
+			$crds->rollback($this->CriteriasUser);
+			return null;
+		}
 			
 		$ds->commit($this);
+		$crds->commit($this->CriteriasUser);
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 

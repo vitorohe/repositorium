@@ -34,7 +34,7 @@ $this->Html->addCrumb($title);
   			$ast = false;
   			if(isset($cond)) {
   				if(strcmp($cond, 'owner') == 0) {
-  					$ast = $user['User']['id'] == $cr['Repository']['user_id'];
+  					$ast = $user['User']['id'] == $cr['Repository']['user_id'] || $cr['RepositoriesUser']['user_type_id'] == 1;
   				}
   			}
   	?>

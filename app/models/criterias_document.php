@@ -202,7 +202,9 @@ class CriteriasDocument extends AppModel {
 		);
 		
 		$options['conditions'] = array(
-				'CriteriasDocument.criteria_id' => $criteria_id);
+				'CriteriasDocument.criteria_id' => $criteria_id,
+				'CriteriasDocument.answer' => $confirmado,
+				'Document.repository_id' => $repository_id);
 		
 		$options['fields'] = array(
 				'DISTINCT Document.id', 'Document.name', 'Document.description');
@@ -244,15 +246,15 @@ class CriteriasDocument extends AppModel {
 			if(!isset($d['criteria_id']) || !isset($d['document_id']) || !isset($d['respuesta']))
 				return false;
 	
-			$info['CriteriasDocument']['official_answer'] = 0;//$this->_validatedEntry($d);
+			$info = $this->_validatedEntry($d);
 				
 			if(!is_null($info)) {
-				$answer = $info['CriteriasDocument']['official_answer'];
+				$answer = $info['CriteriasDocument']['answer'];
 				$given = $d['respuesta'];
-	
-				/* answer : 0, 1
+				
+				/* answer :    1, 2
 				 * given  :    1, 2	 */
-				if(	$answer+1 != $given )
+				if(	$answer != $given )
 					return false;
 			}
 		}
@@ -272,7 +274,7 @@ class CriteriasDocument extends AppModel {
 		if(is_null($d)) return null;
 		$info = $this->entry($d);
 	
-		if($info['CriteriasDocument']['validated'] === '1')
+		if($info['CriteriasDocument']['answer'] != 3)
 			return $info;
 		return null;
 	}
@@ -287,7 +289,7 @@ class CriteriasDocument extends AppModel {
 		
 		$info = $this->find('first', array(
 				'recursive' => -1,
-	 			'fields' => array('id' ,'validated', 'official_answer', 'total_answers_1', 'total_answers_2'),
+	 			'fields' => array('id' ,'answer'),
 				'conditions' => array(
 					'CriteriasDocument.criteria_id' => $d['criteria_id'],
 					'CriteriasDocument.document_id' => $d['document_id']
