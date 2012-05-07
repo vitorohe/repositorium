@@ -25,15 +25,19 @@ $this->viewVars['title_for_layout'] = $title;
 	echo '<br />';
 	echo '<br />';
 }?>
-<?php foreach($document_with_files as $document_wf){
-	echo '<strong>Title:</strong> ' . $document_wf['Document']['name'];
-	echo '<br />';
-	echo '<strong>Content:</strong> ' . $document_wf['Document']['description'];
-	echo '<br />';
-	echo '<strong>Attached file:</strong> ' . $document_wf['Attachfile']['name'];
-	echo '<br />';
-	echo '<br />';
-}?>
+<?php 
+	if(!is_null($document_with_files)) {
+		foreach($document_with_files as $document_wf){
+			echo '<strong>Title:</strong> ' . $document_wf['Document']['name'];
+			echo '<br />';
+			echo '<strong>Content:</strong> ' . $document_wf['Document']['description'];
+			echo '<br />';
+			echo '<strong>Attached file:</strong> ' . $document_wf['Attachfile']['name'];
+			echo '<br />';
+			echo '<br />';
+		}
+	}
+?>
 
 </br>
 </br>
