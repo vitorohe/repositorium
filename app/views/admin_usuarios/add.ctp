@@ -19,8 +19,12 @@ $this->viewVars['title_for_layout'] = $title;
      ?>
   <?php echo $this->Form->create('User', array('url' => '/admin_usuarios/add')); ?>
   <?php echo $this->Form->input('email');?>
-  <?php echo $this->Form->input('first_name', array('label' => 'Name'));?>
-  <?php echo $this->Form->input('last_name', array('label' => 'Last Name'));?>
+  <!--<?php //echo $this->Form->input('first_name', array('label' => 'Name'));?>
+  <?php //echo $this->Form->input('last_name', array('label' => 'Last Name'));?>-->
+  <!--INI-->
+  <?php echo $this->Form->input('name', array('label' => 'Name'));?>
+  <?php echo $this->Form->input('username', array('label' => 'Username'));?>
+  <!--FIN-->
   <?php echo $this->Form->input('password');?>
   <?php //echo $this->Form->input('puntos', array('label' => 'Initial Points'));?>
 <label for="UsuarioIsAdministrator">Is Administrator?</label>

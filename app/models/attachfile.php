@@ -177,7 +177,71 @@ class Attachfile extends AppModel {
 	
 	function test_sha(){
 	return 8;
+	}	
+
+
+	/*+++++++++++++INI++++++++++++++*/	
+	/*save attached files*/
+	function saveAttachedFiles($data) {
+
+		$fileData = $data['files'];
+
+		$doc = $this->Document->query("select id from documents order by id desc limit 1");
+
+		$doc = $doc[0];
+
+		$document_id = $doc['documents']['id'];
+
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+
+		foreach ($fileData as $file){
+
+			if($file['error']==4){
+				continue;
+			}
+			if($file['size'] > 0) {
+				
+				$this->create();
+				$this->set(
+				$attachfile = array(
+					'Attachfile' => array(
+						'name' => $file['name'],
+						'location' => '/uploaded_files',
+						'activation_id' => 'A',
+						'internalstate_id' => 'A',
+						'document_id' => $document_id
+						)
+					)
+				);
+
+				if(!$this->save()){
+					$ds->rollback($this);
+					return false;
+				}
+
+				$ds->commit($this);
+
+				$extension = end(explode('.', $file['name']));
+				
+				$filename = WWW_ROOT.'/uploaded_files/document_'.$document_id.'.'.$extension;
+
+				$handle = fopen($file['tmp_name'],'r');
+				$content = fread($handle, filesize($file['tmp_name']));
+				fclose($handle);
+
+				$handle = fopen($filename, 'wr');
+				fwrite($handle, $content);
+				fclose($handle);
+
+			} /*else{
+				$this->session->setFlash('A file is requiered');
+				return false;
+			}*/
+		}
+		return true;
 	}
-	
+
+	/*+++++++++++++FIN++++++++++++++*/	
 }
 ?>

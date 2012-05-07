@@ -2,7 +2,7 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
-  var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'CriteriasUser');
+  var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'AttachFile', 'CriteriasUser');
   var $paginate = array(
 	'Criteria' => array(
 	  'limit' => 5,

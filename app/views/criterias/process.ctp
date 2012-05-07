@@ -19,10 +19,22 @@ $this->viewVars['title_for_layout'] = $title;
 
 <br />
 <?php foreach($documents as $document){
-	echo 'Title: ' . $document['Document']['name'];
+	echo '<strong>Title:</strong> ' . $document['Document']['name'];
 	echo '<br />';
-	echo 'Content: ' . $document['Document']['description'];
+	echo '<strong>Content:</strong> ' . $document['Document']['description'];
+	echo '<br />';
+	echo '<br />';
+}?>
+<?php foreach($document_with_files as $document_wf){
+	echo '<strong>Title:</strong> ' . $document_wf['Document']['name'];
+	echo '<br />';
+	echo '<strong>Content:</strong> ' . $document_wf['Document']['description'];
+	echo '<br />';
+	echo '<strong>Attached file:</strong> ' . $document_wf['Attachfile']['name'];
 	echo '<br />';
 	echo '<br />';
 }?>
 
+</br>
+</br>
+</br>
