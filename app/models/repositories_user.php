@@ -36,7 +36,7 @@ class RepositoriesUser extends AppModel {
 	);
 
 
-	function saveRepositoryUser($user_id, $repository_id, $is_admin) {
+	function saveRepositoryUser($user_id, $repository_id) {
 
 		$ds = $this->getDataSource();
 		$ds->begin($this);
@@ -50,7 +50,7 @@ class RepositoriesUser extends AppModel {
 				'internalstate_id' => 'A',
 				'user_id' => $user_id,
 				'repository_id' => $repository_id,
-				'user_type_id' => $is_admin
+				'user_type_id' => 2
 				)
 			)
 		);

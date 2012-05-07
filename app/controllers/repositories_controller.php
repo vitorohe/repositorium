@@ -63,11 +63,12 @@ class RepositoriesController extends AppController {
 						'RepositoriesUser.user_id' => $user['User']['id'],
 						'RepositoriesUser.user_type_id <>' => 1,
 						'RepositoriesUser.activation_id' => 'A'),
-// 					'recursive' => -1 
+	 					'recursive' => -1 
 				));				
 				//$watching = $r['RepositoriesUser']['watching'];
 				/*----------------------------INI------------------------------*/
-				$joined = $r;				
+				$joined = $r;
+				
 				/*----------------------------FIN------------------------------*/
 			}
 			
@@ -312,12 +313,8 @@ class RepositoriesController extends AppController {
 		$joined = false;
 
 		if(empty($repo)) {
-			if($user['User']['is_administrator'])
-				$is_admin = 1;
-			else
-				$is_admin = 2;
 
-			if(!$this->RepositoriesUser->saveRepositoryUser($user['User']['id'], $id, $is_admin)) {
+			if(!$this->RepositoriesUser->saveRepositoryUser($user['User']['id'], $id)) {
 				$this->Session->setFlash('Joining failed','flash_errors');
 				$this->redirect('/');
 			}
