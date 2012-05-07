@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 06-05-2012 a las 23:15:16
--- Versión del servidor: 5.5.20
--- Versión de PHP: 5.3.10
+-- Tiempo de generación: 07-05-2012 a las 23:04:28
+-- Versión del servidor: 5.5.16
+-- Versión de PHP: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -59,16 +59,7 @@ CREATE TABLE IF NOT EXISTS `attachfiles` (
   KEY `documento_adjuntos_01` (`activation_id`),
   KEY `documento_adjuntos_02` (`internalstate_id`),
   KEY `documento_adjuntos_03` (`document_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
-
---
--- Volcado de datos para la tabla `attachfiles`
---
-
-INSERT INTO `attachfiles` (`id`, `name`, `location`, `activation_id`, `internalstate_id`, `document_id`) VALUES
-(8, '46906bcc.gif', '/uploaded_files', 'A', 'A', 152),
-(9, 'Startled_hamster_01.gif', '/uploaded_files', 'A', 'A', 153),
-(10, 'seven.png', '/uploaded_files', 'A', 'A', 154);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -130,15 +121,31 @@ CREATE TABLE IF NOT EXISTS `criterias` (
   KEY `criterios_01` (`activation_id`),
   KEY `criterios_02` (`internalstate_id`),
   KEY `criterios_03` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Volcado de datos para la tabla `criterias`
 --
 
 INSERT INTO `criterias` (`id`, `name`, `question`, `upload_score`, `download_score`, `collaboration_score`, `register_date`, `register_ip`, `activation_id`, `internalstate_id`, `user_id`) VALUES
-(1, 'Perro', 'is it a perro?', 1, 1, 1, '0000-00-00 00:00:00', '', 'A', 'A', 2),
-(2, 'gato', 'is it a cat?', 1, 1, 1, '0000-00-00 00:00:00', '', 'A', 'A', 2);
+(7, 'Buena redacciÃ³n', 'Â¿La conexiÃ³n de las ideas es buena?', 4, 3, 2, '0000-00-00 00:00:00', '', 'A', 'A', 1),
+(8, 'aaaaa', 'asd', 2, 1, 3, '0000-00-00 00:00:00', '', 'A', 'A', 1),
+(9, 'hola', 'hola', 2, 1, 3, '0000-00-00 00:00:00', '', 'A', 'A', 1),
+(15, 'mycrit', 'mycrit', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(16, 'sdfbgfsdgd', 'gdsgfsd', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(17, 'hola', 'chao', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(18, 'sdafsa', 'fasfsa', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(19, 'sdafsa12', 'fasfsa12', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(20, 'soyuncrit', 'sadgds', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(21, 'gdsfsagda', 'fsagsafg', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(22, 'hola12', 'sdafs', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(23, 'hola12asdf', 'sdafsdswa', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(31, 'HOLA123', 'CHAO!1', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(32, 'mycrit1', 'asd??', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(33, 'MNBV', 'POLIKJ', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 10),
+(34, 'sdgfda', 'sdgdsf', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 11),
+(35, 'safsa', 'fsags', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 11),
+(36, 'hjola', 'gholadfgs', 5, 10, 5, '0000-00-00 00:00:00', '', 'A', 'A', 11);
 
 -- --------------------------------------------------------
 
@@ -152,135 +159,46 @@ CREATE TABLE IF NOT EXISTS `criterias_documents` (
   `internalstate_id` char(1) NOT NULL COMMENT 'Clave Foranea Estadointernos',
   `document_id` int(15) NOT NULL COMMENT 'Clave Foranea Documentos',
   `criteria_id` int(6) NOT NULL COMMENT 'Clave Foranea Criterios',
-  `answer` int(2) NOT NULL DEFAULT '3',
+  `answer` int(2) NOT NULL DEFAULT '3' COMMENT 'Cumple o no el criterio',
   PRIMARY KEY (`id`),
   KEY `documento_criterios_01` (`activation_id`),
   KEY `documento_criterios_02` (`internalstate_id`),
   KEY `documento_criterios_03` (`document_id`),
   KEY `documento_criterios_04` (`criteria_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=117 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Volcado de datos para la tabla `criterias_documents`
 --
 
 INSERT INTO `criterias_documents` (`id`, `activation_id`, `internalstate_id`, `document_id`, `criteria_id`, `answer`) VALUES
-(1, 'A', 'A', 36, 1, 3),
-(2, 'A', 'A', 37, 1, 3),
-(3, 'A', 'A', 38, 1, 3),
-(4, 'A', 'A', 38, 2, 3),
-(5, 'A', 'A', 39, 2, 3),
-(6, 'A', 'A', 40, 1, 3),
-(7, 'A', 'A', 40, 2, 3),
-(8, 'A', 'A', 41, 1, 3),
-(9, 'A', 'A', 42, 2, 3),
-(10, 'A', 'A', 43, 2, 3),
-(11, 'A', 'A', 44, 2, 3),
-(12, 'A', 'A', 45, 1, 3),
-(13, 'A', 'A', 46, 2, 3),
-(14, 'A', 'A', 47, 2, 3),
-(15, 'A', 'A', 48, 2, 3),
-(16, 'A', 'A', 49, 2, 3),
-(17, 'A', 'A', 50, 2, 3),
-(18, 'A', 'A', 51, 2, 3),
-(19, 'A', 'A', 52, 2, 3),
-(20, 'A', 'A', 53, 2, 3),
-(21, 'A', 'A', 54, 2, 3),
-(22, 'A', 'A', 55, 1, 3),
-(23, 'A', 'A', 56, 2, 3),
-(24, 'A', 'A', 57, 1, 3),
-(25, 'A', 'A', 58, 1, 3),
-(26, 'A', 'A', 59, 1, 3),
-(27, 'A', 'A', 60, 2, 3),
-(28, 'A', 'A', 61, 2, 3),
-(29, 'A', 'A', 62, 2, 3),
-(30, 'A', 'A', 63, 2, 3),
-(31, 'A', 'A', 65, 2, 3),
-(32, 'A', 'A', 70, 2, 3),
-(33, 'A', 'A', 73, 2, 3),
-(34, 'A', 'A', 74, 1, 3),
-(35, 'A', 'A', 75, 1, 3),
-(36, 'A', 'A', 76, 1, 3),
-(37, 'A', 'A', 77, 1, 3),
-(38, 'A', 'A', 78, 1, 3),
-(39, 'A', 'A', 79, 1, 3),
-(40, 'A', 'A', 80, 1, 3),
-(41, 'A', 'A', 81, 1, 3),
-(42, 'A', 'A', 82, 1, 3),
-(43, 'A', 'A', 83, 1, 3),
-(44, 'A', 'A', 84, 2, 3),
-(45, 'A', 'A', 85, 1, 3),
-(46, 'A', 'A', 86, 1, 3),
-(47, 'A', 'A', 87, 1, 3),
-(48, 'A', 'A', 88, 1, 3),
-(49, 'A', 'A', 89, 1, 3),
-(50, 'A', 'A', 90, 1, 3),
-(51, 'A', 'A', 91, 2, 3),
-(52, 'A', 'A', 92, 2, 3),
-(53, 'A', 'A', 93, 1, 3),
-(54, 'A', 'A', 94, 1, 3),
-(55, 'A', 'A', 95, 1, 3),
-(56, 'A', 'A', 96, 1, 3),
-(57, 'A', 'A', 97, 1, 3),
-(58, 'A', 'A', 98, 1, 3),
-(59, 'A', 'A', 99, 1, 3),
-(60, 'A', 'A', 100, 1, 3),
-(61, 'A', 'A', 101, 1, 3),
-(62, 'A', 'A', 102, 1, 3),
-(63, 'A', 'A', 103, 1, 3),
-(64, 'A', 'A', 104, 1, 3),
-(65, 'A', 'A', 105, 1, 3),
-(66, 'A', 'A', 106, 1, 3),
-(67, 'A', 'A', 107, 1, 3),
-(68, 'A', 'A', 108, 1, 3),
-(69, 'A', 'A', 109, 1, 3),
-(70, 'A', 'A', 110, 1, 3),
-(71, 'A', 'A', 111, 2, 3),
-(72, 'A', 'A', 112, 2, 3),
-(73, 'A', 'A', 113, 2, 3),
-(74, 'A', 'A', 114, 2, 3),
-(75, 'A', 'A', 115, 2, 3),
-(76, 'A', 'A', 116, 2, 3),
-(77, 'A', 'A', 117, 2, 3),
-(78, 'A', 'A', 118, 2, 3),
-(79, 'A', 'A', 119, 2, 3),
-(80, 'A', 'A', 120, 2, 3),
-(81, 'A', 'A', 121, 2, 3),
-(82, 'A', 'A', 122, 1, 3),
-(83, 'A', 'A', 123, 1, 3),
-(84, 'A', 'A', 124, 1, 3),
-(85, 'A', 'A', 125, 1, 3),
-(86, 'A', 'A', 126, 1, 3),
-(87, 'A', 'A', 127, 1, 3),
-(88, 'A', 'A', 128, 1, 3),
-(89, 'A', 'A', 129, 1, 3),
-(90, 'A', 'A', 130, 1, 3),
-(91, 'A', 'A', 131, 1, 3),
-(92, 'A', 'A', 132, 1, 3),
-(93, 'A', 'A', 133, 1, 3),
-(94, 'A', 'A', 134, 1, 3),
-(95, 'A', 'A', 135, 1, 3),
-(96, 'A', 'A', 136, 1, 3),
-(97, 'A', 'A', 137, 1, 3),
-(98, 'A', 'A', 138, 1, 3),
-(99, 'A', 'A', 139, 1, 3),
-(100, 'A', 'A', 140, 1, 3),
-(101, 'A', 'A', 141, 1, 3),
-(102, 'A', 'A', 142, 2, 3),
-(103, 'A', 'A', 143, 1, 3),
-(104, 'A', 'A', 144, 1, 3),
-(105, 'A', 'A', 145, 1, 3),
-(106, 'A', 'A', 146, 1, 3),
-(107, 'A', 'A', 147, 1, 3),
-(108, 'A', 'A', 148, 2, 3),
-(109, 'A', 'A', 149, 2, 3),
-(110, 'A', 'A', 150, 2, 3),
-(111, 'A', 'A', 151, 1, 3),
-(112, 'A', 'A', 152, 1, 3),
-(113, 'A', 'A', 153, 2, 3),
-(114, 'A', 'A', 153, 1, 3),
-(115, 'A', 'A', 154, 1, 3),
-(116, 'A', 'A', 154, 2, 3);
+(1, 'A', 'A', 21, 7, 3),
+(2, 'A', 'A', 23, 7, 3),
+(3, 'A', 'A', 24, 7, 3),
+(4, 'A', 'A', 25, 9, 3),
+(5, 'A', 'A', 25, 7, 3),
+(6, 'A', 'A', 26, 7, 3),
+(7, 'A', 'A', 27, 7, 3),
+(8, 'A', 'A', 28, 9, 3),
+(9, 'A', 'A', 29, 8, 3),
+(10, 'A', 'A', 30, 8, 3),
+(11, 'A', 'A', 31, 7, 3),
+(12, 'A', 'A', 32, 8, 3),
+(13, 'A', 'A', 33, 8, 3),
+(14, 'A', 'A', 34, 8, 3),
+(15, 'A', 'A', 35, 7, 3),
+(16, 'A', 'A', 35, 9, 3),
+(17, 'A', 'A', 35, 8, 3),
+(18, 'A', 'A', 36, 9, 3),
+(19, 'A', 'A', 37, 33, 2),
+(20, 'A', 'A', 38, 32, 1),
+(21, 'A', 'A', 38, 31, 2),
+(22, 'A', 'A', 39, 33, 1),
+(23, 'A', 'A', 39, 32, 2),
+(24, 'A', 'A', 39, 31, 1),
+(25, 'A', 'A', 40, 32, 2),
+(26, 'A', 'A', 41, 33, 1),
+(27, 'A', 'A', 41, 31, 2);
 
 -- --------------------------------------------------------
 
@@ -293,20 +211,30 @@ CREATE TABLE IF NOT EXISTS `criterias_users` (
   `successful_evaluation` int(10) NOT NULL COMMENT 'Cantidad de Evaluacion Exitosas de Documentos',
   `negative_evaluation` int(10) NOT NULL COMMENT 'Cantidad de Evaluacion Negativas de Documentos',
   `score_obtained` int(10) NOT NULL COMMENT 'Puntaje del Usuario obtenido en el Criterio',
-  `expert_user` char(1) NOT NULL COMMENT 'Verificar si el Usuario es Experto o no en el Criterio',
   `activation_id` char(1) NOT NULL COMMENT 'Clave Foranea Activacions',
   `internalstate_id` char(1) NOT NULL COMMENT 'Clave Foranea Estadointernos',
   `user_id` int(6) NOT NULL COMMENT 'Clave Foranea Usuarios',
   `criteria_id` int(6) NOT NULL COMMENT 'Clave Foranea Criterios',
   `quality_user_id` int(2) NOT NULL COMMENT 'Clave Foranea Calidad_Usuarios',
   PRIMARY KEY (`id`),
-  KEY `usuario_criterios_01` (`expert_user`),
   KEY `usuario_criterios_02` (`activation_id`),
   KEY `usuario_criterios_03` (`internalstate_id`),
   KEY `usuario_criterios_04` (`user_id`),
   KEY `usuario_criterios_05` (`criteria_id`),
   KEY `usuario_criterios_06` (`quality_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Usuarios asociados a los Criterios para almacenar el Puntaje' AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Usuarios asociados a los Criterios para almacenar el Puntaje' AUTO_INCREMENT=8 ;
+
+--
+-- Volcado de datos para la tabla `criterias_users`
+--
+
+INSERT INTO `criterias_users` (`id`, `successful_evaluation`, `negative_evaluation`, `score_obtained`, `activation_id`, `internalstate_id`, `user_id`, `criteria_id`, `quality_user_id`) VALUES
+(2, 0, 0, 5, 'A', 'A', 10, 31, 1),
+(3, 0, 0, 0, 'A', 'A', 10, 32, 1),
+(4, 0, 0, 0, 'A', 'A', 10, 33, 1),
+(5, 0, 0, 0, 'A', 'A', 11, 34, 1),
+(6, 0, 0, 0, 'A', 'A', 11, 35, 1),
+(7, 0, 0, 0, 'A', 'A', 11, 36, 1);
 
 -- --------------------------------------------------------
 
@@ -333,132 +261,42 @@ CREATE TABLE IF NOT EXISTS `documents` (
   KEY `documentos_05` (`document_state_id`),
   KEY `documentos_03` (`user_id`),
   KEY `documentos_04` (`repository_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Documentos subidos por los Usuarios al Repositorio' AUTO_INCREMENT=155 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Documentos subidos por los Usuarios al Repositorio' AUTO_INCREMENT=42 ;
 
 --
 -- Volcado de datos para la tabla `documents`
 --
 
 INSERT INTO `documents` (`id`, `name`, `description`, `register_date`, `register_ip`, `registration_date`, `registration_ip`, `activation_id`, `internalstate_id`, `user_id`, `repository_id`, `document_state_id`) VALUES
-(5, 'jkkjkj', 'kjkjkj', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(30, 'hjjhhjjhklfdskm', 'jhbskjdngkjdsnjkd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(31, 'kjkjkjjkdfsklgm', 'msfdmgdsmklg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(32, 'jkkjkjdfs', 'fdsklgdsk', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(33, 'saffasf', 'klasdogfsakofoas', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(34, 'dsgdslhsdlkdslk', 'flksglkdsajgkldsjhdkl', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(35, 'fdsg', 'fsklgdsmkl', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(36, 'hola', 'hola', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(37, 'hola', 'hola', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(38, 'hola2', 'hola2', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(39, 'doc3', 'doc3', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(40, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(41, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(42, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(43, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(44, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(45, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(46, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(47, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(48, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(49, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(50, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(51, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(52, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(53, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(54, 'doc4', 'doc4', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(55, 'sdf', 'sdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(56, 'sadfsdf', 'sdfsg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(57, 'sadfsdf', 'sdfsg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(58, 'sadfsdf', 'sdfsg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(59, 'sdfsdf', 'sdfsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(60, 'sdgbg', 'sdvtsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(61, 'sdgbg', 'sdvtsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(62, 'sdgbg', 'sdvtsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(63, 'sdgbg', 'sdvtsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(65, 'sdfsdf', 'sdfsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(70, 'sdfs', 'dfefsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(73, 'df', 'sdfsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(74, 'sfgrgr', 'sdfgresd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(75, 'sfgrgr', 'sdfgresd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(76, 'sfgrgr', 'sdfgresd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(77, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(78, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(79, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(80, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(81, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(82, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(83, 'dafsdf', 'dsfsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(84, 'dsfsdf', 'sdfsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(85, 'dsfsdf', 'sdfsdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(86, 'fewfdsf', 'fwfdsgfrfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(87, 'fewfdsf', 'fwfdsgfrfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(88, 'sdgrg', 'sgfsfe', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(89, 'sdgrg', 'sgfsfe', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(90, 'fefsdfe', 'sfsdfe', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(91, 'efsd', 'feasdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(92, 'efsd', 'feasdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(93, 'vfdvdsfcgv', 'rgsdrdfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(94, 'vfdvdsfcgv', 'rgsdrdfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(95, 'vfdvdsfcgv', 'rgsdrdfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(96, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(97, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(98, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(99, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(100, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(101, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(102, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(103, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(104, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(105, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(106, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(107, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(108, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(109, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(110, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(111, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(112, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(113, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(114, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(115, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(116, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(117, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(118, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(119, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(120, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(121, 'dfushdfo', 'qhodhsfosdhfos', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(122, 'wefdsfg', 'rfsgfe', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(123, 'wefdsfg', 'rfsgfe', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(124, 'dfgdfg', 'drfgrgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(125, 'dfgdfg', 'drfgrgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(126, 'dfgdfg', 'drfgrgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(127, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(128, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(129, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(130, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(131, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(132, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(133, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(134, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(135, 'sdfgwrg', 'fsdgregfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(136, 'dfgdfg', 'drfgrgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(137, 'dfgdfg', 'drfgrgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(138, 'ergdf', 'grgfgdfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(139, 'gsgrsfd', 'gsdfsee', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(140, 'gsgrsfd', 'gsdfsee', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(141, 'vdfgr', 'fgdfghr', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(142, 'refgverg', 'sdfgr ', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(143, 'rregsfg', 'rsffgsfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(144, 'rregsfg', 'rsffgsfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(145, 'rregsfg', 'rsffgsfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(146, 'rregsfg', 'rsffgsfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(147, 'rregsfg', 'rsffgsfg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(148, 'fgr', 'sfgfdhdg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(149, 'dfsgr', 'sfgrsgfd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(150, 'rgsgsfg', 'rgsfgdfgdf', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(151, 'fhtd', 'gfhdgfh', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(152, 'gtrgd', 'fhdghtr', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1),
-(153, 'docn', 'People are often unreasonable, illogical and self centered;\r\nForgive them anyway.\r\nIf you are kind, people may accuse you of selfish, ulterior motives;\r\nBe kind anyway.\r\nIf you are successful, you will win some false friends and some true enemies;\r\nSucceed anyway.\r\nIf you are honest and frank, people may cheat you;\r\nBe honest and frank anyway.\r\nWhat you spend years building, someone could destroy overnight;\r\nBuild anyway.\r\nIf you find serenity and happiness, they may be jealous;\r\nBe happy anyway.\r\nThe good you do today, people will often forget tomorrow;\r\nDo good anyway.\r\nGive the world the best you have, and it may never be enough;\r\nGive the world the best you''ve got anyway.\r\nYou see, in the final analysis, it is between you and your God;\r\nIt was never between you and them anyway.', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 1, 1),
-(154, 'docnn', 'A wiki (i/ËˆwÉªki/ WIK-ee) is a website whose users can add, modify, or delete its content via a web browser using a simplified markup language or a rich-text editor.[1][2][3] Wikis are typically powered by wiki software and are often created collaboratively by multiple users. Examples include community websites, corporate intranets, knowledge management systems, and notetaking.\r\n\r\nWikis may serve many different purposes. Some permit control over different functions (levels of access). For example, editing rights may permit changing, adding or removing material. Others may permit access without enforcing access control. Other rules may also be imposed for organizing content.\r\n\r\nWard Cunningham, the developer of the first wiki software, WikiWikiWeb, originally described it as "the simplest online database that could possibly work."[4] "Wiki" (pronounced [Ëˆwiti] or [Ëˆviti]) is an Hawaiian word meaning "fast" or "quick".[5]', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 2, 2, 1);
+(13, 'assaf', 'sadsfa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 8, 2),
+(14, 'asd', 'asdfsdg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 8, 2),
+(15, 'dasfgsa', 'asfsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 8, 2),
+(16, 'hola', 'chao', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 8, 2),
+(17, 'safgsag', 'safasg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(18, 'dsgds', 'gsdhes', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(19, 'asd', 'hjhjjh', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(20, 'dshds', 'gdsh', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(21, 'asaf', 'asfsagsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(22, 'sadgsa', 'gsafasg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(23, 'sdfgsad', 'gsdhds', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(24, 'gdshdsggs', 'gsdgdsgsdgsd', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 10, 1),
+(25, 'asdags', 'gadgdafdag', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 8, 1),
+(26, 'safsag', 'sagsagsg', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 8, 1),
+(27, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(28, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(29, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(30, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(31, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(32, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(33, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(34, 'sdafsa', 'asfdfgsa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(35, 'asdsaf', 'sadgas', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(36, 'asdsaf', 'sadgas', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 1, 13, 1),
+(37, 'asdasf', 'fasgsafag', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 21, 1),
+(38, 'adsgasfasg', 'safsagsagsaas', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 21, 1),
+(39, 'sdgasdfg', 'sgsafa', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 21, 1),
+(40, 'fshqwqwqq', 'qqwweret', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 21, 1),
+(41, 'ffsdxvcmvgf', 'sdfhzsgh', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '', 'A', 'A', 10, 21, 1);
 
 -- --------------------------------------------------------
 
@@ -474,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `document_states` (
   PRIMARY KEY (`id`),
   KEY `estado_documentos_01` (`activation_id`),
   KEY `estado_documentos_02` (`internalstate_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Estado de los Documentos del Repositorio' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Estado de los Documentos del Repositorio' AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `document_states`
@@ -483,7 +321,8 @@ CREATE TABLE IF NOT EXISTS `document_states` (
 INSERT INTO `document_states` (`id`, `name`, `activation_id`, `internalstate_id`) VALUES
 (1, 'Subido', 'A', 'A'),
 (2, 'En proceso de evaluacion experta', 'A', 'A'),
-(3, 'Validado por experto', 'A', 'A');
+(3, 'Validado por experto', 'A', 'A'),
+(4, 'Invalidado por experto', 'A', 'A');
 
 -- --------------------------------------------------------
 
@@ -585,7 +424,15 @@ CREATE TABLE IF NOT EXISTS `quality_users` (
   PRIMARY KEY (`id`),
   KEY `calidad_usuarios_01` (`activation_id`),
   KEY `calidad_usuarios_02` (`internalstate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `quality_users`
+--
+
+INSERT INTO `quality_users` (`id`, `name`, `description`, `activation_id`, `internalstate_id`, `percentage`) VALUES
+(1, 'Usuario Experto', 'El usuario es un experto del criterio asociado.', 'A', 'A', NULL),
+(2, 'Usuario Normal', 'Un usuario que ha evaluado un documento con un criterio asociado', 'A', 'A', NULL);
 
 -- --------------------------------------------------------
 
@@ -607,15 +454,24 @@ CREATE TABLE IF NOT EXISTS `repositories` (
   KEY `repositorios_01` (`activation_id`),
   KEY `repositorios_02` (`internalstate_id`),
   KEY `repositorios_03` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Repositorio de Documentos del Sistema' AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Repositorio de Documentos del Sistema' AUTO_INCREMENT=23 ;
 
 --
 -- Volcado de datos para la tabla `repositories`
 --
 
 INSERT INTO `repositories` (`id`, `name`, `internal_name`, `description`, `created`, `modifed`, `activation_id`, `internalstate_id`, `user_id`) VALUES
-(1, 'prueba', 'prueba', 'prueba', '2012-04-30 02:47:58', NULL, 'A', 'A', 3),
-(2, 'prueba2', 'prueba2', 'prueba2', '2012-05-01 00:38:29', NULL, 'A', 'A', 2);
+(8, 'example', 'example', 'esto es un example', '2012-04-30 02:42:16', NULL, 'A', 'A', 1),
+(10, 'example1', 'example1', 'sdafsa', '2012-05-01 03:35:36', NULL, 'A', 'A', 1),
+(11, 'example2', 'example2', 'sadfsa', '2012-05-05 02:44:57', NULL, 'A', 'A', 1),
+(12, 'sdafsa', 'asd', 'asasf', '2012-05-05 22:37:13', NULL, 'A', 'A', 1),
+(13, 'fsdhs', 'sdf', 'gasgha', '2012-05-05 22:37:24', NULL, 'A', 'A', 1),
+(14, 'asdf', 'as12', 'sdgsdh', '2012-05-05 22:37:41', NULL, 'A', 'A', 1),
+(15, 'asdf12', 'assagsa', 'safag', '2012-05-05 23:04:53', NULL, 'A', 'A', 10),
+(16, '12', '2233', '1233', '2012-05-05 23:15:44', NULL, 'A', 'A', 1),
+(17, '12122', '22331', '1233', '2012-05-05 23:19:42', NULL, 'A', 'A', 1),
+(21, 'myrepo1', 'myrepo1', 'myrepo1', '2012-05-07 02:10:46', NULL, 'A', 'A', 10),
+(22, 'dsfasg', 'sadsag', 'asdgsa', '2012-05-07 23:02:28', NULL, 'A', 'A', 11);
 
 -- --------------------------------------------------------
 
@@ -630,20 +486,24 @@ CREATE TABLE IF NOT EXISTS `repositories_users` (
   `user_id` int(6) NOT NULL COMMENT 'Clave Foranea Usuarios',
   `repository_id` int(6) NOT NULL COMMENT 'Clave Foranea Repositorios',
   `user_type_id` int(2) NOT NULL COMMENT 'Clave Foranea Tipo_Usuarios',
+  `watching` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `usuario_repositorios_01` (`activation_id`),
   KEY `usuario_repositorios_02` (`internalstate_id`),
   KEY `usuario_repositorios_03` (`user_id`),
   KEY `usuario_repositorios_04` (`repository_id`),
   KEY `usuario_repositorios_05` (`user_type_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Volcado de datos para la tabla `repositories_users`
 --
 
-INSERT INTO `repositories_users` (`id`, `activation_id`, `internalstate_id`, `user_id`, `repository_id`, `user_type_id`) VALUES
-(2, 'A', 'A', 2, 1, 1);
+INSERT INTO `repositories_users` (`id`, `activation_id`, `internalstate_id`, `user_id`, `repository_id`, `user_type_id`, `watching`) VALUES
+(1, 'N', 'A', 10, 11, 2, 0),
+(4, 'A', 'A', 10, 10, 2, 0),
+(6, 'A', 'A', 10, 21, 1, 0),
+(7, 'A', 'A', 11, 22, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -729,15 +589,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `users_01` (`activation_id`),
   KEY `users_02` (`internalstate_id`),
   KEY `users_03` (`is_administrator`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Usuarios del Sistema' AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Usuarios del Sistema' AUTO_INCREMENT=12 ;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `salt`, `is_administrator`, `activation_id`, `internalstate_id`) VALUES
-(2, 'admin', 'admin@example.com', 'admin', 'fbe82ab72970b9940724512227185348eac9d7fd', '1738993739', '1', 'A', 'A'),
-(3, 'victor', 'vitorohe@gmail.com', 'vitorohe', '9abbf9bf2d11d1399a58f282576b86821b945aca', '1974672534', '0', 'A', 'A');
+(1, 'hola', 'admin@example.com', 'admin', 'f62cb1c950869bd7e5c0fa7aff9292cf5e868856', '979830690', '1', 'A', 'A'),
+(5, 'asd', 'asdf@asdf.com', 'adminas', 'fbeb768f39f4487d2815a92ba9a9ac25913d1434', '395944676', '', 'A', 'A'),
+(7, 'qwerre', 'jkkj@jkjk.com', 'lkmnjn', 'addf20db054ee4fcd081d5f065f3bec11699e434', '1837267016', '0', 'A', 'A'),
+(8, 'yuirih', 'gh@hg.com', 'mnbv', 'd637b8f63a25286463de97a92d2a3f80263d10b5', '1022373586', '1', 'A', 'A'),
+(10, 'HOLA', 'admin@example1.com', 'fdhhdg', '5e69d71643e55ddc1d933a77d75e40b624cea8c3', '1652522636', '0', 'A', 'A'),
+(11, 'safsa', 'sda@dsaf.com', 'sadfas', 'd101f43845c0a4c8befe60a2657f1957b7570bf4', '1135013228', '0', 'A', 'A');
 
 -- --------------------------------------------------------
 
@@ -819,7 +683,6 @@ ALTER TABLE `criterias_documents`
 -- Filtros para la tabla `criterias_users`
 --
 ALTER TABLE `criterias_users`
-  ADD CONSTRAINT `usuario_criterios_01` FOREIGN KEY (`expert_user`) REFERENCES `activations` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuario_criterios_02` FOREIGN KEY (`activation_id`) REFERENCES `activations` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuario_criterios_03` FOREIGN KEY (`internalstate_id`) REFERENCES `internalstates` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `usuario_criterios_04` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
