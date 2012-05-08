@@ -188,6 +188,8 @@ class CriteriasController extends AppController {
   	if(!empty($this->data) && isset($this->data['Criteria']) && isset($this->data['Criteria']['criterias']) && !empty($this->data['Criteria']['criterias'])){
 	  	$data = $this->data;
 	  	
+      $repo = $this->requireRepository();
+
 	  	$there_are_criterias = false;
 	  	if(isset($data['Criteria']['criterias'])) {
 	  		$there_are_criterias = true;
@@ -202,10 +204,11 @@ class CriteriasController extends AppController {
 	  		$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
 	  	}
 
+      $conditions['conditions'] = array('Document.repository_id' => $repo['Repository']['id']);
 
-      $attached_files = $this->Attachfile->find('all');
+      $attached_files = $this->Attachfile->find('all',$conditions);
      
-      $attached_files_ids = array();
+      $attached_document_ids = array();
       foreach($attached_files as $attachf) {
         $attachedf_document_ids[] = $attachf['Attachfile']['document_id'];
       }
@@ -219,11 +222,17 @@ class CriteriasController extends AppController {
 	  					)
 	  			)
 	  	);
-	  	
-	  	$options['conditions'] = array(
-	  			'CriteriasDocument.criteria_id' => $criteria_ids,
-           array ("NOT" => array ('CriteriasDocument.document_id' => $attachedf_document_ids)));
-	  	
+	  	if(!isset($attachedf_document_ids)){
+        $options['conditions'] = array(
+          'CriteriasDocument.criteria_id' => $criteria_ids,
+          'Document.repository_id' => $repo['Repository']['id']);
+      } else {
+  	  	$options['conditions'] = array(
+  	  		'CriteriasDocument.criteria_id' => $criteria_ids,
+          'Document.repository_id' => $repo['Repository']['id'],
+          array ("NOT" => array ('CriteriasDocument.document_id' => $attachedf_document_ids)));
+  	  }
+
 	  	$options['fields'] = array(
 	  			'DISTINCT Document.id', 'Document.name', 'Document.description');
 	  	
@@ -234,33 +243,35 @@ class CriteriasController extends AppController {
 	  	$documents = $this->CriteriasDocument->find('all', $options);
 
       /*options to find documents with files and theses criterias*/
-     
-      $options['joins'] = array(
-        array('table' => 'documents',
-              'alias' => 'Document',
-              'type' => 'inner',
-              'conditions' => array(
-                'CriteriasDocument.document_id = Document.id'
-                )
-            ),
-        array('table' =>'attachfiles',
-              'alias' => 'Attachfile',
-              'type' => 'inner',
-              'conditions' => array(
-                'Attachfile.document_id = Document.id'
-                )
-            )
-      );
-     
-      $options['conditions'] = array(
-        'CriteriasDocument.criteria_id' => $criteria_ids, 
-        'CriteriasDocument.document_id' => $attachedf_document_ids);
-     
-      $options['fields'] = array(
-        'DISTINCT Document.id', 'Document.name', 'Document.description', 'Attachfile.name');
-     
-      $document_with_files = $this->CriteriasDocument->find('all', $options);
-
+      if(isset($attachedf_document_ids)) {
+        $options['joins'] = array(
+          array('table' => 'documents',
+                'alias' => 'Document',
+                'type' => 'inner',
+                'conditions' => array(
+                  'CriteriasDocument.document_id = Document.id'
+                  )
+              ),
+          array('table' =>'attachfiles',
+                'alias' => 'Attachfile',
+                'type' => 'inner',
+                'conditions' => array(
+                  'Attachfile.document_id = Document.id'
+                  )
+              )
+        );
+      
+        $options['conditions'] = array(
+          'CriteriasDocument.criteria_id' => $criteria_ids, 
+          'CriteriasDocument.document_id' => $attachedf_document_ids);
+       
+        $options['fields'] = array(
+          'DISTINCT Document.id', 'Document.name', 'Document.description', 'Attachfile.name');
+       
+        $document_with_files = $this->CriteriasDocument->find('all', $options);
+      } else {
+        $document_with_files = null;
+      }
 	  	
 	  	$criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));
 	  
