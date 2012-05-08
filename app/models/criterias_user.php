@@ -159,8 +159,10 @@ class CriteriasUser extends AppModel {
 					'quality_user_id' => 2);
 			if(!$this->createNewCriteriasUser($td))
 				return false;
+			
+			$td['CriteriasUser']['id'] = $this->getLastInsertID();
 		}
-		$cr = $td['Criteria'];
+
 		$value = $td['CriteriasUser'][$des . '_evaluation'];
 		
 		$new_value = $value + 1;
