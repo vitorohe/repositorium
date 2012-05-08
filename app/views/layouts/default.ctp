@@ -101,9 +101,7 @@
                     </div>-->
                     <ul class="nav subtopmenu">
              	        <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
-                      <?php if($this->Session->read('User.esExperto')): ?>
-	                    <li><?php echo $this->Html->link('Manage Repository', array('controller' => 'admin_documentos'));?></li>
-                    	<?php endif; ?>
+	                    <li><?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?></li>
                     	
                     	<?php if($this->Session->read('User.esAdmin')): ?>
 	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
@@ -129,22 +127,22 @@
 	          <div id="breadcrumb"><?php echo $this->Html->getCrumbs(' > ','Home'); ?></div>
 			  <?php echo $this->Session->flash(); ?>
 	          <?php echo $content_for_layout; ?>
-	          <?php if(Configure::read('debug') > 0) { ?>
+	          <!--<?php //if(Configure::read('debug') > 0) { ?>-->
 		          <!-- debug -->
-		          <h1><a onclick="javascript:$('#debugbox').toggle()" style="cursor: pointer">Toggle Debug</a></h1>
-	          	  <h1><a onclick="javascript:$('#sqlbox').toggle()" style="cursor: pointer">Toggle SQL</a></h1>
-		          <div class="debug" id="sqlbox" style="display:none">
-			        <?php echo $this->element('sql_dump'); ?>
+		          <!--<h1><a onclick="javascript:$('#debugbox').toggle()" style="cursor: pointer">Toggle Debug</a></h1>
+	          	  <h1><a onclick="javascript:$('#sqlbox').toggle()" style="cursor: pointer">Toggle SQL</a></h1>-->
+		          <!--<div class="debug" id="sqlbox" style="display:none">
+			        <?php //echo $this->element('sql_dump'); ?>-->
 		          </div>
-	          <?php
-         		   echo '<div class="debug" id="debugbox" style="display:none">';
+	          <!--<?php
+         		   /*echo '<div class="debug" id="debugbox" style="display:none">';
 		           $vars = $this->getVars();
 		           foreach($vars as $var) { 
 	                 pr($var); pr($$var);
 	               }
 		           echo '</div>';
-		         }
-	           ?>
+		         }*/
+	           ?>-->
             </div>
     	</div>
 
