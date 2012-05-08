@@ -5,10 +5,10 @@ class AdminCriteriasController extends AppController {
     var $uses = array('Criteria');
     var $helpers = array('Text', 'Number');
     var $paginate = array(
-     'Criterias' => array(
+     'Criteria' => array(
          'limit' => 5,
          'order' => array(
-              'total_respuestas' => 'desc'
+              'name' => 'desc'
             )
         )
     );
@@ -36,6 +36,10 @@ class AdminCriteriasController extends AppController {
             'CriteriasUser.user_id' => $user['User']['id'],
             'CriteriasUser.quality_user_id' => 1);
 
+        $options['fields'] = array('Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
+        		 'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
+        
+        
         $options['recursive'] = -1;
 
         $criterias = $this->Criteria->find('all',$options);
@@ -65,22 +69,36 @@ class AdminCriteriasController extends AppController {
     }
 
     function edit($id = null) {
-        $params = array(
-            'menu' => 'menu_expert',
-            'current' => 'criteria',
-            'title' => 'Edit criteria',
-            );
-        $this->set($params);
+    	$params = array(
+    			'menu' => 'menu_expert',
+    			'current' => 'criteria',
+    			'title' => 'Edit criteria',
+    	);
+    	$this->set($params);
+    	if(!empty($this->data)){
+	
+	        $this->Criteria->id = $id;
+	        
+	        if ($this->Criteria->save($this->data)) {
+	            $this->Session->setFlash('Criteria '.$this->data['Criteria']['name'].' was successfully modified');
+	            CakeLog::write('activity', 'Criteria '.$this->data['Criteria']['name'].' was modified');
+	            $this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
+	        }
+	        else{
+	        	$this->Session->setFlash('There was an error creating the criteria, please blame the developer');
+	        	CakeLog::write('activity', 'There was an error creating the criteria, please blame the developer');
+	        	$this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
+	        }
+    	}
+    	if(is_null($id))
+    		$this->redirect('index');
+    	$crit = $this->Criteria->read(null, $id);
+    		
+    	if(empty($crit))
+    		$this->e404();
+    		
+    	$this->data = $crit;
 
-        $this->Criteria->id = $id;
-        
-        if ($this->Criteria->save($this->data)) {
-            $this->Session->setFlash('Criteria '.$id.' was successfully modified');
-            CakeLog::write('activity', 'Criteria '.$id.' was modified');
-            $this->redirect(array('controller' => 'criterias', 'action' => 'index'));
-        }
-        
-        $this->render('add');
     }
 
 }

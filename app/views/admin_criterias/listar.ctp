@@ -64,6 +64,7 @@
 	  <th width="180" title=""><?php echo $this->Paginator->sort('Upload score', 'Criteria.upload_score'); ?></th>
 	  <th width="180"><?php echo $this->Paginator->sort('Download score', 'Criteria.download_score');?></th>
 	  <th width="180"><?php echo $this->Paginator->sort('Collaboration score', 'Criteria.collaboration_score');?></th>
+	  <th width="180"><?php echo $this->Paginator->sort('Points', 'CriteriasUser.score_obtained');?></th>
 	  <!--<th width="220"><?php //echo $this->Paginator->sort();?></th> -->
 	  <th width="150">Options</th>
 	</tr>
@@ -78,6 +79,7 @@
   			<td><?php echo $cr['Criteria']['upload_score'];?></td>
   			<td><?php echo $cr['Criteria']['download_score'];?></td>
   			<td><?php echo $cr['Criteria']['collaboration_score'];?></td>
+  			<td><?php echo $cr['CriteriasUser']['score_obtained'];?></td>
   			<td>
   				<!-- options -->
 				<div class="admin-doc-edit">

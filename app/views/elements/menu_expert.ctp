@@ -39,7 +39,7 @@ echo $this->Form->radio('radiomenu',
 	        					array('criteria' => 'Criteria'),
 								array(
 									'value' => $current , 
-									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'criterias', 'action' => 'index')) .'";'));						
+									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser')) .'";'));						
 									
 echo $this->Form->radio('radiomenu',
 	        					array('experts' => 'Collaborators'),

@@ -107,7 +107,7 @@ class AppController extends Controller {
 				$repository = $this->getCurrentRepository();
 				$name = $repository['Repository']['name'];
 				$url = $repository['Repository']['internal_name'];
-				$this->Session->write('User.points', $this->User->get_user_points($user['User']['id'], $repository['Repository']['id']));
+				$this->Session->write('User.points', 0);//$this->User->get_user_points($user['User']['id'], $repository['Repository']['id']));
 			}
 			
 			//$this->Session->setFlash('Welcome, ' . $user['User']['first_name']);
