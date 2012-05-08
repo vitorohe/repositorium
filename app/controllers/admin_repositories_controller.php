@@ -93,7 +93,7 @@ class AdminRepositoriesController extends AppController {
 			$dom = Configure::read('App.domain');
 			$this->redirect("http://www.{$dom}/admin_repositories");
 		} else {
-			$this->redirect('index');		
+			$this->redirect($this->referer());		
 		}
 		
 	}

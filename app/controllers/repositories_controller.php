@@ -48,9 +48,10 @@ class RepositoriesController extends AppController {
 		if(is_null($repo_url)) {
 			$this->redirect('/');
 		}
+		$this->Session->delete('Experto');
 		
 		$result = $this->_set_repo($data = compact('repo_url'));
-		if($result[0]) {			
+		if($result[0]) {		
 			$repository = $result[1];
 			$joined = null;
 			
@@ -172,6 +173,13 @@ class RepositoriesController extends AppController {
 				),
 				'recursive' => -1
 			));*/
+			
+			
+			$criteriasuser = $this->Criteria->findCriteriasUserinRepo($user, $repository);
+			
+			if(!empty($criteriasuser)){
+				$this->Session->write('Experto.isExperto', true);	
+			}			
 			
 			$this->set(compact('repository', /*'watching',*//*INI*/'joined', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags',*/, 'cloud_data'));
 		} else {

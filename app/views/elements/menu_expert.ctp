@@ -16,7 +16,7 @@ if(isset($current)) {
 ?>
 <div class="admin-menu">
 <?php
-echo $this->Form->radio('radiomenu',
+/*echo $this->Form->radio('radiomenu',
         					array('no_validados' => 'Pending validation'),
 							array(
 								'value' => $current , 
@@ -34,28 +34,13 @@ echo $this->Form->radio('radiomenu',
 							array(
 								'value' => $current , 
 								'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_documentos', 'action' => 'all')) .'";'));
-								
+			*/					
 echo $this->Form->radio('radiomenu',
 	        					array('criteria' => 'Criteria'),
 								array(
 									'value' => $current , 
 									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser')) .'";'));						
 									
-echo $this->Form->radio('radiomenu',
-	        					array('experts' => 'Collaborators'),
-								array(
-									'value' => $current , 
-									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'experts', 'action' => 'index')) .'";'));
-echo $this->Form->radio('radiomenu',
-								array('constituents' => 'Update Constituents'),
-								array(
-									'value' => $current , 
-									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'constituents', 'action' => 'index')) .'";'));
-echo $this->Form->radio('radiomenu',
-								array('warned' => 'Warned Documents'),
-								array(
-									'value' => $current , 
-									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_documentos', 'action' => 'warneds')) .'";'));
 									
 ?>
 </div>

@@ -13,6 +13,16 @@ class AdminCriteriasController extends AppController {
         )
     );
 
+    function beforeFilter() {
+    	
+    	$this->requireRepository();
+    	
+    	if(!$this->Session->check('Experto.isExperto')) {
+    		$this->Session->setFlash('You don\'t have permission to access this page');
+    		$this->redirect('/');
+    	}
+    }
+    
     function index() {
         $this->redirect(array('action'=>'listCriteriasUser'));
     }
@@ -21,29 +31,10 @@ class AdminCriteriasController extends AppController {
     function listCriteriasUser() {
 
         $user = $this->getConnectedUser();
+        $repo = $this->getCurrentRepository();
 
-        $options['joins'] = array(
-            array('table' => 'criterias_users',
-                  'alias' => 'CriteriasUser',
-                  'type' => 'inner',
-                  'conditions' => array(
-                    'CriteriasUser.criteria_id = Criteria.id'
-                    )
-                )
-            );
-
-        $options['conditions'] = array(
-            'CriteriasUser.user_id' => $user['User']['id'],
-            'CriteriasUser.quality_user_id' => 1);
-
-        $options['fields'] = array('Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
-        		 'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
+        $criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
         
-        
-        $options['recursive'] = -1;
-
-        $criterias = $this->Criteria->find('all',$options);
-
         if(!empty($this->data)) {  		
             if(!empty($this->data['Criteria']['limit'])) {
                 $this->paginate['Criteria']['limit'] = $this->data['Criteria']['limit'];
@@ -99,6 +90,27 @@ class AdminCriteriasController extends AppController {
     		
     	$this->data = $crit;
 
+    }
+    
+    
+    function remove($id = null) {
+    	if(is_null($id))
+    		$this->e404();
+    
+    	if($this->Criteria->delete($id)) {
+    		$this->Session->setFlash('Criteria deleted successfuly');
+    		CakeLog::write('activity', 'Criteria [id='.$id.'] deleted');
+    	} else {
+    		$this->Session->setFlash('An error ocurred deleting the criteria', 'flash_errors');
+    	}
+    
+    	if(Configure::read('App.subdomains')) {
+    		$dom = Configure::read('App.domain');
+    		$this->redirect("http://www.{$dom}/admin_repositories");
+    	} else {
+    		$this->redirect('index');
+    	}
+    
     }
 
 }

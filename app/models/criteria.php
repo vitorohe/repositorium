@@ -280,5 +280,48 @@ class Criteria extends AppModel {
 		$crds->commit($this->CriteriasUser);
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
+	
+	function findCriteriasUserinRepo($user = array(), $repo = null){
+		if(empty($user) || is_null($repo))
+			return $user;
+		
+		$options['joins'] = array(
+				array('table' => 'criterias_users',
+						'alias' => 'CriteriasUser',
+						'type' => 'inner',
+						'conditions' => array(
+								'CriteriasUser.criteria_id = Criteria.id'
+						)
+				),
+				array(
+						'table' => 'criterias_documents',
+						'alias' => 'CriteriasDocument',
+						'type' => 'inner',
+						'conditions' => array(
+								'CriteriasDocument.criteria_id = Criteria.id')
+				),
+				array(
+						'table' => 'documents',
+						'alias' => 'Document',
+						'type' => 'inner',
+						'conditions' => array(
+								'Document.id = CriteriasDocument.document_id')
+				)
+		);
+
+		
+		$options['conditions'] = array(
+				'CriteriasUser.user_id' => $user['User']['id'],
+				'CriteriasUser.quality_user_id' => 1,
+				'Document.repository_id' => $repo['Repository']['id']);
+		
+		$options['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
+				'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
+		
+		
+		$options['recursive'] = -1;
+		
+		return $this->find('all', $options);
+	}
 
 }

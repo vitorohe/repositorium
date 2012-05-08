@@ -91,6 +91,7 @@ class AppController extends Controller {
 			$this->Session->delete('Document');
 			$this->Session->delete('Points');
 			$this->Session->delete('Challenge');
+			$this->Session->delete('Expert');
 			
 			$this->Session->write('User.id', $user['User']['id']);
 			/*$this->Session->write('User.first_name', $user['User']['first_name']);
