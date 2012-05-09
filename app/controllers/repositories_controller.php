@@ -174,10 +174,11 @@ class RepositoriesController extends AppController {
 				'recursive' => -1
 			));*/
 			
+			if(isset($user)) {
+				$criteriasuser = $this->Criteria->findCriteriasUserinRepo($user, $repository);
+			}
 			
-			$criteriasuser = $this->Criteria->findCriteriasUserinRepo($user, $repository);
-			
-			if(!empty($criteriasuser)){
+			if(!empty($criteriasuser) && isset($criteriasuser)) {
 				$this->Session->write('Experto.isExperto', true);	
 			}			
 			
