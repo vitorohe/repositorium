@@ -52,9 +52,11 @@ class UsersController extends AppController {
 	  if ($this->User->validates()) {
 		// saves edited data
 		if($this->User->save($this->data)) {
-		  $this->Session->setFlash('Your profile was modified');
-		  CakeLog::write('activity', 'User '. $id .' modified his/her profile');
-		  $this->redirect('index');
+			$this->Session->write('User.name',$this->data['User']['name']);
+			$this->Session->write('User.username',$this->data['User']['username']);
+			$this->Session->setFlash('Your profile was modified');
+		  	CakeLog::write('activity', 'User '. $id .' modified his/her profile');
+		  	$this->redirect('index');
 		} else {
 		  $this->set('debug', $this->User);
 		}
