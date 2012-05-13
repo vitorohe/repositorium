@@ -2,7 +2,7 @@
 	$title = 'Manage criterias';
 	$this->viewVars['title_for_layout'] = $title;
 	/* breadcrumbs */
-	$this->Html->addCrumb('Manage', '/manage/');
+	//$this->Html->addCrumb('Manage', '/manage/');
 	$this->Html->addCrumb($title);
 	/* end breadcrumbs */ 
 ?>
