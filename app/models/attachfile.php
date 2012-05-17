@@ -202,12 +202,15 @@ class Attachfile extends AppModel {
 			}
 			if($file['size'] > 0) {
 				
+				$extension = end(explode('.', $file['name']));
+
 				$this->create();
 				$this->set(
 				$attachfile = array(
 					'Attachfile' => array(
 						'name' => $file['name'],
 						'location' => '/uploaded_files',
+						'extension' => $extension,
 						'activation_id' => 'A',
 						'internalstate_id' => 'A',
 						'document_id' => $document_id
@@ -221,8 +224,6 @@ class Attachfile extends AppModel {
 				}
 
 				$ds->commit($this);
-
-				$extension = end(explode('.', $file['name']));
 				
 				$filename = WWW_ROOT.'/uploaded_files/document_'.$document_id.'.'.$extension;
 

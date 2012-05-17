@@ -266,7 +266,7 @@ class CriteriasController extends AppController {
           'CriteriasDocument.document_id' => $attachedf_document_ids);
        
         $options['fields'] = array(
-          'DISTINCT Document.id', 'Document.name', 'Document.description', 'Attachfile.name');
+          'DISTINCT Document.id', 'Document.name', 'Document.description', 'Attachfile.name', 'Attachfile.location', 'Attachfile.extension');
        
         $document_with_files = $this->CriteriasDocument->find('all', $options);
       } else {
