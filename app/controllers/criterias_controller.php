@@ -159,9 +159,9 @@ class CriteriasController extends AppController {
   		$this->data['Criteria']['user_id'] = $user['User']['id'];
   		$this->data['Criteria']['activation_id'] = 'A';
   		$this->data['Criteria']['internalstate_id'] = 'A';
-  		$this->data['Criteria']['upload_score'] = 5;
+  		/*$this->data['Criteria']['upload_score'] = 5;
   		$this->data['Criteria']['download_score'] = 10;
-  		$this->data['Criteria']['collaboration_score'] = 5;
+  		$this->data['Criteria']['collaboration_score'] = 5;*/
   		
   		
   			
