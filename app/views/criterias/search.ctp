@@ -28,39 +28,56 @@ $(function() {
 </script>
 
 <span style="font-size:12pt">Select Criterias for the search of documents</span>
-<table class="criterias_selector" border="5" width="500">
-    <tr>
-        <th align="center"><strong>Criterias</strong></th>
-        <th align="center"><strong>Chosen Criterias</strong></th>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="criterias">
-                <ul id="sortable1" class="connectedSortable">
-                    <?php
-                        foreach ($criterias as $criteria) {
-                            echo "<li class=\"ui-state-default\"";
-                            echo "id =\"criterias_".$criteria['Criteria']['id']."\">";
-                            echo $criteria['Criteria']['name'];
-                            echo "</li>";
-                        }
-                        
-                    ?>
-                </ul>
+
+<br />
+<br />
+
+<p>Please, drag and drop to choose a criteria</p>
+
+<br />
+<!--Search box-->
+<div id="container">
+    <div class="ui-grid ui-widget ui-widget-content ui-corner-all">
+     
+        <div class="ui-grid-header ui-widget-header ui-corner-top clearfix">
+
+            <div class="header-left">
+                <!-- Left side of table header -->
             </div>
-            <input type="hidden" name="data[Criteria][criterias]" id="thedata">
-            <div class="chosen_criterias">
-                <ul id="sortable2" name="hola" class="connectedSortable">
-                </ul>
+
+            <div class="header-right">
+                Search: <input style="width:150px;" id="searchData" type="text"></div>
             </div>
-        </td>
-    </tr>
-</table>
-<!--FIN-->
+
+        <table class="ui-grid-content ui-widget-content cStoreDataTable" id="cStoreDataTable">
+            <thead>
+                <tr>
+                    <th class="ui-state-default" width="50%">Criterias</th>
+                    <th class="ui-state-default" width="50%">Chosen Criterias</th>
+                </tr>
+            </thead>
+            <tbody id="results">
+                <tr>
+                    <td>
+                        <div id="msg">
+                        </div>
+                        <ul id="sortable1" name="hola" class="connectedSortable">
+                        </ul>
+                    </td>
+                    <input type="hidden" name="data[Criteria][criterias]" id="thedata">
+                    <td>
+                        <ul id="sortable2" name="hola" class="connectedSortable">
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="ui-grid-footer ui-widget-header ui-corner-bottom">
+            <div class="grid-results">Results </div>
+        </div>
+    </div>
+</div>
+<!--Search box-->
+
 <?php echo $this->Form->end('Search'); ?> 
 <?php }?>
-
-
-<script language="javascript" type="text/javascript">
-	add_textboxlist("#TagSearch");
-</script>

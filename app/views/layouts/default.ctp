@@ -27,6 +27,10 @@
 	    echo $this->Html->css('style2');
 	  
       echo $scripts_for_layout;
+
+      //JQuery for search-box
+      echo $this->Html->script('jquery-search');
+
  ?>
   <script type="text/javascript" language="javascript">
   	$(document).ready(function() {

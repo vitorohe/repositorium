@@ -11,9 +11,7 @@ class CriteriasController extends AppController {
 	  )
 	)
   );
-  
-
-  
+    
 //   var $helpers = array('Session', 'Form');
 
   /*function beforeFilter() {
@@ -59,7 +57,27 @@ class CriteriasController extends AppController {
   	$repo = $this->requireRepository();
   
   	$criterias = $this->Criteria->findRepoCriterias($repo['Repository']['id']);
-  
+
+    $criterias_names = array();
+    foreach ($criterias as $criteria) {
+        $criterias_names[] = $criteria['Criteria']['name'];
+    }
+
+    $criterias_ids = array();
+    foreach ($criterias as $criteria) {
+        $criterias_ids[] = $criteria['Criteria']['id'];
+    }
+
+    $criterias_points = array();
+    foreach ($criterias as $criteria) {
+        $criterias_points[] = $criteria['Criteria']['download_score'];
+    }
+
+
+    $this->Session->write('criterias_names',$criterias_names);
+    $this->Session->write('criterias_ids',$criterias_ids);
+    $this->Session->write('criterias_points',$criterias_points);
+
   	$this->set(compact('criterias'));
   }
 
@@ -158,11 +176,7 @@ class CriteriasController extends AppController {
   		
   		$this->data['Criteria']['user_id'] = $user['User']['id'];
   		$this->data['Criteria']['activation_id'] = 'A';
-  		$this->data['Criteria']['internalstate_id'] = 'A';
-  		/*$this->data['Criteria']['upload_score'] = 5;
-  		$this->data['Criteria']['download_score'] = 10;
-  		$this->data['Criteria']['collaboration_score'] = 5;*/
-  		
+  		$this->data['Criteria']['internalstate_id'] = 'A';  		
   		
   			
   		$this->Criteria->set($this->data);
@@ -285,6 +299,22 @@ class CriteriasController extends AppController {
   		$this->Session->setFlash('Invalid Action', flash_errors);
   		$this->redirect($this->referer());
   	}
+  }
+
+  function autocomplete() {
+    $search_data = $this->params['url']['searchData'];
+
+    $criterias_autocomplete = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
+
+    $keys = array();
+
+    foreach (array_keys($criterias_autocomplete) as $key) {
+      $keys[] = $key;
+    }  
+
+    $this->set(compact('search_data','criterias_autocomplete', 'keys'));
+
+    $this->render('/elements/criterias_autocomplete','ajax'); 
   }
 }
 

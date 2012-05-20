@@ -8,6 +8,31 @@
  * http://docs.jquery.com/UI/Theming/API
  */
 
+
+/* Search box
+----------------------------------*/
+#container { position: relative; width: 760px; text-align: left; } 
+
+#dataTable { font-size: 80%; }
+
+.header-right { float:left; }
+.header-left { float:left; }
+
+.ui-grid { width: 98%; padding: .5em; background-image: none; }
+.ui-state-default { padding: .4em; }
+.ui-grid .ui-grid-content { width: 100%; border-collapse: collapse; }
+.ui-grid table tbody td, .ui-grid .ui-grid-header, .ui-grid table thead a { padding: .4em;  }
+.ui-grid table tbody td {  text-align: left; font-weight: normal;  }
+.ui-grid .ui-grid-header, .ui-grid .ui-grid-footer { padding: .8em .4em; text-align: right; }
+.ui-grid .ui-grid-footer { background-image: none; font-weight: normal; text-align: left; }
+.ui-grid table thead a { display: block;  }
+.ui-grid .ui-icon { float: right; }
+.ui-grid .ui-grid-paging { float: right; }
+.ui-grid .ui-grid-paging-prev { float: left; width: 16px; height: 16px; }
+.ui-grid .ui-grid-paging-next { float: right; width: 16px; height: 16px; }
+.ui-grid .ui-grid-results {  }
+.clearfix:after { content: ".";display: block;clear: both;visibility: hidden;line-height: 0;height: 0;	}
+
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden { display: none; }
@@ -274,6 +299,12 @@
 .ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
 .ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+.cStoreDataTable tr:hover { background-color: #D1DFEB; cursor:pointer; }
+.cStoreDataTable tr { border-bottom:1px #ccc dotted; }
+
+.leftcolumn { width: 500px; float: left; }
+.rightcolumn { width: 60px; float: right; }
 
 
 /* Misc visuals

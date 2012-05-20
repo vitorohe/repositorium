@@ -163,7 +163,7 @@ class Criteria extends AppModel {
 				'Repository.id' => $repository_id);
 		
 		$options['fields'] = array(
-				'DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question');
+				'DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.download_score');
 		
 		$options['recursive'] = -1;
 		
