@@ -88,11 +88,11 @@ $(function() {
      
         <div class="ui-grid-header ui-widget-header ui-corner-top clearfix">
 
-            <div class="header-left">
+            <div class="header-right">
                 <!-- Left side of table header -->
             </div>
 
-            <div class="header-right">
+            <div class="header-left">
                 Search: <input style="width:150px;" id="searchData" type="text"></div>
             </div>
 

@@ -15,7 +15,7 @@
 
 #dataTable { font-size: 80%; }
 
-.header-right { float:left; }
+.header-right { float:right; }
 .header-left { float:left; }
 
 .ui-grid { width: 98%; padding: .5em; background-image: none; }
