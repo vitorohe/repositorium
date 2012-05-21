@@ -27,6 +27,19 @@ $(function() {
 });
 </script>
 
+<script type="text/javascript" language="JavaScript">
+function AskAndSubmit(t)
+{
+  var answer = confirm("Are you sure you want to do this?");
+  if (answer)
+  {
+    t.form.submit();
+  }
+  else
+    return false;
+}
+</script>
+
 <span style="font-size:12pt">Select Criterias for the search of documents</span>
 
 <br />
@@ -79,5 +92,5 @@ $(function() {
 </div>
 <!--Search box-->
 
-<?php echo $this->Form->end('Search'); ?> 
+<?php echo $this->Form->submit('Search', array('onclick' => 'AskAndSubmit(this)')); ?> 
 <?php }?>
