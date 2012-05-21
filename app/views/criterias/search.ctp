@@ -7,11 +7,6 @@ $this->viewVars['title_for_layout'] = $title;
 <h1 class="h1icon" style="margin-top: 15px;"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
 
-<?php if(empty($criterias)){
-	echo '<span style="font-size:12pt">There aren\'t documents in this repository</span>';
-} else {?>
-<?php echo $this->Form->create('Criteria', array('action' => 'process')); ?>
-
 
 <script>
 $(function() {
@@ -27,18 +22,39 @@ $(function() {
 });
 </script>
 
-<script type="text/javascript" language="JavaScript">
-function AskAndSubmit(t)
-{
-  var answer = confirm("Are you sure you want to do this?");
-  if (answer)
-  {
-    t.form.submit();
-  }
-  else
-    return false;
-}
+<script>
+    $(function() {
+        // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+        $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    
+        $( "#dialog-confirm" ).dialog({
+            autoOpen: false,
+            resizable: false,
+            height:160,
+            modal: true,
+            buttons: {
+                "Search": function() {
+                    document.getElementById('CriteriaProcessForm').submit();
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+
+        $('form#CriteriaProcessForm').submit(function(e){
+            e.preventDefault();
+            $('#dialog-confirm').dialog('open');
+        });
+
+    });
 </script>
+
+
+<?php if(empty($criterias)){
+	echo '<span style="font-size:12pt">There aren\'t documents in this repository</span>';
+} else {?>
+<?php echo $this->Form->create('Criteria', array('action' => 'process')); ?>
 
 <span style="font-size:12pt">Select Criterias for the search of documents</span>
 
@@ -91,6 +107,8 @@ function AskAndSubmit(t)
     </div>
 </div>
 <!--Search box-->
-
-<?php echo $this->Form->submit('Search', array('onclick' => 'AskAndSubmit(this)')); ?> 
+<div id="dialog-confirm" title="Empty the recycle bin?">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend x points. Are you sure?</p>
+</div>
+<?php echo $this->Form->submit('Search'); ?> 
 <?php }?>
