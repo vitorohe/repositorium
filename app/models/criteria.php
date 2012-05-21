@@ -5,12 +5,15 @@ class Criteria extends AppModel {
 	var $validate = array(
 		'name' => array(
 				'notempty' => array(
-						'rule' => array('notempty'),
-						'message' => 'The name cannot be empty',
-						//'allowEmpty' => false,
-						//'required' => false,
-						//'last' => false, // Stop validation after this rule
-						//'on' => 'create', // Limit validation to 'create' or 'update' operations
+					'rule' => array('notempty'),
+					'message' => 'The name cannot be empty',
+					//'allowEmpty' => false,
+					//'required' => false,
+					//'last' => false, // Stop validation after this rule
+					//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				),
+				'max_length' => array(
+					'rule' => array('maxLength', 40),
 				),
 				'forty' => array(
 						'rule' => array('forty', 'name'),
