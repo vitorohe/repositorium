@@ -21,7 +21,7 @@
 
                 /* Fire the .get() method for and pass the searchVal data to the
                  * search-data.php file for retrieval */
-                $.get('autocomplete?searchData='+searchVal, function(returnData) {
+                $.get('/repositorium/index.php/criterias/autocomplete?searchData='+searchVal, function(returnData) {
                     /* If the returnData is empty then display message to user
                      * else our returned data results in the table.  */
                     if (!returnData) {

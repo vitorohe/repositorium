@@ -52,6 +52,27 @@ class DocumentsController extends AppController {
     }
   	
     $criterias = $this->Criteria->find('all');
+
+    $criterias_names = array();
+    foreach ($criterias as $criteria) {
+        $criterias_names[] = $criteria['Criteria']['name'];
+    }
+
+    $criterias_ids = array();
+    foreach ($criterias as $criteria) {
+        $criterias_ids[] = $criteria['Criteria']['id'];
+    }
+
+    $criterias_points = array();
+    foreach ($criterias as $criteria) {
+        $criterias_points[] = $criteria['Criteria']['download_score'];
+    }
+
+
+    $this->Session->write('criterias_names',$criterias_names);
+    $this->Session->write('criterias_ids',$criterias_ids);
+    $this->Session->write('criterias_points',$criterias_points);
+    
   	//$constituents = $this->ConstituentsKit->find('list', array(
   		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
   		  //				'recursive' => 1,
