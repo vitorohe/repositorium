@@ -49,7 +49,7 @@ $(function() {
                 Search: <input style="width:150px;" id="searchData" type="text"></div>
             </div>
 
-        <table class="ui-grid-content ui-widget-content cStoreDataTable" id="cStoreDataTable">
+        <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
             <thead>
                 <tr>
                     <th class="ui-state-default" width="50%">Criterias</th>

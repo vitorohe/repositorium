@@ -8,6 +8,7 @@
 		$i=0;
 		foreach ($criterias_autocomplete as $criteria) {
 			echo "<li class=\"ui-state-default\" ";
+			//echo "<li class=\"ui-state-highlight\" ";
 			echo "id=\"criterias_".$criterias_ids[$keys[$i++]]."\" >";
             echo $criteria." - ".$criterias_points[$keys[$i-1]]." points";
             echo "</li>";
