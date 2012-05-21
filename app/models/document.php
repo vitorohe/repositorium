@@ -162,15 +162,15 @@ class Document extends AppModel {
 			$there_are_criterias = false;
 			$dataSource = $this->getDataSource();
 			$dataSource->begin($this); // BEGIN
-			if(isset($data['Document']['criterias'])) {
+			if(isset($data['Criteria']['criterias'])) {
 				$there_are_criterias = true;
 			}
 
 
 			if($there_are_criterias) {
-				$criterias = explode($delimiter, $data['Document']['criterias']);
+				$criterias = explode($delimiter, $data['Criteria']['criterias']);
 				$criterias = array_map("trim", $criterias);
-				unset($data['Document']['criterias']);
+				unset($data['Criteria']['criterias']);
 			}
 			
 			//$this->set($data);

@@ -72,7 +72,7 @@ class DocumentsController extends AppController {
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);
     $this->Session->write('criterias_points',$criterias_points);
-    
+
   	//$constituents = $this->ConstituentsKit->find('list', array(
   		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
   		  //				'recursive' => 1,
@@ -319,7 +319,7 @@ class DocumentsController extends AppController {
   	$this->Document->set($this->data);
 
   	// errors
-  	if(empty($this->data['Document']['criterias'])) {
+  	if(empty($this->data['Criteria']['criterias'])) {
   		$this->Session->setFlash('You must include at least one criteria');
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
