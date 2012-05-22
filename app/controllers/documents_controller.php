@@ -65,7 +65,7 @@ class DocumentsController extends AppController {
 
     $criterias_points = array();
     foreach ($criterias as $criteria) {
-        $criterias_points[] = $criteria['Criteria']['download_score'];
+        $criterias_points[] = $criteria['Criteria']['upload_score'];
     }
 
 

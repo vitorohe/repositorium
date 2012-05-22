@@ -2,7 +2,7 @@
 echo $javascript->link('checker.js',false);
 ?>
 <?php
-$title = "Add new document";	
+$title = "Add new document";    
 $this->viewVars['title_for_layout'] = $title;
 $this->Html->addCrumb($title);
 ?>
@@ -14,22 +14,22 @@ $this->Html->addCrumb($title);
 <?php echo $this->Form->create(null, array('url' => '/documents/upload', 'type' => 'file', 'inputDefaults' => array('error' => false)));?>
 <?php echo $this->Form->input('Document.name', array('class' => 'ingresar-documento', 'label' => 'Title', 'default' => '', 'size' => 50, 'onChange'=>"CheckTitle(DocumentTitle.value)"));?> 
 <?php echo $ajax->div('checked_title'); 
-	  echo $ajax->divEnd('checked_title'); ?>
+      echo $ajax->divEnd('checked_title'); ?>
 <?php
-	//foreach($constituents as $constituent){
-		echo $this->element('content'."/form", array('flag' => 'value'));
-		
-	//	if ($constituent=='content'){
-			
-			echo("<div id='checked_content'></div>");
-	//	}
-	//	if ($constituent=='attachFile'){
-		echo $this->element('attachFile'."/form", array('flag' => 'value'));
-		echo("<div id='checked_attachFile'></div>");
-	//	}
-	//}
-	//DocumentFileAttach.value
-	//echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
+    //foreach($constituents as $constituent){
+        echo $this->element('content'."/form", array('flag' => 'value'));
+
+    //  if ($constituent=='content'){
+
+            echo("<div id='checked_content'></div>");
+    //  }
+    //  if ($constituent=='attachFile'){
+        echo $this->element('attachFile'."/form", array('flag' => 'value'));
+        echo("<div id='checked_attachFile'></div>");
+    //  }
+    //}
+    //DocumentFileAttach.value
+    //echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
 ?>
 
 </br>
@@ -133,9 +133,9 @@ $(function() {
 
 <!-- 
 <div class="ui-widget">
-	<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 10px .7em;"> 
-		<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-		<strong>Hey!</strong> You may add more tags separating them by commas (,)</p>
-	</div>
+    <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 10px .7em;"> 
+        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+        <strong>Hey!</strong> You may add more tags separating them by commas (,)</p>
+    </div>
 </div>
 -->

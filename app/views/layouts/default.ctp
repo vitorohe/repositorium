@@ -14,7 +14,7 @@
   <?php echo $this->Html->charset(); ?>
   <title><?php echo $title_for_layout; ?></title>
   <?php 
-	  echo $this->Html->meta('icon');
+    echo $this->Html->meta('icon');
       //echo $this->Html->css('reset');
       //echo $this->Html->css('style');
       //echo $this->Html->css('tabla');
@@ -24,8 +24,8 @@
       echo $this->Html->script('jquery-ui-1.8.13.custom.min');
       echo $this->Html->css('anchors');
       echo $this->Html->css('jqueryui');
-	    echo $this->Html->css('style2');
-	  
+      echo $this->Html->css('style2');
+
       echo $scripts_for_layout;
 
       //JQuery for search-box
@@ -33,38 +33,38 @@
 
  ?>
   <script type="text/javascript" language="javascript">
-  	$(document).ready(function() {
-  		$('.textboxlist-autocomplete-results').hide();
-  	});
-  	
-	/*function add_textboxlist(selector){ 
-		$("" + selector).textboxlist({
-			unique : true,
-			bitsOptions : {
-				editable : {
-					addOnBlur : true, 
-					addKeys : [188]					
-					}},
-			plugins: {
-				autocomplete: {
-					minLength: 3,
-					queryRemote: true,
-					remote: {
-						url: '<?php echo $this->Html->url(array('controller' => 'tags', 'action' => 'autocomplete')); ?>'					
-					}
-			}}});
-	}*/
-	
-	//Improve the flashMessage
-	$("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");
+    $(document).ready(function() {
+      $('.textboxlist-autocomplete-results').hide();
+    });
+    
+  /*function add_textboxlist(selector){ 
+    $("" + selector).textboxlist({
+      unique : true,
+      bitsOptions : {
+        editable : {
+          addOnBlur : true, 
+          addKeys : [188]         
+          }},
+      plugins: {
+        autocomplete: {
+          minLength: 3,
+          queryRemote: true,
+          remote: {
+            url: '<?php echo $this->Html->url(array('controller' => 'tags', 'action' => 'autocomplete')); ?>'         
+          }
+      }}});
+  }*/
+  
+  //Improve the flashMessage
+  $("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");
 
-	//Convert submit buttons to JQueryUI buttons
-	$(function () {
-		$(":submit").button();
-		//add classes to textboxes
-		$(":text, :password, textarea, select").addClass("text ui-widget-content ui-corner-all");
-		//$(".textboxlist").addClass("");
-		$("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");	
+  //Convert submit buttons to JQueryUI buttons
+  $(function () {
+    $(":submit").button();
+    //add classes to textboxes
+    $(":text, :password, textarea, select").addClass("text ui-widget-content ui-corner-all");
+    //$(".textboxlist").addClass("");
+    $("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");  
 });
   </script>
 </head>
@@ -75,9 +75,9 @@
                 <div class="logo">
                     <?php echo $this->Repo->normal_link($this->Html->image('logo2.png'), '/', array('escape'=>false)); ?>
                     <?php
-                    	if($this->Session->read('Repository.name')) {
+                      if($this->Session->read('Repository.name')) {
                     ?> 
-                   		<span class="repo-span"><?php echo $this->Repo->link(ucwords($this->Session->read('Repository.name')) . ' repository', $this->Session->read('Repository.current'));?></span>                    		
+                      <span class="repo-span"><?php echo $this->Repo->link(ucwords($this->Session->read('Repository.name')) . ' repository', $this->Session->read('Repository.current'));?></span>                        
                     <?php } ?>
                 </div>
                 <div class="box userbox">
@@ -100,21 +100,21 @@
                     </ul>
                 </div>
                 <div class="box optionsbox">
-                    <!--<div class="nav form">                    	
+                    <!--<div class="nav form">                      
                         &nbsp;&nbsp;&nbsp;
                     </div>-->
                     <ul class="nav subtopmenu">
-             	        <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
-	                    <?php if($this->Session->check('Experto.isExperto')):?>
-	                    <li><?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?></li>
-                    	<?php endif;?>
-                    	<?php if($this->Session->read('User.esAdmin')): ?>
-	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
-                    	<?php endif; ?>
-                    	<!--INI-->
-                    	<li><?php echo $this->Html->link('Search',array('controller' => 'criterias', 'action' => 'search')); ?></li>
+                      <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
+                      <?php if($this->Session->check('Experto.isExperto')):?>
+                      <li><?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?></li>
+                      <?php endif;?>
+                      <?php if($this->Session->read('User.esAdmin')): ?>
+                      <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
+                      <?php endif; ?>
+                      <!--INI-->
+                      <li><?php echo $this->Html->link('Search',array('controller' => 'criterias', 'action' => 'search')); ?></li>
                       <!--FIN-->
-                    	
+                      
                       
                       <li><?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?></li>
                       <?php if($this->Session->check('User.id') and $this->Session->read('User.id') > 1): ?>
@@ -128,36 +128,36 @@
 
         <div id="bd">   
             <div class="content">
-	          <!-- real content -->
-	          <div id="breadcrumb"><?php echo $this->Html->getCrumbs(' > ','Home'); ?></div>
-			  <?php echo $this->Session->flash(); ?>
-	          <?php echo $content_for_layout; ?>
-	          <!--<?php //if(Configure::read('debug') > 0) { ?>-->
-		          <!-- debug -->
-		          <!--<h1><a onclick="javascript:$('#debugbox').toggle()" style="cursor: pointer">Toggle Debug</a></h1>
-	          	  <h1><a onclick="javascript:$('#sqlbox').toggle()" style="cursor: pointer">Toggle SQL</a></h1>-->
-		          <!--<div class="debug" id="sqlbox" style="display:none">
-			        <?php //echo $this->element('sql_dump'); ?>-->
-		          </div>
-	          <!--<?php
-         		   /*echo '<div class="debug" id="debugbox" style="display:none">';
-		           $vars = $this->getVars();
-		           foreach($vars as $var) { 
-	                 pr($var); pr($$var);
-	               }
-		           echo '</div>';
-		         }*/
-	           ?>-->
+            <!-- real content -->
+            <div id="breadcrumb"><?php echo $this->Html->getCrumbs(' > ','Home'); ?></div>
+        <?php echo $this->Session->flash(); ?>
+            <?php echo $content_for_layout; ?>
+            <!--<?php //if(Configure::read('debug') > 0) { ?>-->
+              <!-- debug -->
+              <!--<h1><a onclick="javascript:$('#debugbox').toggle()" style="cursor: pointer">Toggle Debug</a></h1>
+                <h1><a onclick="javascript:$('#sqlbox').toggle()" style="cursor: pointer">Toggle SQL</a></h1>-->
+              <!--<div class="debug" id="sqlbox" style="display:none">
+              <?php //echo $this->element('sql_dump'); ?>-->
+              </div>
+            <!--<?php
+               /*echo '<div class="debug" id="debugbox" style="display:none">';
+               $vars = $this->getVars();
+               foreach($vars as $var) { 
+                   pr($var); pr($$var);
+                 }
+               echo '</div>';
+             }*/
+             ?>-->
             </div>
-    	</div>
+      </div>
 
         <div id="ft">
             <div class="footer">
-            	<div class="box footerbox">
-            		<ul class="footernav">
-            			<li><a href="http://github.com/jyby/repositorium/issues/new" target="_blank">Report a bug</a></li>
-            		</ul>
-            	</div>
+              <div class="box footerbox">
+                <ul class="footernav">
+                  <li><a href="http://github.com/jyby/repositorium/issues/new" target="_blank">Report a bug</a></li>
+                </ul>
+              </div>
             </div>
         </div>
     </div>
