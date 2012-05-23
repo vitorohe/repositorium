@@ -234,7 +234,15 @@ class CriteriasController extends AppController {
               'conditions' => array(
                   'CriteriasDocument.document_id = Document.id'
               )
-          )
+            ),
+          array('table' => 'attachfiles',
+              'alias' => 'Attachfile',
+              'type' => 'left',
+              'conditions' => array(
+                  'CriteriasDocument.document_id = Attachfile.document_id'
+              )
+            )
+          
       );
       if(!isset($attachedf_document_ids)){
         $options['conditions'] = array(
@@ -255,6 +263,11 @@ class CriteriasController extends AppController {
       $options['recursive'] = -1;
 
       $documents = $this->CriteriasDocument->find('all', $options);
+      $documents_c = array();
+      foreach ($documents as $document) {
+        $document['Attachfile'] = array('name' =>'' , 'location' => '' ,'extension' => '');
+        $documents_c[] = $document;
+      }
 
       /*options to find documents with files and theses criterias*/
       if(isset($attachedf_document_ids)) {
@@ -287,9 +300,11 @@ class CriteriasController extends AppController {
         $document_with_files = null;
       }
 
+      $all_documents = array_merge($documents_c,$document_with_files);
+
       $criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));
 
-      $this->set(compact('documents','document_with_files','criterias_name'));
+      $this->set(compact('criterias_name','all_documents'));
     }
     else if(!empty($this->data) && isset($this->data['Criteria']) && isset($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['criterias'])){
       $this->Session->setFlash('You must select at least a criteria');

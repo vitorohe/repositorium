@@ -111,7 +111,7 @@ $(function() {
                 <tr>
                     <th class="ui-state-default" width="33%">Criterias</th>
                     <th class="ui-state-default" width="33%">Chosen Criterias</th>
-                    <th class="ui-state-default" width="34%">Option</th>
+                    <th class="ui-state-default" width="34%">Details</th>
                 </tr>
             </thead>
             <tbody id="results">
@@ -147,7 +147,7 @@ $(function() {
 </div>
 <!--Search box-->
 <div id="dialog-confirm" title="Search documents">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <p id="total-dialog"></p> points. Are you sure?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <p id="total-dialog" style="color: red; font-size:1.5em;"></p> points. Are you sure?</p>
 </div>
 <?php echo $this->Form->submit('Search'); ?> 
 <?php }?>
