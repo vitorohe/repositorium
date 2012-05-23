@@ -234,26 +234,13 @@ class CriteriasController extends AppController {
               'conditions' => array(
                   'CriteriasDocument.document_id = Document.id'
               )
-            ),
-          array('table' => 'attachfiles',
-              'alias' => 'Attachfile',
-              'type' => 'left',
-              'conditions' => array(
-                  'CriteriasDocument.document_id = Attachfile.document_id'
-              )
-            )
-          
+            )          
       );
-      if(!isset($attachedf_document_ids)){
-        $options['conditions'] = array(
+
+      $options['conditions'] = array(
           'CriteriasDocument.criteria_id' => $criteria_ids,
           'Document.repository_id' => $repo['Repository']['id']);
-      } else {
-        $options['conditions'] = array(
-          'CriteriasDocument.criteria_id' => $criteria_ids,
-          'Document.repository_id' => $repo['Repository']['id'],
-          array ("NOT" => array ('CriteriasDocument.document_id' => $attachedf_document_ids)));
-      }
+
 
       $options['fields'] = array(
           'DISTINCT Document.id', 'Document.name', 'Document.description');
@@ -263,48 +250,20 @@ class CriteriasController extends AppController {
       $options['recursive'] = -1;
 
       $documents = $this->CriteriasDocument->find('all', $options);
-      $documents_c = array();
+      $documents_waf = array();
       foreach ($documents as $document) {
-        $document['Attachfile'] = array('name' =>'' , 'location' => '' ,'extension' => '');
-        $documents_c[] = $document;
+        $document['files'] = array();
+        $document['files'] = $this->Attachfile->find('all' , 
+          array('conditions' => 
+            array('Attachfile.document_id' => $document['Document']['id']), 
+            'recursive' => -1, 
+            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+        $documents_waf[] = $document;
       }
-
-      /*options to find documents with files and theses criterias*/
-      if(isset($attachedf_document_ids)) {
-        $options['joins'] = array(
-          array('table' => 'documents',
-                'alias' => 'Document',
-                'type' => 'inner',
-                'conditions' => array(
-                  'CriteriasDocument.document_id = Document.id'
-                  )
-              ),
-          array('table' =>'attachfiles',
-                'alias' => 'Attachfile',
-                'type' => 'inner',
-                'conditions' => array(
-                  'Attachfile.document_id = Document.id'
-                  )
-              )
-        );
-      
-        $options['conditions'] = array(
-          'CriteriasDocument.criteria_id' => $criteria_ids, 
-          'CriteriasDocument.document_id' => $attachedf_document_ids);
-       
-        $options['fields'] = array(
-          'DISTINCT Document.id', 'Document.name', 'Document.description', 'Attachfile.name', 'Attachfile.location', 'Attachfile.extension');
-       
-        $document_with_files = $this->CriteriasDocument->find('all', $options);
-      } else {
-        $document_with_files = null;
-      }
-
-      $all_documents = array_merge($documents_c,$document_with_files);
 
       $criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));
 
-      $this->set(compact('criterias_name','all_documents'));
+      $this->set(compact('criterias_name','documents_waf'));
     }
     else if(!empty($this->data) && isset($this->data['Criteria']) && isset($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['criterias'])){
       $this->Session->setFlash('You must select at least a criteria');

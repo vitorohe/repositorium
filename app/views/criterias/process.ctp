@@ -20,15 +20,23 @@ $this->viewVars['title_for_layout'] = $title;
 <br />
 
 <?php 
-	foreach($all_documents as $document){
+	foreach($documents_waf as $document){
 		echo '<strong>Title:</strong> ' . $document['Document']['name'];
 		echo '<br />';
 		echo '<strong>Content:</strong> ' . $document['Document']['description'];
 		
-		if($document['Attachfile']['name'] != '') {
+		if(!empty($document['files'])) {
 
 			echo '<br />';
-			echo '<strong>Attached file:</strong> ' . '<a href="http://'.Configure::read('mywebroot').$document['Attachfile']['location'].'/document_'.$document['Document']['id'].'.'.$document['Attachfile']['extension'].'" target="_blank" title="'.$document['Attachfile']['name'].'">'.$document['Attachfile']['name'].'</a>';
+			echo '<strong>Attached files:</strong> ';
+			echo '<br />';
+			echo '<ol style="margin: 0 0 0 10px;">';
+			foreach ($document['files'] as $file) {
+				echo '<li>';
+				echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/document_'.$document['Document']['id'].'.'.$file['Attachfile']['extension'].'" target="_blank" title="'.$file['Attachfile']['name'].'">'.$file['Attachfile']['name'].'</a>';
+				echo '</li>';
+			}
+			echo '</ol>';
 		}
 		echo '<br />';
 		echo '<br />';
