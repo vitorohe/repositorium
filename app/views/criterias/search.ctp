@@ -10,9 +10,36 @@ $this->viewVars['title_for_layout'] = $title;
 
 <script>
 $(function() {
+    var mycounter = 0;
+    var amount = 0;
+    var total = 0;
     $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable"
+        connectWith: ".connectedSortable",    
     }).disableSelection();
+
+    $("#sortable2").sortable({
+        update: function(event, ui) {
+            mycounter = 0;
+            amount = 0;
+            if($('#amount').val() == "")
+                amount = 0;
+            else
+                amount = parseInt($('#amount').val());
+            $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            if(mycounter == 0) {
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            }
+        }
+    });
 
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
@@ -24,7 +51,7 @@ $(function() {
 
 <script>
     $(function() {
-        // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
     
         $( "#dialog-confirm" ).dialog({
@@ -44,6 +71,7 @@ $(function() {
 
         $('form#CriteriaProcessForm').submit(function(e){
             e.preventDefault();
+            $("p#total-dialog").text($("#total").val());
             $('#dialog-confirm').dialog('open');
         });
 
@@ -81,8 +109,9 @@ $(function() {
         <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
             <thead>
                 <tr>
-                    <th class="ui-state-default" width="50%">Criterias</th>
-                    <th class="ui-state-default" width="50%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="33%">Criterias</th>
+                    <th class="ui-state-default" width="33%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="34%">Option</th>
                 </tr>
             </thead>
             <tbody id="results">
@@ -98,6 +127,16 @@ $(function() {
                         <ul id="sortable2" name="hola" class="connectedSortable">
                         </ul>
                     </td>
+                    <td>
+                        <label for="total">Amount of documents:</label>
+                        <input type="text" id=
+                        "amount" value="3"/>
+                        <label for="total">Total points (1 document):</label>
+                        <input type="text" disabled="disabled" id=
+                        "counter" value="0"/>
+                        <label for="total">Total points to spend:</label>
+                        <input type="text" disabled="disabled" id="total" value="0"/>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -107,8 +146,8 @@ $(function() {
     </div>
 </div>
 <!--Search box-->
-<div id="dialog-confirm" title="Empty the recycle bin?">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend x points. Are you sure?</p>
+<div id="dialog-confirm" title="Search documents">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <p id="total-dialog"></p> points. Are you sure?</p>
 </div>
 <?php echo $this->Form->submit('Search'); ?> 
 <?php }?>
