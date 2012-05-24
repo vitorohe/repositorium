@@ -40,9 +40,28 @@ $this->Html->addCrumb($title);
 
 <script>
 $(function() {
+
+    var mycounter = 0;
+
     $( "#sortable1, #sortable2" ).sortable({
         connectWith: ".connectedSortable"
     }).disableSelection();
+
+    $("#sortable2").sortable({
+        update: function(event, ui) {
+            mycounter = 0;
+            
+            $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+            });
+            if(mycounter == 0) {
+                $('#counter').val(mycounter);
+            }
+        }
+    });
 
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
@@ -51,36 +70,6 @@ $(function() {
 
 });
 </script>
-
-<!--<table class="criterias_selector" border="5" width="500">
-    <tr>
-        <th align="center"><strong>Criterias</strong></th>
-        <th align="center"><strong>Chosen Criterias</strong></th>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="criterias">
-                <ul id="sortable1" class="connectedSortable">
-                    <?php
-                        //foreach ($criterias as $criteria) {
-                            //echo "<li class=\"ui-state-default\"";
-                            //echo "id =\"criterias_".$criteria['Criteria']['id']."\">";
-                            //echo $criteria['Criteria']['name'];
-                            //echo "</li>";
-                        //}
-                        
-                    ?>
-                </ul>
-            </div>
-            <input type="hidden" name="data[Document][criterias]" id="thedata">
-            <div class="chosen_criterias">
-                <ul id="sortable2" name="hola" class="connectedSortable">
-                </ul>
-            </div>
-        </td>
-    </tr>
-</table>-->
-<!--FIN-->
 
 <!--Search box-->
 <div id="container">
@@ -99,8 +88,9 @@ $(function() {
         <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
             <thead>
                 <tr>
-                    <th class="ui-state-default" width="50%">Criterias</th>
-                    <th class="ui-state-default" width="50%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="3%">Criterias</th>
+                    <th class="ui-state-default" width="33%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="34%">Details</th>
                 </tr>
             </thead>
             <tbody id="results">
@@ -115,6 +105,11 @@ $(function() {
                     <td>
                         <ul id="sortable2" name="hola" class="connectedSortable">
                         </ul>
+                    </td>
+                    <td>
+                        <label for="counter">Total points to spend:</label>
+                        <input type="text" disabled="disabled" id=
+                        "counter" value="0"/>
                     </td>
                 </tr>
             </tbody>

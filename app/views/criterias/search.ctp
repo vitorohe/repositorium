@@ -128,10 +128,10 @@ $(function() {
                         </ul>
                     </td>
                     <td>
-                        <label for="total">Amount of documents:</label>
+                        <label for="amount">Amount of documents:</label>
                         <input type="text" id=
                         "amount" value="3"/>
-                        <label for="total">Total points (1 document):</label>
+                        <label for="counter">Total points (1 document):</label>
                         <input type="text" disabled="disabled" id=
                         "counter" value="0"/>
                         <label for="total">Total points to spend:</label>
