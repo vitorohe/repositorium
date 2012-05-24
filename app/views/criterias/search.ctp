@@ -43,7 +43,6 @@ $(function() {
 
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
-        //return false;
     });
 
 });
@@ -130,12 +129,12 @@ $(function() {
                     <td>
                         <label for="amount">Amount of documents:</label>
                         <input type="text" id=
-                        "amount" value="3"/>
+                        "amount" name="data[Payed_search][documents_amount]" value="1"/>
                         <label for="counter">Total points (1 document):</label>
                         <input type="text" disabled="disabled" id=
                         "counter" value="0"/>
                         <label for="total">Total points to spend:</label>
-                        <input type="text" disabled="disabled" id="total" value="0"/>
+                        <input type="text" disabled="disabled" id="total" name="data[Payed_search][toal_spent_points]" value="0"/>
                     </td>
                 </tr>
             </tbody>

@@ -209,6 +209,14 @@ class CriteriasController extends AppController {
         $there_are_criterias = true;
       }
 
+      if(!empty($data['Payed_search']['documents_amount'])) {
+        $documents_amount = $data['Payed_search']['documents_amount'];
+      }
+      else {
+        $this->Session->setFlash('You must search at least 1 document.');
+        $this->redirect('/criterias/search');
+      }
+
       $criterias = explode('&', $data['Criteria']['criterias']);
       $criterias = array_map("trim", $criterias);
       unset($data['Criteria']['criterias']);
@@ -219,13 +227,6 @@ class CriteriasController extends AppController {
       }
 
       $conditions['conditions'] = array('Document.repository_id' => $repo['Repository']['id']);
-
-      $attached_files = $this->Attachfile->find('all',$conditions);
-     
-      $attached_document_ids = array();
-      foreach($attached_files as $attachf) {
-        $attachedf_document_ids[] = $attachf['Attachfile']['document_id'];
-      }
 
       $options['joins'] = array(
           array('table' => 'documents',
@@ -250,7 +251,7 @@ class CriteriasController extends AppController {
       $options['recursive'] = -1;
 
       $documents = $this->CriteriasDocument->find('all', $options);
-      $documents_waf = array();
+      $documents_with_files = array();
       foreach ($documents as $document) {
         $document['files'] = array();
         $document['files'] = $this->Attachfile->find('all' , 
@@ -258,12 +259,19 @@ class CriteriasController extends AppController {
             array('Attachfile.document_id' => $document['Document']['id']), 
             'recursive' => -1, 
             'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
-        $documents_waf[] = $document;
+        $documents_with_files[] = $document;
+      }
+
+      if(count($documents_with_files) > $documents_amount) {
+        shuffle($documents_with_files);
+        $docs_ids = array_rand($documents_with_files, $documents_amount);
+        $docs_ids_array = (is_array($docs_ids) ? $docs_ids : array($docs_ids));
+        $documents_with_files = array_intersect_key($documents_with_files, array_flip($docs_ids_array));
       }
 
       $criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));
 
-      $this->set(compact('criterias_name','documents_waf'));
+      $this->set(compact('criterias_name','documents_with_files'));
     }
     else if(!empty($this->data) && isset($this->data['Criteria']) && isset($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['criterias'])){
       $this->Session->setFlash('You must select at least a criteria');

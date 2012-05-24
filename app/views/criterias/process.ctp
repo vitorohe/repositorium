@@ -7,7 +7,7 @@ $this->viewVars['title_for_layout'] = $title;
 <h1 class="h1icon" style="margin-top: 15px;"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
 
-<?php if(empty($documents) && empty($document_with_files))
+<?php if(empty($documents_with_files))
 		echo '<span>There aren\'t results for: ';
 	else 
 		echo '<span>Search result for: ';
@@ -18,9 +18,10 @@ $this->viewVars['title_for_layout'] = $title;
 ?>
 
 <br />
+<br />
 
 <?php 
-	foreach($documents_waf as $document){
+	foreach($documents_with_files as $document){
 		echo '<strong>Title:</strong> ' . $document['Document']['name'];
 		echo '<br />';
 		echo '<strong>Content:</strong> ' . $document['Document']['description'];
