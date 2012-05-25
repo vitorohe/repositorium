@@ -5,7 +5,7 @@ class AdminCriteriasController extends AppController {
     var $uses = array('Criteria');
     var $helpers = array('Text', 'Number');
     var $paginate = array(
-     'MyCriteria' => array(
+     'Criteria' => array(
          'limit' => 5,
          'order' => array(
               'name' => 'desc'
@@ -50,8 +50,8 @@ class AdminCriteriasController extends AppController {
            'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['MyCriteria']['limit'],
            'repo' => $this->requireRepository(),
            'menu' => 'menu_expert',
-           'current' => 'criteriads',
-           'title' => 'MyCriteria'
+           'current' => 'criteria',
+           'title' => 'Criteria'
         ); 
 
         $this->set($params);
