@@ -5,7 +5,7 @@ class AdminCriteriasController extends AppController {
     var $uses = array('Criteria');
     var $helpers = array('Text', 'Number');
     var $paginate = array(
-     'Criteria' => array(
+     'MyCriteria' => array(
          'limit' => 5,
          'order' => array(
               'name' => 'desc'
@@ -24,32 +24,34 @@ class AdminCriteriasController extends AppController {
     }
     
     function index() {
-        $this->redirect(array('action'=>'listCriteriasUser'));
+
+        if(!empty($this->data)) { 
+            if(!empty($this->data['Criteria']['limit'])) {
+                echo $this->data['Criteria']['limit'];
+                $this->paginate['MyCriteria']['limit'] = $this->data['Criteria']['limit'];
+                $this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
+            } 
+        }
+
+        $this->redirect(array('action'=>'listCriteriasUser', $this->data));
     }
 
 
     function listCriteriasUser() {
-
+        print_r($this->paginate);
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
 
         $criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
-        
-        if(!empty($this->data)) {  		
-            if(!empty($this->data['Criteria']['limit'])) {
-                $this->paginate['Criteria']['limit'] = $this->data['Criteria']['limit'];
-                $this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
-            } 
-        } 
 
         $this->data = $this->paginate();
 
         $params = array(
-           'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['Criteria']['limit'],
+           'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['MyCriteria']['limit'],
            'repo' => $this->requireRepository(),
            'menu' => 'menu_expert',
-           'current' => 'criteria',
-           'title' => 'Criteria'
+           'current' => 'criteriads',
+           'title' => 'MyCriteria'
         ); 
 
         $this->set($params);

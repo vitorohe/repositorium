@@ -36,6 +36,7 @@
 				'20' => '20 criteria',
 				'50' => '50 criteria' 
 			);
+
 			echo $this->Form->select('Criteria.limit', $options, $limit, array('empty' => false, 'onChange' => 'select_limit.submit()'));			   
 		?>
 		</form>
@@ -95,6 +96,6 @@
   </tbody>
 </table>
 <!-- end core table-->
-<?php //echo $this->element('paginator_info'); ?>
+<?php echo $this->element('paginator_info'); ?>
 
-<?php //echo $this->element('paginator'); ?> 
+<?php echo $this->element('paginator'); ?> 
