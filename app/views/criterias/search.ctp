@@ -41,6 +41,17 @@ $(function() {
         }
     });
 
+    $('#amount').keyup(function() {
+        amount = 0;
+        if($('#amount').val() == "")
+            amount = 0;
+        else
+            amount = parseInt($('#amount').val());
+        total = mycounter*amount;
+        $('#total').val(total);
+      
+    });
+
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
     });
