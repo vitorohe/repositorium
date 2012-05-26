@@ -31,7 +31,8 @@ class AdminCriteriasController extends AppController {
 
     function listCriteriasUser() {
 
-        $this->data['Criteria']['limit'] = $this->params['pass'][0];
+        if(!empty($this->params['pass']))
+            $this->data['Criteria']['limit'] = $this->params['pass'][0];
 
         if(!empty($this->data)) { 
             if(!empty($this->data['Criteria']['limit'])) {
