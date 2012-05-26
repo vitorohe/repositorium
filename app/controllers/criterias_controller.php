@@ -203,6 +203,7 @@ class CriteriasController extends AppController {
       $data = $this->data;
 
       $repo = $this->requireRepository();
+      $user = $this->getConnectedUser();
 
       $there_are_criterias = false;
       if(isset($data['Criteria']['criterias'])) {
@@ -225,7 +226,28 @@ class CriteriasController extends AppController {
       foreach($criterias as $criteria) {
         $criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
       }
+	
+      
+      $criterias_users = $this->CriteriasUser->find('all',
+      		array('joins' => array(
+      			    array('table' => 'criterias',
+         		     	'alias' => 'Criteria',
+          			    'type' => 'inner',
+         	   			'conditions' => array(
+                		 'CriteriasUser.criteria_id = Criteria.id'
+              			)
+            		)),      
+      				'conditions' => array('CriteriasUser.user_id' => $user['User']['id'], 'CriteriasUser.criteria_id' => $criteria_ids),
+      				'recursive' => -1,
+      				'fields' => array('DISTINCT CriteriasUser.id', 'Criteria.name','Criteria.download_score', 'CriteriasUser.score_obtained')));
+      
+      
 
+      if(count($criterias_users) < count($criteria_ids)){
+      	$this->Session->setFlash('You haven\'t done enough challenges yet');
+      	$this->redirect($this->referer());
+      }
+      
       $conditions['conditions'] = array('Document.repository_id' => $repo['Repository']['id']);
 
       $options['joins'] = array(
@@ -267,6 +289,13 @@ class CriteriasController extends AppController {
         $docs_ids = array_rand($documents_with_files, $documents_amount);
         $docs_ids_array = (is_array($docs_ids) ? $docs_ids : array($docs_ids));
         $documents_with_files = array_intersect_key($documents_with_files, array_flip($docs_ids_array));
+        $documents_amount = count($documents_with_files);
+      }
+      
+      
+      if(($str = $this->CriteriasUser->saveAndVerify($criterias_users, 0, $documents_amount)) != 'success'){
+      	$this->Session->setFlash($str, flash_errors);
+      	$this->redirect($this->referer());
       }
 
       $criterias_name = $this->Criteria->find('all', array('field' => array('Criteria.name'), 'conditions' => array('Criteria.id' => $criteria_ids)));

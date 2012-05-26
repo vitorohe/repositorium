@@ -187,5 +187,29 @@ class CriteriasUser extends AppModel {
 		$ds->commit($this);
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
+	
+	function saveAndVerify($data = array(), $mode, $doc_quantity = 1){
+		if(empty($data))
+			return 'There is no data';
+	
+		$score_type = $mode == 0 ? 'download_score' : 'upload_score';
+		$ds = $this->getDataSource();
+		$ds->begin($this);
+		foreach($data as $criterias_user){
+			if($criterias_user['Criteria'][$score_type]*$doc_quantity > $criterias_user['CriteriasUser']['score_obtained']){
+				$ds->rollback($this);
+				return 'You haven\'t enough points for the criteria '.$criterias_user['Criteria']['name'];
+			}
+			$this->id = $criterias_user['CriteriasUser']['id'];
+			$criterias_user['CriteriasUser']['score_obtained'] = $criterias_user['CriteriasUser']['score_obtained'] - $criterias_user['Criteria'][$score_type]*$doc_quantity;
+			if(!$this->save($criterias_user)){
+				$ds->rollback($this);
+				return 'An error has occurred, please blame the developer';
+			}
+		}
+		$ds->commit($this);
+		
+		return 'success';
+	}
 }
 ?>

@@ -326,5 +326,5 @@ class Criteria extends AppModel {
 		
 		return $this->find('all', $options);
 	}
-
+	
 }
