@@ -25,8 +25,6 @@ class AdminCriteriasController extends AppController {
     
     function index() {
 
-        echo $this->data['Criteria']['limit'];
-
         $this->redirect(array('action'=>'listCriteriasUser', $this->data['Criteria']['limit']));
     }
 
@@ -37,19 +35,15 @@ class AdminCriteriasController extends AppController {
 
         if(!empty($this->data)) { 
             if(!empty($this->data['Criteria']['limit'])) {
-                echo $this->data['Criteria']['limit'];
                 $this->paginate['Criteria']['limit'] = $this->data['Criteria']['limit'];
                 $this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
             } 
         }
-        
-        //print_r($this->paginate);
+
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
 
         $criterias = $this->findCriteriasUserinRepo($user, $repo);
-
-        //print_r($criterias);
         
         $this->data = $criterias;
 
