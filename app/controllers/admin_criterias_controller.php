@@ -38,13 +38,15 @@ class AdminCriteriasController extends AppController {
 
 
     function listCriteriasUser() {
-        print_r($this->paginate);
+        //print_r($this->paginate);
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
 
-        $criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
+        $criterias = $this->findCriteriasUserinRepo($user, $repo);
 
-        $this->data = $this->paginate();
+        //print_r($criterias);
+        
+        $this->data = $criterias;
 
         $params = array(
            'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['MyCriteria']['limit'],
@@ -113,6 +115,49 @@ class AdminCriteriasController extends AppController {
     		$this->redirect('index');
     	}
     
+    }
+    
+    function findCriteriasUserinRepo($user = array(), $repo = null){
+    	if(empty($user) || is_null($repo))
+    		return $user;
+    
+    	$this->paginate['Criteria']['joins'] = array(
+    			array('table' => 'criterias_users',
+    					'alias' => 'CriteriasUser',
+    					'type' => 'inner',
+    					'conditions' => array(
+    							'CriteriasUser.criteria_id = Criteria.id'
+    					)
+    			),
+    			array(
+    					'table' => 'criterias_documents',
+    					'alias' => 'CriteriasDocument',
+    					'type' => 'inner',
+    					'conditions' => array(
+    							'CriteriasDocument.criteria_id = Criteria.id')
+    			),
+    			array(
+    					'table' => 'documents',
+    					'alias' => 'Document',
+    					'type' => 'inner',
+    					'conditions' => array(
+    							'Document.id = CriteriasDocument.document_id')
+    			)
+    	);
+    
+    
+    	$this->paginate['Criteria']['conditions'] = array(
+    			'CriteriasUser.user_id' => $user['User']['id'],
+    			'CriteriasUser.quality_user_id' => 1,
+    			'Document.repository_id' => $repo['Repository']['id']);
+    
+    	$this->paginate['Criteria']['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
+    			'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
+    
+    
+    	$this->paginate['Criteria']['recursive'] = -1;
+    
+    	return $this->paginate();
     }
 
 }

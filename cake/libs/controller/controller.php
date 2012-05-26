@@ -1197,13 +1197,14 @@ class Controller extends Object {
 		if (method_exists($object, 'paginateCount')) {
 			$count = $object->paginateCount($conditions, $recursive, $extra);
 		} else {
-			$parameters = compact('conditions');
+			$parameters = compact('conditions', 'fields');
 			if ($recursive != $object->recursive) {
 				$parameters['recursive'] = $recursive;
 			}
-			$count = $object->find('count', array_merge($parameters, $extra));
+			$count = count($object->find('all', array_merge($parameters, $extra)));
 		}
 		$pageCount = intval(ceil($count / $limit));
+		$pageCount = $pageCount == 0 ? 1 : $pageCount; 
 
 		if ($page === 'last' || $page >= $pageCount) {
 			$options['page'] = $page = $pageCount;
