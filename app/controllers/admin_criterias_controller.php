@@ -25,19 +25,24 @@ class AdminCriteriasController extends AppController {
     
     function index() {
 
-        if(!empty($this->data)) { 
-            if(!empty($this->data['Criteria']['limit'])) {
-                echo $this->data['Criteria']['limit'];
-                $this->paginate['MyCriteria']['limit'] = $this->data['Criteria']['limit'];
-                $this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
-            } 
-        }
+        echo $this->data['Criteria']['limit'];
 
-        $this->redirect(array('action'=>'listCriteriasUser', $this->data));
+        $this->redirect(array('action'=>'listCriteriasUser', $this->data['Criteria']['limit']));
     }
 
 
     function listCriteriasUser() {
+
+        $this->data['Criteria']['limit'] = $this->params['pass'][0];
+
+        if(!empty($this->data)) { 
+            if(!empty($this->data['Criteria']['limit'])) {
+                echo $this->data['Criteria']['limit'];
+                $this->paginate['Criteria']['limit'] = $this->data['Criteria']['limit'];
+                $this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
+            } 
+        }
+        
         //print_r($this->paginate);
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
@@ -49,7 +54,7 @@ class AdminCriteriasController extends AppController {
         $this->data = $criterias;
 
         $params = array(
-           'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['MyCriteria']['limit'],
+           'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['Criteria']['limit'],
            'repo' => $this->requireRepository(),
            'menu' => 'menu_expert',
            'current' => 'criteria',
