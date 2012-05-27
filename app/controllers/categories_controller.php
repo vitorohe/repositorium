@@ -2,6 +2,8 @@
 App::import('Sanitize');
 class CategoriesController extends AppController {
 
+	var $helpers = array('Html', 'Javascript', 'Ajax');
+	var $uses = array('Category','Criteria');
 	var $paginate = array(
 			'Criteria' => array(
 					'limit' => 5,
@@ -131,33 +133,85 @@ class CategoriesController extends AppController {
 	}
 
 	function create(){
-		if($this->getConnectedUser() == $this->anonymous)
-			$this->redirect(array('controller' => 'login'));
-		 
-		if(!empty($this->data)) {
-			$user = $this->getConnectedUser();
-
-			$this->data['Criteria']['user_id'] = $user['User']['id'];
-			$this->data['Criteria']['activation_id'] = 'A';
-			$this->data['Criteria']['internalstate_id'] = 'A';
-				
-			$this->Criteria->set($this->data);
-				
-			if($this->Criteria->validates()) {
-				$criteria = $this->Criteria->createNewCriteria($this->data, $user);
-				CakeLog::write('activity', "Criteria [name=\"{$criteria['Criteria']['name']}\"] created");
-				if(is_null($criteria)) {
-					$this->Session->setFlash('An error occurred creating the criteria. Please, blame the developer');
-					$this->redirect('/');
-				}
-				 
-				$this->Session->setFlash('Criteria successfully created');
-				$this->redirect('/');
-				 
-			} else {
-				$this->Session->setFlash($this->Criteria->invalidFields(), 'flash_errors');
-			}
-		}
+	  	$repo = $this->getCurrentRepository();
+	  	$user = $this->getConnectedUser();
+	    if($this->isAnonymous()){
+	      $this->Session->setFlash('You must log in first', 'flash_errors');
+	      $this->redirect(array('controller' => 'login', 'action' => 'index'));
+	    }
+	  	
+	    $criterias = $this->Criteria->find('all');
+	
+	    $criterias_names = array();
+	    foreach ($criterias as $criteria) {
+	        $criterias_names[] = $criteria['Criteria']['name'];
+	    }
+	
+	    $criterias_ids = array();
+	    foreach ($criterias as $criteria) {
+	        $criterias_ids[] = $criteria['Criteria']['id'];
+	    }
+	
+	    $criterias_points = array();
+	    foreach ($criterias as $criteria) {
+	        $criterias_points[] = $criteria['Criteria']['upload_score'];
+	    }
+	
+	
+	    $this->Session->write('criterias_names',$criterias_names);
+	    $this->Session->write('criterias_ids',$criterias_ids);
+	    $this->Session->write('criterias_points',$criterias_points);
+	
+	  	//$constituents = $this->ConstituentsKit->find('list', array(
+	  		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
+	  		  //				'recursive' => 1,
+	  		  	//			'fields'=>array('Constituent.sysname')));
+	  	
+	  	if(!empty($this->data)) {
+	  		
+	  		$criterias = explode('&', $this->data['Criteria']['criterias']);
+	  		$criterias = array_map("trim", $criterias);
+	  		 
+	  		$criteria_ids = array();
+	  		foreach($criterias as $criteria) {
+	  			$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+	  		}
+	  		if(count($criteria_ids) < 2){
+	  			$this->Session->setFlash('You must select at least 2 criterias');
+	  			$this->redirect($this->referer());
+	  		}
+	  		
+	  		unset($this->data['Criteria']['criterias']);
+	  		
+	  		$this->data['Category']['user_id'] = $user['User']['id'];
+	  		$this->data['Category']['activation_id'] = 'A';
+	  		$this->data['Category']['internalstate_id'] = 'A';
+	  		$this->data['CategoryCriteria']['activation_id'] = 'A';
+	  		$this->data['CategoryCriteria']['internalstate_id'] = 'A';
+	  		
+	  		$this->Category->set($this->data);
+	  		
+	  		if(!$this->Category->validates()) {
+	  			$errors = $this->Category->invalidFields();
+	  			$this->Session->setFlash($errors, 'flash_errors');
+	  			$this->redirect($this->referer());
+	  		}
+	  		if(!$this->Category->createNewCategory($this->data, $criteria_ids)){
+	  			$this->Session->setFlash('An error has occurred, please blame the developer', 'flash_errors');
+	  			$this->redirect($this->referer());
+	  		}
+	  		$this->Session->setFlash('Category succesfully created');
+	  		if(is_null($repo)){
+	  			$this->redirect('index.php');
+	  		}
+	  		else{
+	  			$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['internal_name']));
+	  		}
+	  		
+	  	}
+	  	
+	  	$this->set(compact('criterias'));    
+		//$this->set(compact('constituents'));
 	}
 
 }

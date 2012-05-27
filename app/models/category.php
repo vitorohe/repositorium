@@ -1,7 +1,7 @@
 <?php
 class Category extends AppModel {
 	var $name = 'Category';
-	var $displayField = 'question';
+	var $displayField = 'description';
 	var $validate = array(
 			'name' => array(
 					'notempty' => array(
@@ -26,20 +26,20 @@ class Category extends AppModel {
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-	/*var $belongsTo = array(
-		'Repository' => array(
-				'className' => 'Repository',
-				'foreignKey' => 'repository_id',
+	var $belongsTo = array(
+		'User' => array(
+				'className' => 'User',
+				'foreignKey' => 'user_id',
 				'conditions' => '',
 				'fields' => '',
 				'order' => ''
 		)
-	);*/
+	);
 
-	/*var $hasMany = array(
-			'CriteriasDocument' => array(
-					'className' => 'CriteriasDocument',
-					'foreignKey' => 'criteria_id',
+	var $hasMany = array(
+			'CategoryCriteria' => array(
+					'className' => 'CategoryCriteria',
+					'foreignKey' => 'category_id',
 					'dependent' => true,
 					'conditions' => '',
 					'fields' => '',
@@ -50,20 +50,7 @@ class Category extends AppModel {
 					'deleteQuery' => '',
 					'insertQuery' => ''
 			),
-			'CriteriasUser' => array(
-					'className' => 'CriteriasUser',
-					'foreignKey' => 'criteria_id',
-					'dependent' => true,
-					'conditions' => '',
-					'fields' => '',
-					'order' => '',
-					'limit' => '',
-					'offset' => '',
-					'finderQuery' => '',
-					'deleteQuery' => '',
-					'insertQuery' => ''
-			)
-	);*/
+	);
 
 	// actualiza los documentos agregando el nuevo criterio a InfoDesafio
 	// y los usuarios, con TamanoDesafio
@@ -167,11 +154,17 @@ class Category extends AppModel {
 		return array_unique($filtered);
 	}
 
-	function createNewCriteria($data) {
+	function createNewCategory($data, $criteria_ids) {
 		$ds = $this->getDataSource();
 		$ds->begin($this);
 
 		if(!$this->save($data)) {
+			$ds->rollback($this);
+			return null;
+		}
+		$data['CategoryCriteria']['category_id'] = $this->getLastInsertID();
+		
+		if(is_null($this->CategoryCriteria->createNewCategoriesCriteria($data, $criteria_ids))){
 			$ds->rollback($this);
 			return null;
 		}
