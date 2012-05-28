@@ -73,10 +73,10 @@ class CriteriasController extends AppController {
         $criterias_points[] = $criteria['Criteria']['download_score'];
     }
 
-
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);
     $this->Session->write('criterias_points',$criterias_points);
+    $this->Session->write('criterias_selected', array());
 
     $this->set(compact('criterias'));
   }
@@ -315,8 +315,11 @@ class CriteriasController extends AppController {
   function autocomplete() {
     $search_data = $this->params['url']['searchData'];
 
-    $criterias_autocomplete = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
-
+    $criterias_autocomplete0 = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
+    
+    $criterias_autocomplete = array_diff($criterias_autocomplete0, $this->Session->read('criterias_selected'));
+	print_r($this->Session->read('criterias_selected'));
+    
     $keys = array();
 
     foreach (array_keys($criterias_autocomplete) as $key) {
@@ -326,6 +329,26 @@ class CriteriasController extends AppController {
     $this->set(compact('search_data','criterias_autocomplete', 'keys'));
 
     $this->render('/elements/criterias_autocomplete','ajax'); 
+  }
+  
+  function prueba(){
+  	print_r('assdadaas');
+  	$this->render('/elements/prueba','ajax'); 
+  }
+  
+  function resetSession(){
+  	$this->Session->write('criterias_selected', array());
+  	$this->render('/elements/prueba','ajax');
+  }
+  
+  function setSession(){
+  	$criteria = $this->params['url']['criteria'];
+  	
+  	$criterias_selected = $this->Session->read('criterias_selected');
+  	$criterias_selected[] = $criteria;
+  	
+  	$this->Session->write('criterias_selected', $criterias_selected);
+  	$this->render('/elements/prueba','ajax');
   }
 }
 

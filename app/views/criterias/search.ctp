@@ -25,6 +25,7 @@ $(function() {
                 amount = 0;
             else
                 amount = parseInt($('#amount').val());
+            $.get('/repositorium/index.php/criterias/resetSession', function(returnData){ });
             $('#sortable2 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
@@ -32,6 +33,7 @@ $(function() {
                 $('#counter').val(mycounter);
                 total = mycounter*amount;
                 $('#total').val(total);
+                $.get('/repositorium/index.php/criterias/setSession?criteria='+$(this).text().substring(0, start-2), function(returnData){ });
             });
             if(mycounter == 0) {
                 $('#counter').val(mycounter);
@@ -90,7 +92,7 @@ $(function() {
 
 
 <?php if(empty($criterias)){
-	echo '<span style="font-size:12pt">There aren\'t documents in this repository</span>';
+	echo '<span style="font-size:12pt">There aren\'t validated documents in this repository</span>';
 } else {?>
 <?php echo $this->Form->create('Criteria', array('action' => 'process')); ?>
 
