@@ -25,7 +25,7 @@ $(function() {
                 amount = 0;
             else
                 amount = parseInt($('#amount').val());
-            $.get('/repositorium/index.php/criterias/resetSession', function(returnData){ });
+            //$.get('/repositorium/index.php/criterias/resetSession', function(returnData){ });
             $('#sortable2 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
@@ -33,13 +33,15 @@ $(function() {
                 $('#counter').val(mycounter);
                 total = mycounter*amount;
                 $('#total').val(total);
-                $.get('/repositorium/index.php/criterias/setSession?criteria='+$(this).text().substring(0, start-2), function(returnData){ });
             });
             if(mycounter == 0) {
                 $('#counter').val(mycounter);
                 total = mycounter*amount;
                 $('#total').val(total);
             }
+            //$.get('/repositorium/index.php/criterias/setSession?criterias='+$('#sortable2').text(), function(returnData){ $('#msg').html(returnData);});
+            
+            //$.get('/repositorium/index.php/criterias/prueba', function(returnData){ $('#msg').html(returnData);});
         }
     });
 

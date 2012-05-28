@@ -10,7 +10,7 @@
 			echo "<li class=\"ui-state-default\" ";
 			//echo "<li class=\"ui-state-highlight\" ";
 			echo "id=\"criterias_".$criterias_ids[$keys[$i++]]."\" >";
-            echo $criteria." - ".$criterias_points[$keys[$i-1]]." points";
+            echo $criteria." - ".$criterias_points[$keys[$i-1]]." points ";
             echo "</li>";
 		}
 	}
