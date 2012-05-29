@@ -17,6 +17,10 @@ $(function() {
         connectWith: ".connectedSortable",    
     }).disableSelection();
 
+    $( "#sortable3, #sortable4" ).sortable({
+        connectWith: ".connectedSortablec",    
+    }).disableSelection();
+
     $("#sortable2").sortable({
         update: function(event, ui) {
             mycounter = 0;
@@ -25,8 +29,15 @@ $(function() {
                 amount = 0;
             else
                 amount = parseInt($('#amount').val());
-            //$.get('/repositorium/index.php/criterias/resetSession', function(returnData){ });
             $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            $('#sortable4 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
@@ -39,9 +50,38 @@ $(function() {
                 total = mycounter*amount;
                 $('#total').val(total);
             }
-            //$.get('/repositorium/index.php/criterias/setSession?criterias='+$('#sortable2').text(), function(returnData){ $('#msg').html(returnData);});
-            
-            //$.get('/repositorium/index.php/criterias/prueba', function(returnData){ $('#msg').html(returnData);});
+        }
+    });
+
+    $("#sortable4").sortable({
+        update: function(event, ui) {
+            mycounter = 0;
+            amount = 0;
+            if($('#amount').val() == "")
+                amount = 0;
+            else
+                amount = parseInt($('#amount').val());
+            $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            $('#sortable4 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            if(mycounter == 0) {
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            }
         }
     });
 
@@ -58,6 +98,7 @@ $(function() {
 
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
+        $('#thedata2').val($( "#sortable4" ).sortable("serialize"));
     });
 
 });
@@ -98,12 +139,12 @@ $(function() {
 } else {?>
 <?php echo $this->Form->create('Criteria', array('action' => 'process')); ?>
 
-<span style="font-size:12pt">Select Criterias for the search of documents</span>
+<span style="font-size:12pt">Select Criterias and/or Categories for the search of documents</span>
 
 <br />
 <br />
 
-<p>Please, drag and drop to choose a criteria</p>
+<p>Please, drag and drop to choose a criteria or category</p>
 
 <br />
 <!--Search box-->
@@ -111,25 +152,39 @@ $(function() {
     <div class="ui-grid ui-widget ui-widget-content ui-corner-all">
      
         <div class="ui-grid-header ui-widget-header ui-corner-top clearfix">
-
+			
+			<div class="header-left">
+                Search Category: <input style="width:150px;" id="searchDatac" type="text"></div>
+            
+			
             <div class="header-right">
-                <!-- Left side of table header -->
+                Search Criteria: <input style="width:150px;" id="searchData" type="text">
             </div>
-
-            <div class="header-left">
-                Search: <input style="width:150px;" id="searchData" type="text"></div>
-            </div>
+        </div>
 
         <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
             <thead>
                 <tr>
-                    <th class="ui-state-default" width="33%">Criterias</th>
-                    <th class="ui-state-default" width="33%">Chosen Criterias</th>
-                    <th class="ui-state-default" width="34%">Details</th>
+                    <th class="ui-state-default" width="20%">Categories</th>
+              		<th class="ui-state-default" width="20%">Chosen Categories</th>
+                    <th class="ui-state-default" width="20%">Criterias</th>
+                    <th class="ui-state-default" width="20%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="20%">Details</th>
                 </tr>
             </thead>
             <tbody id="results">
                 <tr>
+                    <td>
+                        <div id="msgc">
+                        </div>
+                        <ul id="sortable3" name="hola" class="connectedSortablec">
+                        </ul>
+                    </td>
+                    <input type="hidden" name="data[Criteria][categories]" id="thedata2">
+                    <td>
+                        <ul id="sortable4" name="hola" class="connectedSortablec">
+                        </ul>
+                    </td>
                     <td>
                         <div id="msg">
                         </div>

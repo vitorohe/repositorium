@@ -2,7 +2,7 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
-  var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'Attachfile', 'CriteriasUser');
+  var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'Attachfile', 'CriteriasUser', 'CategoryCriteria');
   var $paginate = array(
   'Criteria' => array(
     'limit' => 5,
@@ -58,6 +58,7 @@ class CriteriasController extends AppController {
   
     $criterias = $this->Criteria->findRepoCriterias($repo['Repository']['id']);
 
+    
     $criterias_names = array();
     foreach ($criterias as $criteria) {
         $criterias_names[] = $criteria['Criteria']['name'];
@@ -72,11 +73,72 @@ class CriteriasController extends AppController {
     foreach ($criterias as $criteria) {
         $criterias_points[] = $criteria['Criteria']['download_score'];
     }
+    
+    $options['joins'] = array(
+    		array('table' => 'categories',
+    				'alias' => 'Category',
+    				'type' => 'inner',
+    				'conditions' => array(
+    						'CategoryCriteria.category_id = Category.id'
+    				)
+    		)
+    );
+    
+    $options['fields'] = array('Category.id', 'Category.name', 'CategoryCriteria.criteria_id');
+    
+    $options['recursive'] = -1;
+    
+    $options['group'] = 'Category.id HAVING COUNT(*) = 
+    			(SELECT COUNT(*) FROM category_criterias
+    			WHERE category_criterias.category_id = Category.id 
+    				  AND category_criterias.criteria_id IN ('.implode(', ',$criterias_ids).'))';
+    
+    $categories = $this->CategoryCriteria->find('all', $options);
+    
+    $categories_ids = array();
+    foreach($categories as $category){
+    	$categories_ids[] = $category['Category']['id'];
+    }
+    
+    unset($options['group']);
+    
+    $options['joins'][] = array('table' => 'criterias',
+    				'alias' => 'Criteria',
+    				'type' => 'inner',
+    				'conditions' => array(
+    						'CategoryCriteria.criteria_id = Criteria.id'
+    				)
+    		);
+    
+    $options['fields'][] = 'Criteria.name';
+    $options['fields'][] = 'Criteria.download_score';
+    
+    $options['conditions'] = array('Category.id' => $categories_ids);
+    
+    $categories = $this->CategoryCriteria->find('all', $options);
+    
+    $categories_names = array();
+    $categories_points = array();
+    $criterias_categories = array();
+    foreach($categories as $category){
+    	$categories_names[$category['Category']['name']][] = $category['Criteria']['name'];
+    	$criterias_categories[$category['Criteria']['name']] = $category['Category']['name'];
+    
+    	if(!isset($categories_points[$category['Category']['name']])){
+    		$categories_points[$category['Category']['name']] = $category['Criteria']['download_score'];
+    	}
+    	else {
+    		$categories_points[$category['Category']['name']] += $category['Criteria']['download_score'];
+    	}
+    }
 
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);
     $this->Session->write('criterias_points',$criterias_points);
-    $this->Session->write('criterias_selected', array());
+    $this->Session->write('categories_ids', $categories_ids);
+    $this->Session->write('categories_names', $categories_names);
+    $this->Session->write('categories_points', $categories_points);
+    $this->Session->write('criterias_categories', $criterias_categories);
 
     $this->set(compact('criterias'));
   }
@@ -199,7 +261,7 @@ class CriteriasController extends AppController {
   }
 
   function process(){
-    if(!empty($this->data) && isset($this->data['Criteria']) && isset($this->data['Criteria']['criterias']) && !empty($this->data['Criteria']['criterias'])){
+    if(!empty($this->data) && isset($this->data['Criteria']) && (isset($this->data['Criteria']['criterias']) || isset($this->data['Criteria']['categories'])) && (!empty($this->data['Criteria']['criterias']) || !empty($this->data['Criteria']['categories']))){
       $data = $this->data;
 
       $repo = $this->requireRepository();
@@ -220,13 +282,36 @@ class CriteriasController extends AppController {
 
       $criterias = explode('&', $data['Criteria']['criterias']);
       $criterias = array_map("trim", $criterias);
-      unset($data['Criteria']['criterias']);
 
       $criteria_ids = array();
-      foreach($criterias as $criteria) {
-        $criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+      if(!empty($this->data['Criteria']['criterias'])){
+	      foreach($criterias as $criteria) {
+	        $criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+	      }
       }
-	
+      
+      $categories = explode('&', $data['Criteria']['categories']);
+      $categories = array_map("trim", $categories);
+      
+      
+      $categories_ids = array();
+      if(!empty($this->data['Criteria']['categories'])){
+	      foreach($categories as $category) {
+	      	$categories_ids[] = substr($category, strpos($category, '=')+1);
+	      }
+      }
+      
+      $criterias_category = $this->CategoryCriteria->find('all',
+      			array('conditions' => array('CategoryCriteria.category_id' => $categories_ids),
+      					'recursive' => -1)
+      		);
+      
+      foreach($criterias_category as $cc){
+      	$criteria_ids[] = $cc['CategoryCriteria']['criteria_id'];
+      }
+      
+      unset($data['Criteria']['criterias']);
+      unset($data['Criteria']['categories']);
       
       $criterias_users = $this->CriteriasUser->find('all',
       		array('joins' => array(
@@ -323,6 +408,23 @@ class CriteriasController extends AppController {
     foreach($criterias as $criteria) {
     	if($i%4 == 0 && $i >= 24)
     		$criterias_selected[] = $criteria;
+    
+    	$i++;
+    }
+    
+    $categories_names = $this->Session->read('categories_names');
+    
+    $i = 0;
+    $categories = explode(' ', $this->params['url']['categories']);
+    $categories = array_map("trim", $categories);
+    	
+    $categories_selected = array();
+    foreach($categories as $category) {
+    	if($i%4 == 0 && $i >= 24){
+    		$categories_selected[] = $category;
+    		foreach($categories_names[$category] as $c)
+    			$criterias_selected[] = $c;
+    	}
     
     	$i++;
     }

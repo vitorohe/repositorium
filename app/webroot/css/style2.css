@@ -1,6 +1,6 @@
 /*criterias selector*/
 
-#sortable1, #sortable2 
+#sortable1, #sortable2, #sortable3, #sortable4
 { 
 	list-style-type: none; 
 	margin: 0; 
@@ -12,7 +12,7 @@
 	overflow-y: scroll; 
 	overflow: auto;
 }
-#sortable1 li, #sortable2 li 
+#sortable1 li, #sortable2 li, #sortable3 li, #sortable4 li 
 { 
 	margin: 0 5px 5px 5px; 
 	padding: 5px; 

@@ -11,12 +11,12 @@
 
 /* Search box
 ----------------------------------*/
-#container { position: relative; width: 760px; text-align: left; } 
+#container { position: relative; width: 1266px; text-align: left; } 
 
 #dataTable { font-size: 80%; }
 
-.header-right { float:right; }
-.header-left { float:left; }
+.header-right { width: 480px; float:left; }
+.header-left { float:left;}
 
 .ui-grid { width: 98%; padding: .5em; background-image: none; }
 .ui-state-default { padding: .4em; }

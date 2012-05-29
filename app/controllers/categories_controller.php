@@ -213,5 +213,64 @@ class CategoriesController extends AppController {
 	  	$this->set(compact('criterias'));    
 		//$this->set(compact('constituents'));
 	}
+	
+	function autocomplete() {
+		$search_data = $this->params['url']['searchData'];
+	
+		$i = 0;
+		$categories = explode(' ', $this->params['url']['categories']);
+		$categories = array_map("trim", $categories);
+		 
+		$categories_selected = array();
+		foreach($categories as $category) {
+			if($i%4 == 0 && $i >= 24)
+				$categories_selected[] = $category;
+	
+			$i++;
+		}
+		
+		$criterias_categories = $this->Session->read('criterias_categories');
+		$categories_names = $this->Session->read('categories_names');
+		$cr_catcount = array();
+		
+		$i = 0;
+		$criterias = explode(' ', $this->params['url']['criterias']);
+		$criterias = array_map("trim", $criterias);
+		
+		$criterias_selected = array();
+		foreach($criterias as $criteria) {
+			if($i%4 == 0 && $i >= 24){
+				if(!isset($criterias_categories[$criteria]))
+					continue;
+				if(!isset($cr_catcount[$criterias_categories[$criteria]]))
+					$cr_catcount[$criterias_categories[$criteria]] = 1;
+				else
+					$cr_catcount[$criterias_categories[$criteria]]++;
+			}
+		
+			$i++;
+		}
+		
+		foreach(array_keys($categories_names) as $cn){
+			if(isset($cr_catcount[$cn]) && count($categories_names[$cn]) == $cr_catcount[$cn]){
+				$categories_selected[] = $cn;
+			}
+		}
+		
+	
+		$categories_autocomplete0 = preg_grep("/^".$search_data."/i", array_keys($categories_names));
+	
+		$categories_autocomplete = array_diff($categories_autocomplete0, $categories_selected);
+	
+		$keys = array();
+	
+		foreach (array_keys($categories_autocomplete) as $key) {
+			$keys[] = $key;
+		}
+	
+		$this->set(compact('search_data','categories_autocomplete', 'keys'));
+	
+		$this->render('/elements/categories_autocomplete','ajax');
+	}
 
 }
