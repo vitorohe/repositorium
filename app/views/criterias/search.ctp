@@ -7,7 +7,6 @@ $this->viewVars['title_for_layout'] = $title;
 <h1 class="h1icon" style="margin-top: 15px;"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
 
-
 <script>
 $(function() {
     var mycounter = 0;
@@ -154,12 +153,8 @@ $(function() {
         <div class="ui-grid-header ui-widget-header ui-corner-top clearfix">
 			
 			<div class="header-left">
-                Search Category: <input style="width:150px;" id="searchDatac" type="text"></div>
+                Search term: <input style="width:150px;" id="searchData" type="text"></div>
             
-			
-            <div class="header-right">
-                Search Criteria: <input style="width:150px;" id="searchData" type="text">
-            </div>
         </div>
 
         <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
@@ -178,6 +173,21 @@ $(function() {
                         <div id="msgc">
                         </div>
                         <ul id="sortable3" name="hola" class="connectedSortablec">
+                            <?php
+                                $categories_names = $this->Session->read('categories_names');
+                                $categories_ids = $this->Session->read('categories_ids');
+                                $categories_points = $this->Session->read('categories_points');                        
+
+                                $i=0;
+                                foreach ($categories_names as $categories) {
+                                    echo "<li class=\"ui-state-default\" ";
+                                    echo "id=\"categories_".$categories_ids[$i++]."\" >";
+                                    echo key($categories_names)." - ".$categories_points[key($categories_names)]." points ";
+                                    echo "</li>";
+                                    if($i > 8)
+                                        break;
+                                }
+                            ?>
                         </ul>
                     </td>
                     <input type="hidden" name="data[Criteria][categories]" id="thedata2">
@@ -189,6 +199,21 @@ $(function() {
                         <div id="msg">
                         </div>
                         <ul id="sortable1" name="hola" class="connectedSortable">
+                            <?php
+                                $criterias_names = $this->Session->read('criterias_names');
+                                $criterias_ids = $this->Session->read('criterias_ids');
+                                $criterias_points = $this->Session->read('criterias_points');
+                            
+                                $i=0;
+                                foreach ($criterias_names as $criteria) {
+                                    echo "<li class=\"ui-state-default\" ";
+                                    echo "id=\"criterias_".$criterias_ids[$i]."\" >";
+                                    echo $criteria." - ".$criterias_points[$i++]." points ";
+                                    echo "</li>";
+                                    if($i > 8)
+                                        break;
+                                }
+                            ?>
                         </ul>
                     </td>
                     <input type="hidden" name="data[Criteria][criterias]" id="thedata">

@@ -8,7 +8,6 @@
 		$i=0;
 		foreach ($categories_autocomplete as $categories) {
 			echo "<li class=\"ui-state-default\" ";
-			//echo "<li class=\"ui-state-highlight\" ";
 			echo "id=\"categories_".$categories_ids[$keys[$i++]]."\" >";
 			echo $categories." - ".$categories_points[$categories]." points ";
 			echo "</li>";

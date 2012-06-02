@@ -141,6 +141,7 @@ class CriteriasController extends AppController {
     $this->Session->write('criterias_categories', $criterias_categories);
 
     $this->set(compact('criterias'));
+
   }
 
   function add() {
@@ -397,41 +398,56 @@ class CriteriasController extends AppController {
     }
   }
 
+  function arrayDiffEmulation($arrayFrom, $arrayAgainst) {
+    foreach ($arrayFrom as $key => $value) {
+      if($this->in_array_($value,$arrayAgainst)) {
+        unset($arrayFrom[$key]);
+      }
+    }
+         
+    return $arrayFrom;
+  }
+
+  function in_array_($value,$arrayAgainst) {
+
+    foreach ($arrayAgainst as $val) {
+      if(trim($value) === trim($val)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   function autocomplete() {
     $search_data = $this->params['url']['searchData'];
 
     $i = 0;
-    $criterias = explode(' ', $this->params['url']['criterias']);
-    $criterias = array_map("trim", $criterias);
+    $criterias = preg_split('/ - [0-9]+ points/', $this->params['url']['criterias']);
+
+    unset($criterias[count($criterias)-1]);
      
-    $criterias_selected = array();
-    foreach($criterias as $criteria) {
-    	if($i%4 == 0 && $i >= 24)
-    		$criterias_selected[] = $criteria;
-    
-    	$i++;
-    }
+    $criterias_selected = $criterias;
     
     $categories_names = $this->Session->read('categories_names');
-    
-    $i = 0;
-    $categories = explode(' ', $this->params['url']['categories']);
-    $categories = array_map("trim", $categories);
-    	
+
+    $categories = preg_split('/ - [0-9]+ points/', $this->params['url']['categories']);
+    unset($categories[count($categories)-1]);
+
     $categories_selected = array();
     foreach($categories as $category) {
-    	if($i%4 == 0 && $i >= 24){
-    		$categories_selected[] = $category;
-    		foreach($categories_names[$category] as $c)
-    			$criterias_selected[] = $c;
-    	}
-    
-    	$i++;
+
+    	$categories_selected[] = $category;
+      foreach ($categories_names as $key => $value) {
+        if(trim($key) === trim($category))
+          foreach($value as $c)
+            $criterias_selected[] = $c;
+      }    	
     }
-    
+
     $criterias_autocomplete0 = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
     
-    $criterias_autocomplete = array_diff($criterias_autocomplete0, $criterias_selected);
+    $criterias_autocomplete = $this->arrayDiffEmulation($criterias_autocomplete0, $criterias_selected);
     
     $keys = array();
 

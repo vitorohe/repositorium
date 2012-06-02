@@ -6,8 +6,7 @@
         */
         $('#msg').html('<p style="padding:5px;">Enter a search term to start filtering.</p>');
         $('#msgc').html('<p style="padding:5px;">Enter a search term to start filtering.</p>');
-        $('#sortable1').html('');
-        $('#sortable3').html('');
+
 
         /* When the user enters a value such as "j" in the search box
          * we want to run the .get() function. */
@@ -39,13 +38,10 @@
                 $('#sortable1').html('');
             }
 
-        });
-        
-        $('#searchDatac').keyup(function() {
 
             /* Get the value of the search input each time the keyup() method fires so we
              * can pass the value to our .get() method to retrieve the data from the database */
-            var searchVal = $(this).val();
+            //var searchVal = $(this).val();
 
             /* If the searchVal var is NOT empty then check the database for possible results
              * else display message to user */
