@@ -106,7 +106,7 @@ class DocumentsController extends AppController {
         );
     
     $options['fields'][] = 'Criteria.name';
-    $options['fields'][] = 'Criteria.download_score';
+    $options['fields'][] = 'Criteria.upload_score';
     
     $options['conditions'] = array('Category.id' => $categories_ids);
     
@@ -120,10 +120,10 @@ class DocumentsController extends AppController {
       $criterias_categories[$category['Criteria']['name']] = $category['Category']['name'];
     
       if(!isset($categories_points[$category['Category']['name']])){
-        $categories_points[$category['Category']['name']] = $category['Criteria']['download_score'];
+        $categories_points[$category['Category']['name']] = $category['Criteria']['upload_score'];
       }
       else {
-        $categories_points[$category['Category']['name']] += $category['Criteria']['download_score'];
+        $categories_points[$category['Category']['name']] += $category['Criteria']['upload_score'];
       }
     }
 
@@ -400,17 +400,19 @@ class DocumentsController extends AppController {
   	}
     
     foreach ($categories as $category) {
+      $category = substr($category, strpos($category, '=')+1);
       $criterias_categories = array();
       $criterias_categories = $this->CategoryCriteria->find('all', array(
           'conditions' => array('CategoryCriteria.category_id' => $category),
             'recursive' => -1,)
         );
+
       foreach ($criterias_categories as $crit_cat) {
         $criteria_ids[] = $crit_cat['CategoryCriteria']['criteria_id'];
       }
     }
 
-    $criterias_ids = array_unique($criteria_ids);
+    $criteria_ids = array_unique($criteria_ids);
   	
   	$criterias_users = $this->CriteriasUser->find('all',
   			array('joins' => array(
@@ -427,13 +429,14 @@ class DocumentsController extends AppController {
   	
   	// errors
     if(count($criterias_users) < count($criteria_ids)){
-  		$this->Session->setFlash('You haven\'t done enough challenges yet');
+      $url = Router::url(array('controller'=>'points', 'action'=>'earn'));
+      $this->Session->setFlash(sprintf('You haven\'t done enough challenges yet, you can click <a href="%s">here</a> to do it', $url));
   		$this->redirect($this->referer());
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
   		$this->Session->setFlash($errors, 'flash_errors');
   	} else if(($str = $this->CriteriasUser->saveAndVerify($criterias_users, 1)) != 'success'){
-  		$this->Session->setFlash($str, flash_errors);
+  		$this->Session->setFlash($str, 'flash_errors');
   		$this->redirect($this->referer());
   	} else if(!$this->Document->saveWithCriterias($this->data) || !$this->Attachfile->saveAttachedFiles($this->data)){
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');

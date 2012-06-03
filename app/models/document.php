@@ -165,12 +165,20 @@ class Document extends AppModel {
 			if(isset($data['Criteria']['criterias'])) {
 				$there_are_criterias = true;
 			}
+			if(isset($data['Criteria']['categories'])) {
+				$there_are_criterias_from_cat = true;
+			}
 
 
 			if($there_are_criterias) {
 				$criterias = explode($delimiter, $data['Criteria']['criterias']);
 				$criterias = array_map("trim", $criterias);
 				unset($data['Criteria']['criterias']);
+			}
+			if($there_are_criterias_from_cat) {
+				$categories = explode($delimiter, $data['Criteria']['categories']);
+				$categories = array_map("trim", $categories);
+				unset($data['Criteria']['categories']);
 			}
 			
 			//$this->set($data);
@@ -182,7 +190,7 @@ class Document extends AppModel {
 			$id = $this->getLastInsertID();	
 
 			if(true) {
-				if(!$this->CriteriasDocument->saveCriteriaDocument($criterias, $id)){
+				if(!$this->CriteriasDocument->saveCriteriaDocument($criterias, $categories, $id)){
 					$dataSource->rollback($this); // ROLLBACK
 					return false;
 				}
