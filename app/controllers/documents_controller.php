@@ -377,23 +377,40 @@ class DocumentsController extends AppController {
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
   	//$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
-	//$this->set_warned($this->data);
+	  //$this->set_warned($this->data);
   	$this->data['Document']['activation_id'] = 'A';
   	$this->data['Document']['internalstate_id'] = 'A';
   	$this->data['Document']['document_state_id'] = 1;
   	$this->Document->set($this->data);
+
+    if(empty($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['categories'])) {
+      $this->Session->setFlash('You must include at least one criteria or category');
+      $this->redirect($this->referer());
+    }
 	
   	$criterias = explode('&', $this->data['Criteria']['criterias']);
   	$criterias = array_map("trim", $criterias);
+
+    $categories = explode('&', $this->data['Criteria']['categories']);
+    $categories = array_map("trim", $categories);
   	
   	$criteria_ids = array();
   	foreach($criterias as $criteria) {
   		$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
   	}
-  	if(empty($criteria_ids)){
-  		$this->Session->setFlash('You must select at least 1 criteria');
-  		$this->redirect($this->referer());
-  	}
+    
+    foreach ($categories as $category) {
+      $criterias_categories = array();
+      $criterias_categories = $this->CategoryCriteria->find('all', array(
+          'conditions' => array('CategoryCriteria.category_id' => $category),
+            'recursive' => -1,)
+        );
+      foreach ($criterias_categories as $crit_cat) {
+        $criteria_ids[] = $crit_cat['CategoryCriteria']['criteria_id'];
+      }
+    }
+
+    $criterias_ids = array_unique($criteria_ids);
   	
   	$criterias_users = $this->CriteriasUser->find('all',
   			array('joins' => array(
@@ -409,9 +426,7 @@ class DocumentsController extends AppController {
   					'fields' => array('DISTINCT CriteriasUser.id', 'Criteria.name','Criteria.upload_score', 'CriteriasUser.score_obtained')));
   	
   	// errors
-  	if(empty($this->data['Criteria']['criterias'])) {
-  		$this->Session->setFlash('You must include at least one criteria');
-  	} else if(count($criterias_users) < count($criteria_ids)){
+    if(count($criterias_users) < count($criteria_ids)){
   		$this->Session->setFlash('You haven\'t done enough challenges yet');
   		$this->redirect($this->referer());
   	} else if(!$this->Document->validates()) {
