@@ -40,32 +40,95 @@ $this->Html->addCrumb($title);
 
 <script>
 $(function() {
-
     var mycounter = 0;
-
+    var amount = 0;
+    var total = 0;
     $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable"
+        connectWith: ".connectedSortable",    
+    }).disableSelection();
+
+    $( "#sortable3, #sortable4" ).sortable({
+        connectWith: ".connectedSortablec",    
     }).disableSelection();
 
     $("#sortable2").sortable({
         update: function(event, ui) {
             mycounter = 0;
-            
+            amount = 0;
+            if($('#amount').val() == "")
+                amount = 0;
+            else
+                amount = parseInt($('#amount').val());
             $('#sortable2 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
                 $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            $('#sortable4 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
             });
             if(mycounter == 0) {
                 $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
             }
         }
     });
 
+    $("#sortable4").sortable({
+        update: function(event, ui) {
+            mycounter = 0;
+            amount = 0;
+            if($('#amount').val() == "")
+                amount = 0;
+            else
+                amount = parseInt($('#amount').val());
+            $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            $('#sortable4 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter +=parseInt($(this).text().substring(start, end));
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            });
+            if(mycounter == 0) {
+                $('#counter').val(mycounter);
+                total = mycounter*amount;
+                $('#total').val(total);
+            }
+        }
+    });
+
+    $('#amount').keyup(function() {
+        amount = 0;
+        if($('#amount').val() == "")
+            amount = 0;
+        else
+            amount = parseInt($('#amount').val());
+        total = mycounter*amount;
+        $('#total').val(total);
+      
+    });
+
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
-        //return false;
+        $('#thedata2').val($( "#sortable4" ).sortable("serialize"));
     });
 
 });
@@ -76,29 +139,69 @@ $(function() {
     <div class="ui-grid ui-widget ui-widget-content ui-corner-all">
      
         <div class="ui-grid-header ui-widget-header ui-corner-top clearfix">
-
-            <div class="header-right">
-                <!-- Left side of table header -->
-            </div>
-
+            
             <div class="header-left">
-                Search: <input style="width:150px;" id="searchData" type="text"></div>
-            </div>
+                Search term: <input style="width:150px;" id="searchData" type="text"></div>
+            
+        </div>
 
         <table class="ui-grid-content ui-widget-content" id="cStoreDataTable">
             <thead>
                 <tr>
-                    <th class="ui-state-default" width="3%">Criterias</th>
-                    <th class="ui-state-default" width="33%">Chosen Criterias</th>
-                    <th class="ui-state-default" width="34%">Details</th>
+                    <th class="ui-state-default" width="20%">Categories</th>
+                    <th class="ui-state-default" width="20%">Chosen Categories</th>
+                    <th class="ui-state-default" width="20%">Criterias</th>
+                    <th class="ui-state-default" width="20%">Chosen Criterias</th>
+                    <th class="ui-state-default" width="20%">Details</th>
                 </tr>
             </thead>
             <tbody id="results">
                 <tr>
                     <td>
+                        <div id="msgc">
+                        </div>
+                        <ul id="sortable3" name="hola" class="connectedSortablec">
+                            <?php
+                                $categories_names = $this->Session->read('categories_names');
+                                $categories_ids = $this->Session->read('categories_ids');
+                                $categories_points = $this->Session->read('categories_points');                        
+
+                                $i=0;
+                                foreach ($categories_names as $categories) {
+                                    echo "<li class=\"ui-state-default\" ";
+                                    echo "id=\"categories_".$categories_ids[$i++]."\" >";
+                                    echo key($categories_names)." - ".$categories_points[key($categories_names)]." points ";
+                                    echo "</li>";
+                                    if($i > 8)
+                                        break;
+                                }
+                            ?>
+                        </ul>
+                    </td>
+                    <input type="hidden" name="data[Criteria][categories]" id="thedata2">
+                    <td>
+                        <ul id="sortable4" name="hola" class="connectedSortablec">
+                        </ul>
+                    </td>
+                    <td>
                         <div id="msg">
                         </div>
                         <ul id="sortable1" name="hola" class="connectedSortable">
+                            <?php
+                                $criterias_names = $this->Session->read('criterias_names');
+                                $criterias_ids = $this->Session->read('criterias_ids');
+                                $criterias_points = $this->Session->read('criterias_points');
+                            
+                                $i=0;
+                                foreach ($criterias_names as $criteria) {
+                                    echo "<li class=\"ui-state-default\" ";
+                                    echo "id=\"criterias_".$criterias_ids[$i]."\" >";
+                                    echo $criteria." - ".$criterias_points[$i++]." points ";
+                                    echo "</li>";
+                                    if($i > 8)
+                                        break;
+                                }
+                            ?>
                         </ul>
                     </td>
                     <input type="hidden" name="data[Criteria][criterias]" id="thedata">
