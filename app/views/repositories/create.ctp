@@ -17,6 +17,20 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('description'); ?>
 
+<!--
+<script type="text/javascript">
+	$('#RepositoryMaxDocuments').val('hola');
+	if ($('#RepositoryRestrictions').is(':checked')) {
+        $('#RepositoryMaxDocuments :input').removeAttr('disabled');
+        $('#RepositoryMaxSize :input').removeAttr('disabled');
+    } else {
+    	$('#RepositoryMaxDocuments').val('hola');
+        $('#RepositoryMaxDocuments :input').attr('disabled', true);
+        $('#RepositoryMaxSize :input').attr('disabled', true);
+    }   
+
+</script>-->
+
 <!-- source types for repo -->
 
 <!-- 
@@ -33,6 +47,18 @@ $this->Html->addCrumb($title);
 	echo $this->Form->input("Constituents", array("type"=>"select", "multiple"=>"checkbox", "default"=>"0", "options"=>$constituents));
 	*/?>
 </div> -->
+
+</br>
+
+<?php echo $this->Form->checkbox('restrictions', array('value' => 'attachfile', 'hiddenField' => false)); ?>
+
+Attach File: Allow users to attach files to Document
+
+<?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document:')); ?>
+
+<?php echo $this->Form->input('max_size', array('label' => 'Maximum total size (MB):')); ?>
+
+<?php echo $this->Form->input('extension', array('label' => 'File extension:')); ?>
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 
