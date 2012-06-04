@@ -79,11 +79,13 @@ class CriteriasDocument extends AppModel {
 
 		$ds = $this->getDataSource();
 		$ds->begin($this);
-		
-		$criteria_ids = array();
-		$category_ids = array();
 
-	    foreach ($categories as $category) {
+		$criteria_ids = array();
+
+		foreach($criterias as $criteria)
+			$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+		
+		foreach ($categories as $category) {
 			$category = substr($category, strpos($category, '=')+1);
 			$criterias_categories = array();
 			$criterias_categories =  ClassRegistry::init("CategoryCriteria")->find('all', array(
@@ -93,35 +95,11 @@ class CriteriasDocument extends AppModel {
 
 			foreach ($criterias_categories as $crit_cat) {
 				$criteria_ids[] = $crit_cat['CategoryCriteria']['criteria_id'];
-				$category_ids[] = $crit_cat['CategoryCriteria']['category_id'];
 			}
 	    }
 
+	    $criteria_ids = array_unique($criteria_ids);
 
-		foreach($criterias as $criteria) {
-			$criteria_id = substr($criteria, strpos($criteria, '=')+1);
-			if(in_array($criteria_id, $criteria_ids)) {
-				continue;
-			}
-			$this->create();
-			$this->set(
-			$criteria_document = array(
-				'CriteriasDocument' => array(
-		    	   'criteria_id' => $criteria_id,
-	               'document_id' => $id,
-	               'internalstate_id' => 'A',
-	               'activation_id' => 'A'
-	             )
-               )
-			);
-
-			if(!$this->save()){
-				$ds->rollback($this);
-				return false;
-			}
-		}
-
-		$i = 0;
 		foreach($criteria_ids as $criteria_id) {
 			$this->create();
 			$this->set(
@@ -130,8 +108,7 @@ class CriteriasDocument extends AppModel {
 		    	   'criteria_id' => $criteria_id,
 	               'document_id' => $id,
 	               'internalstate_id' => 'A',
-	               'activation_id' => 'A',
-	               'category_id' => $category_ids[$i++]
+	               'activation_id' => 'A'
 	             )
                )
 			);

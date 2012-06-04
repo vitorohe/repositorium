@@ -167,10 +167,10 @@ $(function() {
                                 $categories_points = $this->Session->read('categories_points');                        
 
                                 $i=0;
-                                foreach ($categories_names as $categories) {
+                                foreach (array_keys($categories_names) as $categories) {
                                     echo "<li class=\"ui-state-default\" ";
                                     echo "id=\"categories_".$categories_ids[$i++]."\" >";
-                                    echo key($categories_names)." - ".$categories_points[key($categories_names)]." points ";
+                                    echo $categories." - ".$categories_points[$categories]." points ";
                                     echo "</li>";
                                     if($i > 8)
                                         break;
