@@ -318,14 +318,14 @@ class CriteriasDocument extends AppModel {
 			 * if challenge was correct, then save all documents' statistics
 			* otherwise, only validated documents' statistcs
 			*/
-			if($info && ($info['CriteriasDocument']['validated'] === '1' || $correctChallenge)) {
+			if($info) {
 				$id = $info['CriteriasDocument']['id'];
 	
-				$ans = $d['respuesta'];
-				$new_value = $info['CriteriasDocument']['total_answers_'.$ans] + 1;
+				$ans = $d['respuesta'] == 1? 'yes_eval' : 'no_eval';
+				$new_value = $info['CriteriasDocument'][$ans] + 1;
 					
 				$this->id = $id;
-				$this->saveField('total_answers_'.$ans, $new_value);
+				$this->saveField($ans, $new_value);
 			}
 		}
 	}
