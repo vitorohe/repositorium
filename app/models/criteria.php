@@ -183,7 +183,7 @@ class Criteria extends AppModel {
 		return $criterios[array_rand($criterios)];
 	}
 	
-	function generateChallenge($user_id = null, $criterio = null, $repository_id = null, $proportion = 0.5) {
+	function generateChallenge($user_id = null, $criterio = null, $repository_id = null, $proportion = 0.3) {
 		if(is_null($user_id) || is_null($repository_id))
 			return null;
 	
@@ -194,10 +194,11 @@ class Criteria extends AppModel {
 			return null;
 	
 		$criterio_id = $criterio['Criteria']['id'];
-		$c = 3;//$this->CriteriasUser->getC($user_id, $criterio_id);
+		$c = $this->getQ($criterio_id);
 	
 		$qty_of_validated    = ceil($proportion * $c);
-		$qty_of_nonvalidated = floor((1 - $proportion) * $c);
+		$qty_of_nonvalidated = floor($proportion * $c);
+		$qty_of_nonevaluated = $c - $qty_of_validated - $qty_of_nonvalidated;
 	
 		$v_params = array(
 				'repository_id' => $repository_id,
@@ -214,15 +215,28 @@ class Criteria extends AppModel {
 				'confirmado' => 2,
 				'quantity' => $qty_of_nonvalidated 
 		);
+		
+		$nn_params = array(
+				'repository_id' => $repository_id,
+				'criteria_id' => $criterio_id,
+				'user_id' => $user_id,
+				'confirmado' => 3,
+				'quantity' => $qty_of_nonevaluated
+		);
 	
 		$validated = $this->CriteriasDocument->getRandomDocuments($v_params);
 	
 		if(count($validated) < $qty_of_validated)
-			$n_params['quantity'] = $qty_of_nonvalidated + ($qty_of_validated - count($validated));
+			$n_params['quantity'] = $qty_of_nonvalidated = $qty_of_nonvalidated + ($qty_of_validated - count($validated));
 	
 		$nonvalidated = $this->CriteriasDocument->getRandomDocuments($n_params);
 		
-		$challenge = array_merge($validated, $nonvalidated);
+		if(count($nonvalidated) < $qty_of_nonvalidated)
+			$nn_params['quantity'] = $qty_of_nonevaluated + ($qty_of_validated - count($validated)) + ($qty_of_nonvalidated - count($nonvalidated));
+		
+		$nonevaluated = $this->CriteriasDocument->getRandomDocuments($nn_params);
+		
+		$challenge = array_merge($validated, $nonvalidated, $nonevaluated);
 		shuffle($challenge);
 	
 		return $challenge;
@@ -325,6 +339,18 @@ class Criteria extends AppModel {
 		$options['recursive'] = -1;
 		
 		return $this->find('all', $options);
+	}
+	
+	function getQ($criteria_id = null){
+		if(is_null($criteria_id))
+			return 3;
+		
+		$options['conditions'] = array('Criteria.id' => $criteria_id);
+		$options['recursive'] = -1;
+		
+		$row = $this->find('first', $options);
+		
+		return $row['Criteria']['questions_quantity'];
 	}
 	
 }

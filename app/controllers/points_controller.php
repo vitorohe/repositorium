@@ -348,7 +348,7 @@ class PointsController extends AppController {
 		if($this->getConnectedUser() == $this->anonymous)
 			$this->Session->setFlash("Thank you, now you can {$action_name} document(s)");
 		else
-			$this->Session->setFlash($this->Session->read('Points.status'));
+			$this->Session->setFlash('You have made a challenge');
 				
 		if($action == $this->earn) {
 			$repository = $this->getCurrentRepository();

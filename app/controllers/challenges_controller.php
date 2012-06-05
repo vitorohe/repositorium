@@ -156,7 +156,7 @@ class ChallengesController extends AppController {
   	$user = $this->getConnectedUser();
   	$criterio = $this->Session->read('Challenge.criterio');
   	$desafio_correcto = $this->CriteriasDocument->validateChallenge($data['Desafio']);
-  	//$this->CriteriasDocument->saveStatistics($data['Desafio'], $desafio_correcto);
+  	$this->CriteriasDocument->saveStatistics($data['Desafio']);
   	//$this->CriteriasUser->saveNextC($user['User']['id'], $criterio, $desafio_correcto);
   	$this->CriteriasUser->countEvaluation($user['User']['id'], $criterio, $desafio_correcto);
   	$this->_dispatch($desafio_correcto);
@@ -166,7 +166,14 @@ class ChallengesController extends AppController {
   	if($challenge_successful) {
   		$this->_process_points();  		
   	} else {
-  		$this->redirect('failure');
+  		$this->Session->setFlash('You have made a challenge');
+  		$repository = $this->getCurrentRepository();
+		if(Configure::read('App.subdomains')) {
+			$dom = Configure::read('App.domain');
+			$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
+		} else {
+			$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repository['Repository']['internal_name']));
+		}
   	}
   }
   

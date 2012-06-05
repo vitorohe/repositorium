@@ -168,7 +168,7 @@ class CriteriasUser extends AppModel {
 		$new_value = $value + 1;
 
 		$this->id = $td['CriteriasUser']['id'];
-		if($this->saveField('challenge_size', $new_value))
+		if($this->save($td))
 			return true;
 		
 		return false;
