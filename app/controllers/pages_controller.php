@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Repository', /*'Expert', */'RepositoriesUser');
+	var $uses = array('Repository', 'RepositoriesUser');
 	
 /**
  * @var string 
@@ -103,6 +103,9 @@ class PagesController extends AppController {
 	}
 	
 	function _user() {
+
+		$this->Session->delete('Repository');
+		
 		$user = $this->getConnectedUser();
 		
 		$yours = array(

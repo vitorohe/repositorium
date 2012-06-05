@@ -71,7 +71,7 @@ class AppController extends Controller {
 	 * Anonymous user representation, use with AppController::getConnectedUser()
 	 */
 	var $anonymous = array(
-		'User' => array('id' => 1, 'is_administrator' => 0)
+		'User' => array('id' => 1, 'name' => 'Anonymous', 'is_administrator' => 0)
 	);
 	
 	var $uses = array(/*'Expert',*/ 'User', 'Repository');
@@ -153,7 +153,7 @@ class AppController extends Controller {
 			'conditions' => array(
 				'User.id' => $user_id
 			),
-			'fields' => array('id', 'is_administrator'), 
+			'fields' => array('id', 'name', 'is_administrator'), 
 			'recursive' => -1));
 		
 	}

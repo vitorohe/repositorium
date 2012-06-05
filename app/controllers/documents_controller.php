@@ -5,6 +5,17 @@ class DocumentsController extends AppController {
 	
 	var $name = 'Documents';
 	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser');
+
+  var $paginate = array(
+    'Document' => array(
+      'limit' => 10,
+      'recursive' => -1,
+      'order' => array('Document.id' => 'desc')
+    ),
+    'Repository' => array(
+      'recursive' => -1
+    )
+  );
 	
 	/**
 	 * User Model
@@ -461,7 +472,43 @@ class DocumentsController extends AppController {
 		
   	}
   }
-  
+
+  function list_documents(){
+    $user = $this->getConnectedUser();
+    $repo = $this->getCurrentRepository();
+
+    //$this->paginate['recursive'] = -1;
+    if(is_null($repo) || empty($repo)){
+      $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id']);
+      $this->paginate['Document']['joins'] = array(
+        array('table' => 'repositories',
+            'alias' => 'Repository',
+            'type' => 'inner',
+            'conditions' => array(
+                'Document.repository_id = Repository.id'
+            )
+        )
+      );
+      $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name');
+    }
+    else{
+      $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id'], 'Document.repository_id' => $repo['Repository']['id']);
+    }
+
+    $documents = $this->paginate();
+    
+    $data = array(
+      'documents' => $documents,
+      'current' => 'My documents',
+      'repo' => $repo,
+     //'menu' => 'menu_admin',
+      'title' => "Documents of '{$user['User']['name']}'",
+      'cond' => 'owner',
+     //'footnotes' => array('Repository administrator'), 
+    );
+
+    $this->set($data);
+  }  
   
 }
 ?>
