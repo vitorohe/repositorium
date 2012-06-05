@@ -126,30 +126,11 @@ class Repository extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)//,
-		/*'Kit' => array(
-			'className' => 'Kit',
-			'foreignKey' => 'kit_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''			
-		)*/
+		)
 	);
 
 	var $hasMany = array(
-		/*'Criteria' => array(
-			'className' => 'Criteria',
-			'foreignKey' => 'repository_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),*/
+
 		'Document' => array(
 			'className' => 'Document',
 			'foreignKey' => 'repository_id',
@@ -163,19 +144,7 @@ class Repository extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		/*'Expert' => array(
-			'className' => 'Expert',
-			'foreignKey' => 'repository_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),*/
+
 		'RepositoriesUser' => array(
 			'className' => 'RepositoriesUser',
 			'foreignKey' => 'repository_id',
@@ -192,19 +161,7 @@ class Repository extends AppModel {
 			$ds->rollback($this);
 			return null;
 		}
-			
-			/*$expert = array(
-				'Expert' => array(
-					'user_id' => $data['Repository']['user_id'],
-					'repository_id' => $this->getLastInsertID()
-				)				
-			);
-			
-			if(!$this->Expert->save($expert)) {
-				$ds->rollback($this);
-				return null;
-			}*/
-			
+				
 		if($this->RepositoriesUser->saveRepositoryUser($data['Repository']['user_id'], $this->id, 1))	
 			$ds->commit($this);
 		else return null;

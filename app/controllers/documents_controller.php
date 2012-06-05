@@ -4,7 +4,7 @@ class DocumentsController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Documents';
-	var $uses = array('Document', 'User', 'Repository','Criteria',/*'Tag', 'ConstituentsKit',*/ 'Attachfile', 'CriteriasUser');
+	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser');
 	
 	/**
 	 * User Model
@@ -69,10 +69,72 @@ class DocumentsController extends AppController {
         $criterias_points[] = $criteria['Criteria']['upload_score'];
     }
 
+    $options['joins'] = array(
+        array('table' => 'categories',
+            'alias' => 'Category',
+            'type' => 'inner',
+            'conditions' => array(
+                'CategoryCriteria.category_id = Category.id'
+            )
+        )
+    );
+    
+    $options['fields'] = array('Category.id', 'Category.name', 'CategoryCriteria.criteria_id');
+    
+    $options['recursive'] = -1;
+    
+    $options['group'] = 'Category.id HAVING COUNT(*) = 
+          (SELECT COUNT(*) FROM category_criterias
+          WHERE category_criterias.category_id = Category.id 
+              AND category_criterias.criteria_id IN ('.implode(', ',$criterias_ids).'))';
+    
+    $categories = $this->CategoryCriteria->find('all', $options);
+    
+    $categories_ids = array();
+    foreach($categories as $category){
+      $categories_ids[] = $category['Category']['id'];
+    }
+    
+    unset($options['group']);
+    
+    $options['joins'][] = array('table' => 'criterias',
+            'alias' => 'Criteria',
+            'type' => 'inner',
+            'conditions' => array(
+                'CategoryCriteria.criteria_id = Criteria.id'
+            )
+        );
+    
+    $options['fields'][] = 'Criteria.name';
+    $options['fields'][] = 'Criteria.upload_score';
+    
+    $options['conditions'] = array('Category.id' => $categories_ids);
+    
+    $categories = $this->CategoryCriteria->find('all', $options);
+    
+    $categories_names = array();
+    $categories_points = array();
+    $criterias_categories = array();
+    foreach($categories as $category){
+      $categories_names[$category['Category']['name']][] = $category['Criteria']['name'];
+      $criterias_categories[$category['Criteria']['name']] = $category['Category']['name'];
+    
+      if(!isset($categories_points[$category['Category']['name']])){
+        $categories_points[$category['Category']['name']] = $category['Criteria']['upload_score'];
+      }
+      else {
+        $categories_points[$category['Category']['name']] += $category['Criteria']['upload_score'];
+      }
+    }
+
 
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);
     $this->Session->write('criterias_points',$criterias_points);
+    $this->Session->write('categories_ids', $categories_ids);
+    $this->Session->write('categories_names', $categories_names);
+    $this->Session->write('categories_points', $categories_points);
+    $this->Session->write('criterias_categories', $criterias_categories);
 
   	//$constituents = $this->ConstituentsKit->find('list', array(
   		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
@@ -315,23 +377,42 @@ class DocumentsController extends AppController {
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
   	//$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
-	//$this->set_warned($this->data);
+	  //$this->set_warned($this->data);
   	$this->data['Document']['activation_id'] = 'A';
   	$this->data['Document']['internalstate_id'] = 'A';
   	$this->data['Document']['document_state_id'] = 1;
   	$this->Document->set($this->data);
+
+    if(empty($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['categories'])) {
+      $this->Session->setFlash('You must include at least one criteria or category');
+      $this->redirect($this->referer());
+    }
 	
   	$criterias = explode('&', $this->data['Criteria']['criterias']);
   	$criterias = array_map("trim", $criterias);
+
+    $categories = explode('&', $this->data['Criteria']['categories']);
+    $categories = array_map("trim", $categories);
   	
   	$criteria_ids = array();
   	foreach($criterias as $criteria) {
   		$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
   	}
-  	if(empty($criteria_ids)){
-  		$this->Session->setFlash('You must select at least 1 criteria');
-  		$this->redirect($this->referer());
-  	}
+    
+    foreach ($categories as $category) {
+      $category = substr($category, strpos($category, '=')+1);
+      $criterias_categories = array();
+      $criterias_categories = $this->CategoryCriteria->find('all', array(
+          'conditions' => array('CategoryCriteria.category_id' => $category),
+            'recursive' => -1,)
+        );
+
+      foreach ($criterias_categories as $crit_cat) {
+        $criteria_ids[] = $crit_cat['CategoryCriteria']['criteria_id'];
+      }
+    }
+
+    $criteria_ids = array_unique($criteria_ids);
   	
   	$criterias_users = $this->CriteriasUser->find('all',
   			array('joins' => array(
@@ -347,16 +428,15 @@ class DocumentsController extends AppController {
   					'fields' => array('DISTINCT CriteriasUser.id', 'Criteria.name','Criteria.upload_score', 'CriteriasUser.score_obtained')));
   	
   	// errors
-  	if(empty($this->data['Criteria']['criterias'])) {
-  		$this->Session->setFlash('You must include at least one criteria');
-  	} else if(count($criterias_users) < count($criteria_ids)){
-  		$this->Session->setFlash('You haven\'t done enough challenges yet');
+    if(count($criterias_users) < count($criteria_ids)){
+      $url = Router::url(array('controller'=>'points', 'action'=>'earn'));
+      $this->Session->setFlash(sprintf('You haven\'t done enough challenges yet, you can click <a href="%s">here</a> to do it', $url));
   		$this->redirect($this->referer());
   	} else if(!$this->Document->validates()) {
   		$errors = $this->Document->invalidFields();
   		$this->Session->setFlash($errors, 'flash_errors');
   	} else if(($str = $this->CriteriasUser->saveAndVerify($criterias_users, 1)) != 'success'){
-  		$this->Session->setFlash($str, flash_errors);
+  		$this->Session->setFlash($str, 'flash_errors');
   		$this->redirect($this->referer());
   	} else if(!$this->Document->saveWithCriterias($this->data) || !$this->Attachfile->saveAttachedFiles($this->data)){
   		$this->Session->setFlash('There was an error trying to save the document. Please try again later');

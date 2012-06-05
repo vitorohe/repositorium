@@ -28,7 +28,7 @@ class RepositoriesController extends AppController {
 	
 	var $name = 'Repositories';
 	
-	var $uses = array('Repository', 'RepositoriesUser', 'User', 'Document', /*'Tag',*/ 'Criteria'/*,'Constituent', 'Restriction', 'Kit', 'ConstituentsKit', 'KitsRestriction'*/);
+	var $uses = array('Repository', 'RepositoriesUser', 'User', 'Document', 'Criteria', 'RepositoryRestriction');
 	
 	/*@rmeruane*/
 	private function make_seed()
@@ -258,21 +258,48 @@ class RepositoriesController extends AppController {
 			$user = $this->getConnectedUser();
 			$this->data['Repository']['user_id'] = $user['User']['id'];
 			
-			// adding Constituents to a new Kit
-			/*$selectConstituents = $this->data['Repository']['Constituents'];
-			$this->Kit->save();
-			foreach($selectConstituents as $constituent){
-				$this->ConstituentsKit->create();
-				$this->ConstituentsKit->set('kit_id', $this->Kit->id);
-				$this->ConstituentsKit->set('constituent_id', $constituent);
-				$this->ConstituentsKit->save();
+			// restrictions
+
+			$restrictions = array();
+
+			if(isset($this->data['Repository']['restrictions'])) {
+				if(empty($this->data['Repository']['max_documents']) && 
+					empty($this->data['Repository']['max_size']) && 			
+					empty($this->data['Repository']['max_extension'])) {
+					$this->Session->setFlash("You must set at least one option: max documents, max size, extension");
+					$this->redirect($this->referer());
+				}
+
+				if(!empty($this->data['Repository']['max_documents'])) {
+					$restrictions['amount'] = $this->data['Repository']['max_documents'];
+					if(!is_numeric($restrictions['amount'])) {
+						$this->Session->setFlash("Maximum of documents must be a number", flash_errors);
+						$this->redirect($this->referer());		
+					}
+				} else {
+					$restrictions['amount'] = 0;
+				}
+				if(!empty($this->data['Repository']['max_size'])) {
+					$restrictions['size'] = $this->data['Repository']['max_size'];
+					if(!is_numeric($restrictions['size'])) {
+						$this->Session->setFlash("Maximum size must be a number", flash_errors);
+						$this->redirect($this->referer());		
+					}
+				} else {
+					$restrictions['size'] = 0;
+				}
+				if(!empty($this->data['Repository']['extension'])) {
+					$restrictions['extension'] = $this->data['Repository']['extension'];
+
+				} else {
+					$restrictions['extension'] = "*";
+				}
+				
 			}
-			// update Repository kit_id
-			$this->data['Repository']['kit_id'] = $this->Kit->id;*/
+
 			
 			$this->data['Repository']['activation_id'] = 'A';
 			$this->data['Repository']['internalstate_id'] = 'A';
-			//$this->data['Repository']['internal_name'] = 'A';
 			
 			$this->Repository->set($this->data);
 			
@@ -283,8 +310,12 @@ class RepositoriesController extends AppController {
 					$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer');
 					$this->redirect('/');
 				}
-				
-				//$this->_make_user_expert();
+
+				if(!$this->RepositoryRestriction->saveRestriction($restrictions, $user['User']['id'], $repository['Repository']['id'])) {
+					$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer');
+					$this->redirect('/');
+				}
+
 
 				if(Configure::read('App.subdomains')) {
 					$dom = Configure::read('App.domain');
@@ -297,8 +328,7 @@ class RepositoriesController extends AppController {
 				$this->Session->setFlash($this->Repository->invalidFields(), 'flash_errors');
 			}	
 		}
-		//$constituents =  $this->Constituent->find('superlist', array('fields'=>array('id','name','description'), 'separator'=>': '));
-		//$this->set(compact('constituents'));
+
 	}
 
 	

@@ -72,17 +72,35 @@ class CriteriasDocument extends AppModel {
 	*/
 
 
-	function saveCriteriaDocument($criterias = null, $id = null) {
+	function saveCriteriaDocument($criterias = null, $categories = null, $id = null) {
 
 		if(empty($criterias))
 			return false;
 
 		$ds = $this->getDataSource();
 		$ds->begin($this);
-		
-		foreach($criterias as $criteria) {
-			$criteria_id = substr($criteria, strpos($criteria, '=')+1);
 
+		$criteria_ids = array();
+
+		foreach($criterias as $criteria)
+			$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+		
+		foreach ($categories as $category) {
+			$category = substr($category, strpos($category, '=')+1);
+			$criterias_categories = array();
+			$criterias_categories =  ClassRegistry::init("CategoryCriteria")->find('all', array(
+			  'conditions' => array('CategoryCriteria.category_id' => $category),
+			    'recursive' => -1,)
+			);
+
+			foreach ($criterias_categories as $crit_cat) {
+				$criteria_ids[] = $crit_cat['CategoryCriteria']['criteria_id'];
+			}
+	    }
+
+	    $criteria_ids = array_unique($criteria_ids);
+
+		foreach($criteria_ids as $criteria_id) {
 			$this->create();
 			$this->set(
 			$criteria_document = array(
