@@ -30,6 +30,24 @@ class Criteria extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'questions_quantity' => array(
+			'notempty' => array(
+				'rule' => array('notempty'),
+				'message' => 'The Question quantity cannot be empty',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+			'numeric' => array(
+				'rule' => array('numeric'),
+				'message' => 'Questions quantity must be a number',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
 		'upload_score' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),

@@ -15,7 +15,7 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('question', array('label' => 'Question to ask in a challenge, for this criteria')); ?>
 
-<?php echo $this->Form->input('questions_quantity', array('label' => 'Quantity of documents for a challenge')); ?>
+<?php echo $this->Form->input('questions_quantity', array('label' => 'Quantity of documents for a challenge', 'value' => 3)); ?>
 
 <!-- source types for repo -->
 

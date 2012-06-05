@@ -89,9 +89,10 @@ class ChallengesController extends AppController {
   	
   	if(is_null($criterio))
   		$this->_skip_challenge();
-  	
+
   	$documentos = $this->Criteria->generateChallenge($user['User']['id'], $criterio, $repo_id);
   	
+
   	if(count($documentos) == 0)
   		$this->_skip_challenge();
   	
