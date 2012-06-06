@@ -166,7 +166,7 @@ class Document extends AppModel {
 			if(isset($data['Criteria']['criterias']) && !empty($data['Criteria']['criterias'])) {
 				$there_are_criterias = true;
 			}
-			if(isset($data['Criteria']['categories'])) {
+			if(isset($data['Criteria']['categories']) && !empty($data['Criteria']['categories'])) {
 				$there_are_criterias_from_cat = true;
 			}
 
