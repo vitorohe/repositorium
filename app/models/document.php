@@ -157,18 +157,21 @@ class Document extends AppModel {
 	 */
 	function saveWithCriterias(&$data = array(), $delimiter = '&') {
 		if(!empty($data)) {
+
 			$this->create();
 	
 			$there_are_criterias = false;
 			$dataSource = $this->getDataSource();
 			$dataSource->begin($this); // BEGIN
-			if(isset($data['Criteria']['criterias'])) {
+			if(isset($data['Criteria']['criterias']) && !empty($data['Criteria']['criterias'])) {
 				$there_are_criterias = true;
 			}
 			if(isset($data['Criteria']['categories'])) {
 				$there_are_criterias_from_cat = true;
 			}
 
+			$criterias = array();
+			$categories = array();
 
 			if($there_are_criterias) {
 				$criterias = explode($delimiter, $data['Criteria']['criterias']);

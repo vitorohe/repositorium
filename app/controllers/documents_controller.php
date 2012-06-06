@@ -407,11 +407,18 @@ class DocumentsController extends AppController {
   	
   	$criteria_ids = array();
   	foreach($criterias as $criteria) {
-  		$criteria_ids[] = substr($criteria, strpos($criteria, '=')+1);
+      $id = substr($criteria, strpos($criteria, '=')+1);
+      if(empty($id))
+        continue;
+  		$criteria_ids[] = $id;
   	}
     
+    //print_r($criteria_ids);
+
     foreach ($categories as $category) {
       $category = substr($category, strpos($category, '=')+1);
+      if(empty($category))
+        continue;
       $criterias_categories = array();
       $criterias_categories = $this->CategoryCriteria->find('all', array(
           'conditions' => array('CategoryCriteria.category_id' => $category),
@@ -439,6 +446,11 @@ class DocumentsController extends AppController {
   					'fields' => array('DISTINCT CriteriasUser.id', 'Criteria.name','Criteria.upload_score', 'CriteriasUser.score_obtained')));
   	
   	// errors
+
+    //print_r($criterias_users);
+    //print_r($criteria_ids);
+    //die();
+
     if(count($criterias_users) < count($criteria_ids)){
       $url = Router::url(array('controller'=>'points', 'action'=>'earn'));
       $this->Session->setFlash(sprintf('You haven\'t done enough challenges yet, you can click <a href="%s">here</a> to do it', $url));

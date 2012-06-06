@@ -22,7 +22,7 @@ class RepositoryRestriction extends AppModel {
                'extension' => $restrictions['extension'],
                'size' => $restrictions['size'],
                'amount' => $restrictions['amount'],
-               'register_date' => date('m/d/Y h:i:s', time()),
+               'register_date' => date('YYYY-MM-DD h:i:s', time()),
                'activation_id' => 'A',
                'internalstate_id' => 'A',
                'user_id' => $user_id,
