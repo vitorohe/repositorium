@@ -2,36 +2,17 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
+  var $helpers = array('Zipper');
+
   var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'Attachfile', 'CriteriasUser', 'CategoryCriteria');
   var $paginate = array(
-  'Criteria' => array(
-    'limit' => 5,
-    'order' => array(
-    'Criteria.question' => 'desc'
+    'Criteria' => array(
+      'limit' => 5,
+      'order' => array(
+      'Criteria.question' => 'desc'
+      )
     )
-  )
   );
-    
-//   var $helpers = array('Session', 'Form');
-
-  /*function beforeFilter() {
-  if(!$this->isExpert()) {    
-      $this->Session->setFlash('You do not have permission to access this page');
-      $this->redirect('/');   
-  }
-  
-  $this->requireRepository();
-  
-  if($this->Session->check('Criteria.limit'))
-    $this->paginate['Criteria']['limit'] = $this->Session->read('Criteria.limit'); 
-  if(!isset($this->paginate['Criteria']['conditions'])) {
-    $repo = $this->requireRepository();
-        
-    $this->paginate['Criteria']['conditions'] = array(
-      'Criteria.repository_id' => $repo['Repository']['id']
-    );
-  }
-  }*/
 
   function index() {
     if(!empty($this->data)) {     

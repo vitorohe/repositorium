@@ -180,6 +180,22 @@ class Attachfile extends AppModel {
 	}	
 
 
+	function normalize ($string) {
+		$table = array(
+		 'Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c',
+		 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+		 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
+		 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss',
+		 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e',
+		 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o',
+		 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b',
+		 'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r',
+		);
+     
+    	return strtr($string, $table);
+ 	}
+
+
 	/*+++++++++++++INI++++++++++++++*/	
 	/*save attached files*/
 	function saveAttachedFiles($data) {
@@ -204,13 +220,14 @@ class Attachfile extends AppModel {
 				
 				$extension = end(explode('.', $file['name']));
 
+				$filename = $this->normalize($file['name']);
+
 				$this->create();
 				$this->set(
 				$attachfile = array(
 					'Attachfile' => array(
-						'name' => $file['name'],
-						'location' => '/uploaded_files',
-						'extension' => $extension,
+						'name' => $filename,
+						'location' => '/uploaded_files/document_'.$document_id,
 						'activation_id' => 'A',
 						'internalstate_id' => 'A',
 						'document_id' => $document_id
@@ -224,14 +241,20 @@ class Attachfile extends AppModel {
 				}
 
 				$ds->commit($this);
+
+				$directory = WWW_ROOT.'/uploaded_files/document_'.$document_id;
+
+				if(!file_exists($directory))
+					if(!mkdir($directory, 0700))
+						return false;
 				
-				$filename = WWW_ROOT.'/uploaded_files/document_'.$document_id.'.'.$extension;
+				$filename_ = $directory.'/'.$filename;
 
 				$handle = fopen($file['tmp_name'],'r');
 				$content = fread($handle, filesize($file['tmp_name']));
 				fclose($handle);
 
-				$handle = fopen($filename, 'wr');
+				$handle = fopen($filename_, 'wr');
 				fwrite($handle, $content);
 				fclose($handle);
 

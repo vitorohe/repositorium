@@ -4,7 +4,7 @@ class DocumentsController extends AppController {
 	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Documents';
-	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser');
+	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser', 'RepositoryRestriction');
 
   var $paginate = array(
     'Document' => array(
@@ -56,6 +56,9 @@ class DocumentsController extends AppController {
    * @TODO dispatch handling
    */
   function upload() {
+
+    $this->Session->delete('restrictions');
+
   	$repo = $this->requireRepository();
   	$user = $this->getConnectedUser();
     if($this->isAnonymous()){
@@ -147,32 +150,17 @@ class DocumentsController extends AppController {
     $this->Session->write('categories_points', $categories_points);
     $this->Session->write('criterias_categories', $criterias_categories);
 
-  	//$constituents = $this->ConstituentsKit->find('list', array(
-  		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
-  		  //				'recursive' => 1,
-  		  	//			'fields'=>array('Constituent.sysname')));
-  	
-  	if(!empty($this->data)) {
-		//attach necesary behaviors
-		/*foreach ($constituents as $constituent){
-			$configArray = array('cod'=> 1);
-			$configArray['data'] =& $this->data;
-			$configArray['session'] =& $this->Session;
-  			//$this->Document->Behaviors->attach($constituent, $configArray);
-		}*/
-  		
-		//En la siguiente linea se guardan los documentos
+  	$restrictions = $this->RepositoryRestriction->find('first', array(
+  	  				'conditions' => array('RepositoryRestriction.repository_id' => $repo['Repository']['id']), 
+  	   				'recursive' => -1));
 
-  		
-		$this->save($this->data);
-		
-  		/*foreach ($constituents as $constituent){
-  			$this->Document->Behaviors->detach($constituent);
-  		}*/
+    $this->Session->write('restrictions', $restrictions);
+  	
+  	if(!empty($this->data)) {  		
+		  $this->save($this->data);
   	}
   	
-  	$this->set(compact('criterias'));    
-	//$this->set(compact('constituents'));
+  	$this->set(compact('criterias', 'restrictions'));    
   }
 
   
@@ -381,14 +369,65 @@ class DocumentsController extends AppController {
   }
 
 
+  function checkRestrictions(&$data, $restrictions = null) {
+
+    if(empty($data))
+      return false;
+
+    $files = $data['files'];
+
+    foreach ($files as $file) {
+      if($file['name'] === "")
+        return true;
+      else
+        break;
+    }
+
+    $res_extension = $restrictions['RepositoryRestriction']['extension'];
+    $res_amount = $restrictions['RepositoryRestriction']['amount'];
+    $res_size = $restrictions['RepositoryRestriction']['size'];
+
+    if($res_amount != 0)
+      if(count($files) > $res_amount)
+        return false;
+
+    foreach ($files as $file) {
+      if($file['error']==4){
+        continue;
+      }
+    
+      if($file['size'] > 0) {
+
+        if($res_extension != '*') { 
+          $extension = end(explode('.', $file['name']));
+          if(!strpos($res_extension, $extension))
+            return false;
+        }
+
+        if($res_size != 0) {
+          if($file['size']/1048576 > $res_size)
+            return false;
+        }
+      }
+    }
+  }
+
+
   function save(&$data){
   	
   	$repo = $this->requireRepository();
   	$user = $this->getConnectedUser(); 
+
+    $restrictions = $this->Session->read('restrictions');
+
+    if(!empty($restrictions))
+      if(!$this->checkRestrictions($this->data, $restrictions)) {
+        $this->Session->setFlash('Your attached files don\'t satisfy with the restrictions');
+        $this->redirect($this->referer());
+      }
+
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
-  	//$this->data['Document']['kit_id'] = $repo['Repository']['kit_id'];
-	  //$this->set_warned($this->data);
   	$this->data['Document']['activation_id'] = 'A';
   	$this->data['Document']['internalstate_id'] = 'A';
   	$this->data['Document']['document_state_id'] = 1;
@@ -412,8 +451,6 @@ class DocumentsController extends AppController {
         continue;
   		$criteria_ids[] = $id;
   	}
-    
-    //print_r($criteria_ids);
 
     foreach ($categories as $category) {
       $category = substr($category, strpos($category, '=')+1);
@@ -444,12 +481,6 @@ class DocumentsController extends AppController {
   					'conditions' => array('CriteriasUser.user_id' => $user['User']['id'], 'CriteriasUser.criteria_id' => $criteria_ids),
   					'recursive' => -1,
   					'fields' => array('DISTINCT CriteriasUser.id', 'Criteria.name','Criteria.upload_score', 'CriteriasUser.score_obtained')));
-  	
-  	// errors
-
-    //print_r($criterias_users);
-    //print_r($criteria_ids);
-    //die();
 
     if(count($criterias_users) < count($criteria_ids)){
       $url = Router::url(array('controller'=>'points', 'action'=>'earn'));
@@ -489,7 +520,6 @@ class DocumentsController extends AppController {
     $user = $this->getConnectedUser();
     $repo = $this->getCurrentRepository();
 
-    //$this->paginate['recursive'] = -1;
     if(is_null($repo) || empty($repo)){
       $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id']);
       $this->paginate['Document']['joins'] = array(
@@ -512,15 +542,53 @@ class DocumentsController extends AppController {
     $data = array(
       'documents' => $documents,
       'current' => 'My documents',
-      'repo' => $repo,
-     //'menu' => 'menu_admin',
       'title' => "Documents of '{$user['User']['name']}'",
       'cond' => 'owner',
-     //'footnotes' => array('Repository administrator'), 
     );
 
     $this->set($data);
   }  
-  
+
+  function getZip() {
+
+    $files = $this->Attachfile->find('all', array(
+      'conditions' => array('Attachfile.document_id' => $this->params['url']['id']),
+      'recursive' => -1
+      )
+    );
+      
+
+    $zip = new ZipArchive;
+
+    $tmp_zip = tempnam ("tmp", "file") . ".zip";
+
+    $zip->open($tmp_zip, ZipArchive::CREATE);
+    foreach ($files as $file) {
+      $dir = WWW_ROOT.substr($file['Attachfile']['location'],1).'/'.$file['Attachfile']['name'];
+
+      if(strpos(WWW_ROOT, "\\"))
+        $dir = str_replace('/', '\\', $dir);
+
+      $zip->addFile($dir, $file['Attachfile']['name']);
+    }
+
+
+    $zip->close();
+
+    header("Pragma: public");
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    header("Cache-Control: private", false);
+    header('Content-Type: application/zip');
+    header('Content-disposition: attachment; filename='.$this->params['url']['title'].'.zip');
+    header("Content-Transfer-Encoding: binary");
+    header('Content-Length: ' . filesize($tmp_zip));
+    
+
+
+    readfile($tmp_zip);
+
+    unlink($tmp_zip);
+  }
 }
 ?>

@@ -16,16 +16,15 @@ $this->Html->addCrumb($title);
 <?php echo $ajax->div('checked_title'); 
       echo $ajax->divEnd('checked_title'); ?>
 <?php
-    //foreach($constituents as $constituent){
-        echo $this->element('content'."/form", array('flag' => 'value'));
-
-    //  if ($constituent=='content'){
-
-            echo("<div id='checked_content'></div>");
-    //  }
-    //  if ($constituent=='attachFile'){
+    
+    echo $this->element('content'."/form", array('flag' => 'value'));
+    echo("<div id='checked_content'></div>");
+    
+    if(!empty($restrictions)) {
+        
         echo $this->element('attachFile'."/form", array('flag' => 'value'));
         echo("<div id='checked_attachFile'></div>");
+    }
     //  }
     //}
     //DocumentFileAttach.value

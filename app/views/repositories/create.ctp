@@ -56,7 +56,7 @@ Attach File: Allow users to attach files to Document
 
 <?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document:')); ?>
 
-<?php echo $this->Form->input('max_size', array('label' => 'Maximum total size (MB):')); ?>
+<?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB):')); ?>
 
 <?php echo $this->Form->input('extension', array('label' => 'File extension:')); ?>
 
