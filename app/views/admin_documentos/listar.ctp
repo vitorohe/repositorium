@@ -20,7 +20,15 @@
 			 e.preventDefault();
 			 $("#ActionMassAction").val("validate");
 			 var form = $(this).parent("form");
-			 var ok = confirm("Are you sure to (in)validate the selected documents?");
+			 var ok = confirm("Are you sure to validate the selected documents?");
+			 if(ok)
+			 	form.submit();			 
+		});
+		$("#adm-mass-invalidate").click(function(e) {			
+			 e.preventDefault();
+			 $("#ActionMassAction").val("invalidate");
+			 var form = $(this).parent("form");
+			 var ok = confirm("Are you sure to invalidate the selected documents?");
 			 if(ok)
 			 	form.submit();			 
 		});
@@ -73,7 +81,7 @@
 		  return 0;
 		return 100*abs($a-$b)/($a+$b);
 	}
-
+	
 	$en_valid = (strcmp($current,'no_validados') == 0) ? false : true; 
 
 	if(!$en_valid) {
@@ -154,7 +162,7 @@
 			<?php echo $this->Form->create(null, array('url' => '/admin_documentos/'.$current, 'name' => 'select_criterio')); ?>
 			<span class="adm-opt">Criteria: </span>
 			<?php			 
-				echo $this->Form->select('question', $criterio_list, $criterio_n, array('empty' => false, 'onChange' => 'select_criterio.submit()'));
+				echo $this->Form->select('id', $criterio_list, $criterio_n, array('empty' => false, 'onChange' => 'select_criterio.submit()'));
 				echo $this->Form->end(); 
 			?>
 		</div>
@@ -162,34 +170,32 @@
 		
 		<!-- filter -->
 		<div class="adm-filter">
-			<?php echo $this->Form->create(null, array('url' => '/admin_documentos/'.$current, 'name' => 'select_filter')); ?>
-			<span class="adm-opt">Filter by: </span>
+			<?php //echo $this->Form->create(null, array('url' => '/admin_documentos/'.$current, 'name' => 'select_filter')); ?>
+			<span class="adm-opt"> </span>
 			<?php
-				$options = array(
+				/*$options = array(
 					'all' => 'All documents',
 					'app' => 'Documents with 50% or more approval',
-					'dis' => 'Documents with 50% or more disapproval',
-					'con' => 'Documents with 50% or more consensus',
-					'don' => 'Documents with 50% or less consensus'
+					'dis' => 'Documents with 50% or more disapproval'
 				);						 
 				echo $this->Form->select('CriteriasDocument.filter', $options, $filter, array('empty' => false, 'onChange' => 'select_filter.submit()'));
-				echo $this->Form->end(); 
+				echo $this->Form->end(); */
 			?>
 		</div>
 		<!-- end filter -->
 				
 		<!-- mass edit -->
 		<div class="adm-mass">
-		<?php echo $this->Form->create(null, array('id' => 'adm-process', 'url' => array('controller' => 'admin_documentos', 'action' => 'mass_edit', $criterio_n))); ?>	
+		<?php echo $this->Form->create(null, array('id' => 'adm-process', 'url' => array('controller' => 'admin_documentos', 'action' => 'mass_edit'))); ?>	
 			<span class="adm-opt">Selected Documents: </span>
 			<?php		
 				echo $this->Form->hidden('Action.mass_action');
 				echo '&nbsp;&nbsp;&nbsp;';
 				echo $this->Form->button('Reset stats', array('id' => 'adm-mass-reset'));
 				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button(($en_valid ? 'Inv' : 'V' ). 'alidate', array('id' => 'adm-mass-validate'));
+				echo $this->Form->button('Invalidate', array('id' => 'adm-mass-invalidate'));
 				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Delete', array('id' => 'adm-mass-delete'));
+				echo $this->Form->button('Validate', array('id' => 'adm-mass-validate'));
 			?>
 		</div>
 		<!-- end mass edit-->	
@@ -211,15 +217,16 @@
   <?php 
   	$i = 0;
   	foreach($data as $d):
-  		$id = $d['Document']['id'];  	
+  		$id = $d['Document']['id'];
+  		$c_id = $d['Criteria']['id'];	
   ?>
 	<tr>
-		<td class="clickable"><div class="adm-checkbox" style="font-size:9px"><?php echo $this->Form->checkbox('Document.'.$i.'.id', array('value' => $id, 'class' => 'adm-checkbox-form')); 
+		<td class="clickable"><div class="adm-checkbox" style="font-size:9px"><?php echo $this->Form->checkbox('Document.'.$i.'.id', array('value' => $id.' '.$c_id, 'class' => 'adm-checkbox-form')); 
 						    echo "<label for='Document".$i."Id'>check</label>"; ?></div></td>
 		<td>
 			<!-- doc -->
 			<span class="admin-doc-titulo">
-				<?php echo $this->Html->link(Sanitize::html($d['Document']['title']), array('action' => 'edit', $id, $criterio_n), array('escape' => false)) ;?>
+				<?php echo $this->Html->link(Sanitize::html($d['Document']['name']), array('action' => 'edit', $id, $criterio_n), array('escape' => false)) ;?>
 			</span>
 			<div class="admin-doc-texto">		
 				<?php
@@ -227,7 +234,7 @@
 					str_replace(
 						'\n', 
 						'<br />', 
-						Sanitize::html($d['Document']['content'])), 
+						Sanitize::html($d['Document']['description'])), 
 					350, 
 					array(
 						'ending' => '<a href="'.$this->Html->url(array('controller' => 'admin_documentos', 'action' => 'edit', $id, $criterio_n)).'">...</a>', 
@@ -236,21 +243,22 @@
 				?>				
 			</div>
 			<div class="created-by">
-				Created on <?php echo $d['Document']['created']; ?> by <?php echo $d['Document']['nombre_autor']; ?>. 
+				Created on <?php //echo $d['Document']['created']; ?> by <?php //echo $d['Document']['nombre_autor']; ?>. 
+				<br>From Criteria: <?php echo $d['Criteria']['name']?>
 			</div>
 		</td>
 		<td>
 			<!-- consenso -->
 			<?php				
 				// convencion............. 1 = no, 2 = si
-				$no = $d['CriteriasDocument']["total_answers_1"];
-				$si = $d['CriteriasDocument']["total_answers_2"];
+				$no = $d['CriteriasDocument']["no_eval"];
+				$si = $d['CriteriasDocument']["yes_eval"];
 				$tot = $no + $si;
 				
 				$pno = porcentaje($no, $tot);
 				$psi = porcentaje($si, $tot);				
 			?>
-			<?php if($d['CriteriasDocument']['total_respuestas']>0): ?>
+			<?php if($d['CriteriasDocument']['total_eval']>0): ?>
 			<div style="width: 95%; clear:both; margin: 0 auto; height: 2em">
 				<div style="float:left;"><?php echo 'Yes ('.$this->Number->precision($psi, 1).'%)'; ?></div>
 				<div style="float:right;"><?php echo 'No ('.$this->Number->precision($pno, 1).'%)'; ?></div>				
@@ -258,8 +266,8 @@
 			<div class="progressbar-doc-<?php echo $id; ?>" style="width: 95%; margin: 0 auto;background-image:none;background-color:#E79A3D"></div>
 			<script>$('.progressbar-doc-<?php echo $id; ?>').progressbar({value: <?php echo $psi; ?>});</script>
 			<div style="text-align:center;width:95%;clear:both; margin: 0 auto; height: 2em">
-				<?php echo $d['CriteriasDocument']['total_respuestas'] ; ?> 
-				answers<?php if($d['CriteriasDocument']['validated']==1){echo ", official ".(($d['CriteriasDocument']['is_positive']==0)?("No"):("Yes")) ;} ?>
+				<?php echo $d['CriteriasDocument']['total_eval'] ; ?> 
+				answers<?php //if($d['CriteriasDocument']['answer']==1){echo ", official ".((0==0)?("No"):("Yes")) ;} ?>
 			</div>
 			<?php else: ?>
 				<div style="text-align:center">

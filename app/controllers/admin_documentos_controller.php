@@ -14,10 +14,10 @@ class AdminDocumentosController extends AppController {
   var $uses = array('Criteria', 'Document', 'CriteriasDocument', /*'Tag',*/ 'User', /*'Expert',*/ 'Attachfile'/*, 'ConstituentsKit'*/);
   var $helpers = array('Text', 'Number');
   var $paginate = array(
-	'CriteriasDocument' => array(
+	'Criteria' => array(
 	  'limit' => 5,
 	  'order' => array(
-		'total_respuestas' => 'desc'
+		'total_eval' => 'desc'
 	  )
 	)
   );
@@ -31,10 +31,10 @@ class AdminDocumentosController extends AppController {
 		$this->redirect('/');
 	}
   	
-  	if($this->isAnonymous() || (!$this->isAdmin() && !$this->isExpert())) {
+  	if($this->isAnonymous() || !$this->Session->check('Experto.isExperto')) {
   		$this->Session->setFlash('You do not have permission to access this page');
   		$this->redirect('/');
-  	}  		 
+  	}
 
 	if($this->Session->check('CriteriasDocument.limit'))
 		$this->paginate['CriteriasDocument']['limit'] = $this->Session->read('CriteriasDocument.limit');
@@ -119,7 +119,7 @@ class AdminDocumentosController extends AppController {
   return $document_id;
   //return $data_result;
   }
-  function validados() {
+  /*function validados() {
   	$d = $this->_beforeList(1);
 	$current = 'validados';
 	$criterio_n = $this->Session->read('CriteriasDocument.criterio') ? $this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
@@ -149,7 +149,7 @@ class AdminDocumentosController extends AppController {
 	
 	$this->set(compact('criterio_n', 'criterio_list', 'data', 'current', 'limit', 'ordering', 'filter', 'repo', 'menu'));
 	$this->render('listar');
-  }	
+  }	*/
   //Cambios
     function warneds() {	
 	$d = $this->_beforeList(0);
@@ -191,22 +191,162 @@ class AdminDocumentosController extends AppController {
 	$this->render('listar_warneds');
   }	
   
-  function all() {
-  	$d = $this->_beforeList(null, true);
-	$current = 'all';
-	$criterio_n = $this->Session->read('CriteriasDocument.criterio') ? $this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
-	$criterio_list = $d['criterio_list'];
-	$data = $d['data'];
-	$limit = $this->Session->read('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['CriteriasDocument']['limit'];
-	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['CriteriasDocument']['order']);
-	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
-	$repo = $this->getCurrentRepository();
-	$menu = 'menu_expert';
-	
-	$this->set(compact('criterio_n', 'criterio_list', 'data', 'current', 'limit', 'ordering', 'filter', 'repo', 'menu'));
-	$this->render('listar');
-  }
+  function set_paginate($user, $repo){
+  	
+  	if(!empty($this->data)) {
+  		if(!empty($this->data['Document']['limit'])) {
+  			$this->paginate['Criteria']['limit'] = $this->data['Document']['limit'];
+  			$this->Session->write('CriteriasDocument.limit', $this->data['Document']['limit']);
+  		}
+  	
+  		if(!empty($this->data['CriteriasDocument']['order'])) {
+  			$this->paginate['Criteria']['order'] = $this->_strToArray($this->data['CriteriasDocument']['order']);
+  			$this->Session->write('CriteriasDocument.order', $this->_arrayToStr($this->paginate['Criteria']['order']));
+  		}
+  	
+  		if(!empty($this->data['CriteriasDocument']['filter'])) {
+  			$this->Session->write('CriteriasDocument.filter', $this->data['CriteriasDocument']['filter']);
+  		}
 
+  		if(isset($this->data['Criteria']['id'])) {
+  			$this->Session->write('CriteriasDocument.criterio', $this->data['Criteria']['id']);
+  		}
+  	}
+  	
+
+  	
+  	$this->paginate['Criteria']['joins'] = array(
+  			array('table' => 'criterias_users',
+  					'alias' => 'CriteriasUser',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasUser.criteria_id = Criteria.id'
+  					)
+  			),
+  			array(
+  					'table' => 'criterias_documents',
+  					'alias' => 'CriteriasDocument',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasDocument.criteria_id = Criteria.id')
+  			),
+  			array(
+  					'table' => 'documents',
+  					'alias' => 'Document',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'Document.id = CriteriasDocument.document_id')
+  			)
+  	);
+  	
+  	
+  	$this->paginate['Criteria']['conditions'] = array(
+  			'CriteriasUser.user_id' => $user['User']['id'],
+  			'CriteriasUser.quality_user_id' => 1,
+  			'Document.repository_id' => $repo['Repository']['id']);
+  	
+  	if($this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0){
+  		$this->paginate['Criteria']['conditions']['Criteria.id'] = $this->Session->read('CriteriasDocument.criterio');
+  	}
+  	
+  	/*if($this->Session->check('CriteriasDocument.filter')) {
+  		$this->_strToFilterArray($this->Session->read('CriteriasDocument.filter'));
+  	}*/
+  	
+  	$this->paginate['Criteria']['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
+  			'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained', 'CriteriasDocument.no_eval',
+  			'CriteriasDocument.yes_eval', 'CriteriasDocument.answer', 
+  			'CriteriasDocument.total_eval', 'Document.id', 'Document.description', 'Document.name');
+  	
+  	
+  	$this->paginate['Criteria']['recursive'] = -1;
+  }
+  
+  
+  function getCriteriasList($data){
+  	
+  	$criterio_n = 0;
+  	
+  	$criterias = array();
+  	$criterias[0] = 'All';
+  	foreach($data as $d){
+  		$criterias[$d['Criteria']['id']] = $d['Criteria']['name'];
+  	}
+
+  	return compact('criterio_n', 'criterias');
+  }
+  
+  function all() {
+  	$user = $this->getConnectedUser();
+  	$repo = $this->getCurrentRepository();
+  	
+  	$this->set_paginate($user, $repo);
+  	
+  	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
+  	$data = $this->paginate();
+  	$d = $this->getCriteriasList($criterias);
+  	$current = 'all';
+  	$menu = 'menu_expert';
+  	$criterio_n = $this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0 ? 
+  			$this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
+  	$criterio_list = $d['criterias'];
+  	$limit = $this->Session->read('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['Criteria']['limit'];
+  	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
+  	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
+  	
+  	
+  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$this->render('listar');
+  }
+  
+  function validados() {
+  	$user = $this->getConnectedUser();
+  	$repo = $this->getCurrentRepository();
+  	 
+  	$this->set_paginate($user, $repo);
+  	$this->paginate['Criteria']['conditions']['CriteriasDocument.answer'] = array(1, 2);
+  	 
+  	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo, array(1, 2));
+  	$data = $this->paginate();
+  	$d = $this->getCriteriasList($criterias);
+  	$current = 'validados';
+  	$menu = 'menu_expert';
+  	$criterio_n = $this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0 ?
+  	$this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
+  	$criterio_list = $d['criterias'];
+  	$limit = $this->Session->read('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['Criteria']['limit'];
+  	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
+  	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
+  	 
+  	 
+  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$this->render('listar');
+  }
+  
+  function no_validados() {
+  	$user = $this->getConnectedUser();
+  	$repo = $this->getCurrentRepository();
+  
+  	$this->set_paginate($user, $repo);
+  	$this->paginate['Criteria']['conditions']['CriteriasDocument.answer'] = 3;
+  
+  	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo, 3);
+  	$data = $this->paginate();
+  	$d = $this->getCriteriasList($criterias);
+  	$current = 'no_validados';
+  	$menu = 'menu_expert';
+  	$criterio_n = $this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0 ?
+  	$this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
+  	$criterio_list = $d['criterias'];
+  	$limit = $this->Session->read('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['Criteria']['limit'];
+  	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
+  	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
+  
+  
+  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$this->render('listar');
+  }
+  
   
   function add() {
 	$this->redirect(array('controller' => 'documents', 'action' => 'upload'));
@@ -367,11 +507,12 @@ class AdminDocumentosController extends AppController {
   }
 
   function _reset_stats($id = null, $criteria = null) {
-	if(!is_null($id) && !is_null($criteria)) {
+	if(!is_null($id) && !is_null($criteria) && $id != 0 && $criteria != 0) {
 	 $this->CriteriasDocument->updateAll(
 	 	array(
-			'CriteriasDocument.total_answers_1' => 0,
-			'CriteriasDocument.total_answers_2' => 0,
+			'CriteriasDocument.yes_eval' => 0,
+			'CriteriasDocument.no_eval' => 0,
+	 		'CriteriasDocument.total_eval' => 0,
 		),
 		array(
 			'CriteriasDocument.document_id' => $id,
@@ -388,13 +529,15 @@ class AdminDocumentosController extends AppController {
   	$this->redirect($this->referer());
   }
   
-  function mass_edit($criteria = null) {
+  function mass_edit() {
 //   	pr($this->data['Document']); exit;
-  	if(!empty($this->data) && !is_null($criteria)) {
+  	if(!empty($this->data)) {
   		/* reset stats */
   		if(strcmp($this->data['Action']['mass_action'], 'reset') == 0) {
   			foreach($this->data['Document'] as $d) {
-  				$id = $d['id'];	
+  				$ids = explode(' ', $d['id']);
+  				$id = $ids[0];
+  				$criteria = $ids[1];	
   				$this->_reset_stats($id, $criteria);  			 
   			}
   			$this->Session->setFlash('Documents\' statistics restarted successfully');
@@ -402,18 +545,22 @@ class AdminDocumentosController extends AppController {
   		/* validate docs */
   		} else if(strcmp($this->data['Action']['mass_action'], 'validate') == 0) {
   			foreach($this->data['Document'] as $doc) {  				
-  				$id = $doc['id'];
+  				$ids = explode(' ', $d['id']);
+  				$id = $ids[0];
+  				$criteria = $ids[1];
   				$this->validate_document($id, $criteria ,false);
   			}  	
   			$this->Session->setFlash('Documents changed successfully');
   			
   		/* delete docs */
-  		} else if(strcmp($this->data['Action']['mass_action'], 'delete') == 0) {
+  		} else if(strcmp($this->data['Action']['mass_action'], 'invalidate') == 0) {
   			foreach($this->data['Document'] as $d) {
-  				$id = $d['id'];
-  				$this->remove($id, false, false);
+  				$ids = explode(' ', $d['id']);
+  				$id = $ids[0];
+  				$criteria = $ids[1];
+  				$this->validate_document($id, $criteria ,false, false);
   			}  			
-  			$this->Session->setFlash('Documents removed successfully');
+  			$this->Session->setFlash('Documents changed successfully');
   			
   		/* default */
   		} else {
@@ -424,34 +571,30 @@ class AdminDocumentosController extends AppController {
   	$this->redirect($this->referer());
   }
   
-  function validate_document($id = null, $criteria = null, $redirect = true) {
+  function validate_document($id = null, $criteria = null, $redirect = true, $validate = true) {
   	
-  	if(!is_null($id) && !is_null($criteria)) {  	  	  				
+  	if(!is_null($id) && !is_null($criteria)  && $id != 0 && $criteria != 0) {  	  	  				
 		$doc = $this->CriteriasDocument->find( 'first', array(
 			'conditions' => array(
 				'CriteriasDocument.document_id' => $id,
 				'CriteriasDocument.criteria_id' => $criteria)			
 		));
-		
-		// set respuesta_oficial to 1 if not set  				  				
-		if($doc['CriteriasDocument']['official_answer'] === null) {			
-			$this->set_field('official_answer', $doc['CriteriasDocument']['id'], 1, false);
-		} 				
-		$this->set_field('validated', $doc['CriteriasDocument']['id'] , ($doc['CriteriasDocument']['validated']+1)%2, false);
+						
+		$this->set_field('answer', $doc['CriteriasDocument']['id'] , $validate ? 1 : 2, false);
   	}
   	if($redirect) $this->redirect($this->referer());
   }
   
   /* translates an array of ordering conditions to a string */
   function _arrayToStr($a = array()) {
- 	if(array_key_exists('total_respuestas', $a)) {
- 		if(strcmp($a['total_respuestas'], 'desc') == 0) {
+ 	if(array_key_exists('total_eval', $a)) {
+ 		if(strcmp($a['total_eval'], 'desc') == 0) {
  			return 'more-ans';
  		} else {
  			return 'less-ans';
  		} 			
- 	} elseif(array_key_exists('consenso', $a)) {
- 		if(strcmp($a['consenso'], 'desc') == 0) {
+ 	} elseif(array_key_exists('yes_eval', $a)) {
+ 		if(strcmp($a['yes_eval'], 'desc') == 0) {
  			return 'more-cs';
  		} else {
  			return 'less-cs';
@@ -464,45 +607,30 @@ class AdminDocumentosController extends AppController {
   function _strToArray($ord = '') {
 	if(strcmp('less-ans', $ord) == 0) {
 		return array(
-			'total_respuestas' => 'asc'
+			'total_eval' => 'asc'
 		);  				
 	} elseif (strcmp('more-cs', $ord) == 0) {
 		return array(
-			'consenso' => 'desc'
+			'yes_eval' => 'desc'
 		);
 	} elseif (strcmp('less-cs', $ord) == 0) {
 		return array(
-			'consenso' => 'asc'
+			'yes_eval' => 'asc'
 		);
 	} else { // more-ans
 		return array(
-			'total_respuestas' => 'desc'
+			'total_eval' => 'desc'
 		);
 	}  	
   }
   
   function _strToFilterArray($fil = '') {
   	if(strcmp('app', $fil) == 0) {
-  		return array(
-  			'CriteriasDocument.total_app >' => '50' 
-  		);
+  		$this->paginate['Criteria']['conditions']['CriteriasDocument.yes_eval2 >'] = 'CriteriasDocument.total_eval';
+  			 
   	} elseif(strcmp('dis', $fil) == 0) {
-  		return array(
-  			'CriteriasDocument.total_app <=' => '50' 
-  		);
-  	} elseif(strcmp('con', $fil) == 0) {
-  		return array(
-  			'CriteriasDocument.consenso >' => '50' 
-  		);
-  	} elseif(strcmp('don', $fil) == 0) {
-  		return array(
-  			'CriteriasDocument.consenso <=' => '50' 
-  		);
-  	} else { // all
-  		return array(
-  			'1' => '1' 
-  		);
-  	} 		
+  		$this->paginate['Criteria']['conditions']['CriteriasDocument.yes_eval2 <='] = 'CriteriasDocument.total_eval';
+  	} 	
   }
 }
 ?>

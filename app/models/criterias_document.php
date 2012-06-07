@@ -342,10 +342,12 @@ class CriteriasDocument extends AppModel {
 				$id = $info['CriteriasDocument']['id'];
 	
 				$ans = $d['respuesta'] == 1? 'yes_eval' : 'no_eval';
+				$new_total = $info['CriteriasDocument']['total_eval'] + 1;
 				$new_value = $info['CriteriasDocument'][$ans] + 1;
 					
 				$this->id = $id;
 				$this->saveField($ans, $new_value);
+				$this->saveField('total_eval', $new_total);
 			}
 		}
 	}

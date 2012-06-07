@@ -16,7 +16,7 @@ if(isset($current)) {
 ?>
 <div class="admin-menu">
 <?php
-/*echo $this->Form->radio('radiomenu',
+echo $this->Form->radio('radiomenu',
         					array('no_validados' => 'Pending validation'),
 							array(
 								'value' => $current , 
@@ -34,9 +34,9 @@ echo $this->Form->radio('radiomenu',
 							array(
 								'value' => $current , 
 								'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_documentos', 'action' => 'all')) .'";'));
-			*/					
+								
 echo $this->Form->radio('radiomenu',
-	        					array('criteria' => 'Criteria'),
+	        					array('criteria' => 'Criterias'),
 								array(
 									'value' => $current , 
 									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser')) .'";'));						

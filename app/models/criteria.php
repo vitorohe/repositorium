@@ -316,7 +316,7 @@ class Criteria extends AppModel {
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 	
-	function findCriteriasUserinRepo($user = array(), $repo = null){
+	function findCriteriasUserinRepo($user = array(), $repo = null, $answers = array(1,2,3)){
 		if(empty($user) || is_null($repo))
 			return $user;
 		
@@ -348,10 +348,12 @@ class Criteria extends AppModel {
 		$options['conditions'] = array(
 				'CriteriasUser.user_id' => $user['User']['id'],
 				'CriteriasUser.quality_user_id' => 1,
-				'Document.repository_id' => $repo['Repository']['id']);
+				'Document.repository_id' => $repo['Repository']['id'],
+				'CriteriasDocument.answer' => $answers);
 		
 		$options['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
-				'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
+				'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained', 'CriteriasDocument.no_eval',
+				'CriteriasDocument.yes_eval', 'CriteriasDocument.answer', 'Document.id');
 		
 		
 		$options['recursive'] = -1;
