@@ -17,20 +17,6 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('description'); ?>
 
-<!--
-<script type="text/javascript">
-	$('#RepositoryMaxDocuments').val('hola');
-	if ($('#RepositoryRestrictions').is(':checked')) {
-        $('#RepositoryMaxDocuments :input').removeAttr('disabled');
-        $('#RepositoryMaxSize :input').removeAttr('disabled');
-    } else {
-    	$('#RepositoryMaxDocuments').val('hola');
-        $('#RepositoryMaxDocuments :input').attr('disabled', true);
-        $('#RepositoryMaxSize :input').attr('disabled', true);
-    }   
-
-</script>-->
-
 <!-- source types for repo -->
 
 <!-- 
@@ -58,7 +44,7 @@ Attach File: Allow users to attach files to Document
 
 <?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB):')); ?>
 
-<?php echo $this->Form->input('extension', array('label' => 'File extension:')); ?>
+<?php echo $this->Form->input('extension', array('label' => 'File extension (eg:"jpg" or "jpg,bmp,gif"):')); ?>
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 

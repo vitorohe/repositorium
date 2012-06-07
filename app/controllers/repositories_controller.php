@@ -290,6 +290,7 @@ class RepositoriesController extends AppController {
 				}
 				if(!empty($this->data['Repository']['extension'])) {
 					$restrictions['extension'] = $this->data['Repository']['extension'];
+					$restrictions = trim($restrictions);
 
 				} else {
 					$restrictions['extension'] = "*";
