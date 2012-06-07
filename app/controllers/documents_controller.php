@@ -371,8 +371,9 @@ class DocumentsController extends AppController {
 
   function checkRestrictions(&$data, $restrictions = null) {
 
-    if(empty($data))
+    if(empty($data)) {
       return false;
+    }
 
     $files = $data['files'];
 
@@ -388,8 +389,9 @@ class DocumentsController extends AppController {
     $res_size = $restrictions['RepositoryRestriction']['size'];
 
     if($res_amount != 0)
-      if(count($files) > $res_amount)
+      if(count($files) > $res_amount) {
         return false;
+      }
 
     foreach ($files as $file) {
       if($file['error']==4){
@@ -400,16 +402,19 @@ class DocumentsController extends AppController {
 
         if($res_extension != '*') { 
           $extension = end(explode('.', $file['name']));
-          if(!strpos($res_extension, $extension))
+          if(strpos($res_extension, $extension) === false){
             return false;
+          }
         }
 
         if($res_size != 0) {
-          if($file['size']/1048576 > $res_size)
+          if($file['size']/1048576 > $res_size){
             return false;
+          }
         }
       }
     }
+    return true;
   }
 
 
