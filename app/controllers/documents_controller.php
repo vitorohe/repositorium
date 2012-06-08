@@ -544,8 +544,21 @@ class DocumentsController extends AppController {
 
     $documents = $this->paginate();
     
+    $documents_with_files = array();
+    if(!empty($documents))
+      foreach ($documents as $document) {
+        $document['files'] = array();
+        $document['files'] = $this->Attachfile->find('all' , 
+          array('conditions' => 
+            array('Attachfile.document_id' => $document['Document']['id']), 
+            'recursive' => -1, 
+            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+        $documents_with_files[] = $document;
+      }
+
+
     $data = array(
-      'documents' => $documents,
+      'documents_with_files' => $documents_with_files,
       'current' => 'My documents',
       'title' => "Documents of '{$user['User']['name']}'",
       'cond' => 'owner',

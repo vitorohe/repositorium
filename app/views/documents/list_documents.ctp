@@ -29,14 +29,38 @@ $this->Html->addCrumb($title);
   </thead>
   <tbody>
   	<?php
-  		foreach($documents as $cr):
+  		foreach($documents_with_files as $cr):
   			
   	?>
   		<tr>
   			<td><?php echo $cr['Document']['id']; ?></td>
   			<td><?php echo $cr['Document']['name'];?></td>
   			<td><?php echo $cr['Document']['description'];?></td>
-        <td><?php echo $cr['Document']['description'];?></td>
+        <td>
+          <?php
+            if(!empty($cr['files'])) {
+              echo '<br />';
+              echo '<strong>Attached files:</strong> ';
+              echo '<br />';
+              echo '<ol style="margin: 0 0 0 10px;">';
+              foreach ($cr['files'] as $file) {
+                echo '<li>';
+                echo $file['Attachfile']['name'];
+                echo '</li>';
+              }
+              echo '</ol>';
+
+              if(count($cr['files']) === 1)
+                echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" target="_blank" style="margin: 0 0 0 10px;">
+                    <span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+
+              else        
+                echo '<a href="../documents/getZip?title='.$cr['Document']['name'].'&id='.$cr['Document']['id'].'" style="margin: 0 0 0 10px;">
+                    <span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>'; 
+            }
+          ?>
+
+        </td>
   			<?php if(!$this->Session->check('Repository.current')){ ?>
   				<td><?php echo $cr['Repository']['id'];?></td>
   				<td><?php echo $cr['Repository']['name'];?></td>
