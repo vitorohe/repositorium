@@ -88,8 +88,8 @@
 		<div id="desafio-contenido-wrap">
 			<?php
 			$i = 0; 
-			$total=count($documentos);
-			foreach($documentos as $d) : 
+			$total=count($documents_with_files);
+			foreach($documents_with_files as $d) : 
 			?>
 
 			<h3 style="width:100%">
@@ -100,6 +100,30 @@
 			</h3>
 			<div> 
 				<div><?php echo stripslashes(str_replace("\n", '<br />', Sanitize::html($d['Document']['description']))); ?></div>
+				</br>
+				<?php 
+					if(!empty($d['files'])) {
+						echo '<br />';
+						echo 'Attached files:';
+						echo '<br />';
+						echo '<ol style="margin: 0 0 0 10px;">';
+						foreach ($d['files'] as $file) {
+							echo '<li>';
+							echo $file['Attachfile']['name'];
+							echo '</li>';
+						}
+						echo '</ol>';
+
+						if(count($d['files']) === 1)
+							echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" target="_blank" style="margin: 0 0 0 10px;">
+									<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+
+						else				
+							echo '<a href="../documents/getZip?title='.$d['Document']['name'].'&id='.$d['Document']['id'].'" style="margin: 0 0 0 10px;">
+									<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+					}
+				?>
+
 				<div>
 					<?php
 					

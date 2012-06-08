@@ -16,12 +16,13 @@ $this->Html->addCrumb($title);
 <table id="tabla_documentos" class="ui-widget ui-widget-content tabla" style="width: 100%">
   <thead>
 	<tr class="ui-widget-header">
-	  <th width="10"><?php echo $this->Paginator->sort('Id', 'Document.id'); ?> </th>
-	  <th width="20%"><?php echo $this->Paginator->sort('Title', 'Document.name'); ?></th>
-	  <th width="40%" title=""><?php echo $this->Paginator->sort('Content', 'Document.description'); ?></th>
+	  <th width="10%"><?php echo $this->Paginator->sort('Id', 'Document.id'); ?> </th>
+	  <th width="15%"><?php echo $this->Paginator->sort('Title', 'Document.name'); ?></th>
+	  <th width="30%"><?php echo $this->Paginator->sort('Content', 'Document.description'); ?></th>
+    <th width="20%">Attached files</th>
 	  <?php if(!$this->Session->check('Repository.current')){ ?>
 	  	<th width="10%"><?php echo $this->Paginator->sort('Repository Id', 'Repository.id');?></th>
-	  	<th width="20%"><?php echo $this->Paginator->sort('Repository Name', 'Repository.name');?></th>
+	  	<th width="15%"><?php echo $this->Paginator->sort('Repository Name', 'Repository.name');?></th>
 	  <?php } ?>
 	  <th width="20%">Options</th>
 	</tr>
@@ -35,6 +36,7 @@ $this->Html->addCrumb($title);
   			<td><?php echo $cr['Document']['id']; ?></td>
   			<td><?php echo $cr['Document']['name'];?></td>
   			<td><?php echo $cr['Document']['description'];?></td>
+        <td><?php echo $cr['Document']['description'];?></td>
   			<?php if(!$this->Session->check('Repository.current')){ ?>
   				<td><?php echo $cr['Repository']['id'];?></td>
   				<td><?php echo $cr['Repository']['name'];?></td>

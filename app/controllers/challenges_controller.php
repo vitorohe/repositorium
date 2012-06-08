@@ -9,7 +9,7 @@
  *  
  */
 class ChallengesController extends AppController {
-  var $uses = array('User', 'Document', 'CriteriasUser', 'CriteriasDocument', 'Criteria', 'RepositoriesUser');
+  var $uses = array('User', 'Document', 'CriteriasUser', 'CriteriasDocument', 'Criteria', 'RepositoriesUser','Attachfile');
 
   /**
    * User Model
@@ -90,16 +90,26 @@ class ChallengesController extends AppController {
   	if(is_null($criterio))
   		$this->_skip_challenge();
 
-  	$documentos = $this->Criteria->generateChallenge($user['User']['id'], $criterio, $repo_id);
+  	$documents = $this->Criteria->generateChallenge($user['User']['id'], $criterio, $repo_id);
   	
+    if(count($documents) == 0)
+      $this->_skip_challenge();
 
-  	if(count($documentos) == 0)
-  		$this->_skip_challenge();
-  	
+    $documents_with_files = array();
+    foreach ($documents as $document) {
+      $document['files'] = array();
+      $document['files'] = $this->Attachfile->find('all' , 
+        array('conditions' => 
+          array('Attachfile.document_id' => $document['Document']['id']), 
+          'recursive' => -1, 
+          'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+      $documents_with_files[] = $document;
+    }
+
   	$this->Session->write('Challenge.criterio', $criterio['Criteria']['id']);
   	$this->Session->write('Challenge.validate', true);
   	
-  	$this->set(compact('documentos', 'criterio'));
+  	$this->set(compact('documents_with_files', 'criterio'));
   }
   
   /**
