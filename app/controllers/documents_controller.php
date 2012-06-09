@@ -536,7 +536,7 @@ class DocumentsController extends AppController {
             )
         )
       );
-      $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name');
+      $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name', 'Repository.internal_name');
     }
     else{
       $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id'], 'Document.repository_id' => $repo['Repository']['id']);

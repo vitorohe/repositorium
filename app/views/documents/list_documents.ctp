@@ -63,7 +63,7 @@ $this->Html->addCrumb($title);
         </td>
   			<?php if(!$this->Session->check('Repository.current')){ ?>
   				<td><?php echo $cr['Repository']['id'];?></td>
-  				<td><?php echo $cr['Repository']['name'];?></td>
+  				<td><?php echo $this->Repo->link($cr['Repository']['name'], $cr['Repository']['internal_name']);?></td>
   			<?php }?>  			
   			<td>
   				<!-- options -->
