@@ -117,20 +117,11 @@ class PagesController extends AppController {
 			'NOT' => $yours
 		);
 
-		/*$watched = array(
-			'RepositoriesUser.user_id' => $user['User']['id'],
-			'RepositoriesUser.watching' => true,
-// 			'NOT' => $collaborator, 
-// 			'NOT' => $yours
-		);*/
-		
-		/*++++++++++++++INI++++++++++++*/
-		$joined = array(
+		$watching = array(
 			'RepositoriesUser.user_id' => $user['User']['id'],
 			'RepositoriesUser.user_type_id <>' => 1,
 			'RepositoriesUser.activation_id' => 'A'
 			);
-		/*++++++++++++++FIN++++++++++++*/
 		
 		$latest = array(
 // 			'NOT' => $watched,
@@ -149,16 +140,11 @@ class PagesController extends AppController {
 		));*/
 
 		$this->RepositoriesUser->unbindModel(array('belongsTo' => array('User')));
-		/*$watched_repos = $this->RepositoriesUser->find('all', array(
-			'conditions' => $watched,
-		));*/
 		
-		/*++++++++++++++INI++++++++++++*/
-		$joined_repos = $this->RepositoriesUser->find('all', array(
-			'conditions' => $joined
+		$watching_repos = $this->RepositoriesUser->find('all', array(
+			'conditions' => $watching
 			)
 		);
-		/*++++++++++++++FIN++++++++++++*/
 
 		$this->Repository->unbindModel(array('belongsTo' => array('User')), array('hasMany' => array('Criteria', 'Document')));
 		$latest_repos = $this->Repository->find('all', array(
@@ -166,10 +152,7 @@ class PagesController extends AppController {
 			'order' => 'Repository.created desc'
 		));
 		
-		//$this->set(compact('your_repos', 'collaborator_repos', 'watched_repos', 'latest_repos'));
-		/*++++++++++++++INI++++++++++++*/		
-		$this->set(compact('your_repos', 'collaborator_repos', 'joined_repos', 'latest_repos'));
-		/*++++++++++++++FIN++++++++++++*/
+		$this->set(compact('your_repos', 'collaborator_repos', 'watching_repos', 'latest_repos'));
 		$this->render('home_user');
 	}
 	

@@ -29,11 +29,11 @@
 		/*Verifying that user logged is not the creator of the repo to display the msg*/
 		$is_joining = false;
 		if(isset($user) && $creator['User']['id'] != $user['User']['id']) {
-			if($joined) {
-				$msg = 'Leave the repository';
+			if($watching) {
+				$msg = 'Remove from watchlist';
 			}
 			else {
-				$msg = 'Join to the repository';
+				$msg = 'Add to watchlist';
 				$is_joining = true;
 			}
 			

@@ -5,8 +5,6 @@ class RepositoryRestriction extends AppModel {
 	function saveRestriction($restrictions = null,$user_id = null,$repo_id = null) {
 
 		if(empty($restrictions)) {
-			echo "hola";
-			die();
 			return false;
 		}
 
@@ -22,7 +20,7 @@ class RepositoryRestriction extends AppModel {
                'extension' => $restrictions['extension'],
                'size' => $restrictions['size'],
                'amount' => $restrictions['amount'],
-               'register_date' => date('YYYY-MM-DD h:i:s', time()),
+               'register_date' => date('Y-m-d H:i:s'),
                'activation_id' => 'A',
                'internalstate_id' => 'A',
                'user_id' => $user_id,
@@ -33,8 +31,6 @@ class RepositoryRestriction extends AppModel {
 
 		if(!$this->save()){
 			$ds->rollback($this);
-			echo "hola2";
-			die();
 			return false;
 		}
 

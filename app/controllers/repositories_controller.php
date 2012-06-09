@@ -53,9 +53,9 @@ class RepositoriesController extends AppController {
 		$result = $this->_set_repo($data = compact('repo_url'));
 		if($result[0]) {		
 			$repository = $result[1];
-			$joined = null;
+			$watching = null;
 			
-			// joined repo
+			// watching repo
 			if($this->isLoggedIn()) {
 				$user = $this->getConnectedUser();
 				$r = $this->RepositoriesUser->find('first', array(
@@ -68,7 +68,7 @@ class RepositoriesController extends AppController {
 				));				
 				//$watching = $r['RepositoriesUser']['watching'];
 				/*----------------------------INI------------------------------*/
-				$joined = $r;
+				$watching = $r;
 				
 				/*----------------------------FIN------------------------------*/
 			}
@@ -182,7 +182,7 @@ class RepositoriesController extends AppController {
 				$this->Session->write('Experto.isExperto', true);	
 			}			
 			
-			$this->set(compact('repository', /*'watching',*//*INI*/'joined', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags',*/, 'cloud_data'));
+			$this->set(compact('repository', /*'watching',*//*INI*/'watching', 'user',/*FIN*/ 'creator', 'documents'/*, 'tags',*/, 'cloud_data'));
 		} else {
 			$this->e404();
 		}		
@@ -312,10 +312,12 @@ class RepositoriesController extends AppController {
 					$this->redirect('/');
 				}
 
-				if(!$this->RepositoryRestriction->saveRestriction($restrictions, $user['User']['id'], $repository['Repository']['id'])) {
-					$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer');
-					$this->redirect('/');
-				}
+				if(!empty($restrictions))
+
+					if(!$this->RepositoryRestriction->saveRestriction($restrictions, $user['User']['id'], $repository['Repository']['id'])) {
+						$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer');
+						$this->redirect('/');
+					}
 
 
 				if(Configure::read('App.subdomains')) {
@@ -350,7 +352,7 @@ class RepositoriesController extends AppController {
 			$this->redirect('/');
 		}*/
 		
-		$joined = false;
+		$watching = false;
 
 		if(empty($repo)) {
 
@@ -365,7 +367,7 @@ class RepositoriesController extends AppController {
 
 			$this->create();
 			$this->RepositoriesUser->save($repo);				
-			$joined = true;
+			$watching = true;
 		}
 		else {
 			$repo['RepositoriesUser']['activation_id'] = 'A';
@@ -375,14 +377,14 @@ class RepositoriesController extends AppController {
 		}
 
 
-//		$joined = $repo['RepositoriesUser']['joined'];
+//		$watching = $repo['RepositoriesUser']['watching'];
 		
 //		$this->RepositoriesUser->read(null, $repo['RepositoriesUser']['id']);
-//		$this->RepositoriesUser->set('joined', !$joined);
+//		$this->RepositoriesUser->set('watching', !$watching);
 //		$this->RepositoriesUser->save();
 		
-		if($joined) $msg = "You have left the repository";
-		else $msg = "You have joined to the repository";
+		if($watching) $msg = "You have removed this repository from your watchlist";
+		else $msg = "You have added this repository to your watchlist";
 		
 		$this->Session->setFlash($msg);
 		$this->redirect(array('action' => 'set_repository_by_id', $id));

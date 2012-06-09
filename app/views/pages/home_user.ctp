@@ -18,7 +18,7 @@
 	    </div>
         <div class="yui-u">
         	<div class="padded">
-				<strong class="mini-header">Repositories you're a collaborator</strong>
+				<strong class="mini-header">Your criterias</strong>
 				<!--<?php if(count($collaborator_repos) > 0): ?>
 				<ul>
 					<?php foreach($collaborator_repos as $r) { ?>
@@ -29,7 +29,7 @@
 				<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't repositories here</span></div>
 				<?php endif; ?>-->
                 <!--INI-->
-    			<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't repositories here</span></div>
+    			<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't criterias here</span></div>
                 <!--FIN-->
 			</div>			
 	    </div>
@@ -37,12 +37,10 @@
     <div class="yui-g">
         <div class="yui-u first">
         	<div class="padded">
-				<strong class="mini-header">Repositories you have joined</strong>
-				<?php //if(count($watched_repos) > 0): ?>
-				<?php if(count($joined_repos) > 0): ?>
+				<strong class="mini-header">Repositories you are watching</strong>
+				<?php if(count($watching_repos) > 0): ?>
 				<ul>
-					<?php //foreach($watched_repos as $r) { ?>
-					<?php foreach($joined_repos as $r) { ?>
+					<?php foreach($watching_repos as $r) { ?>
 					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
 					<?php } ?>
 				</ul>
