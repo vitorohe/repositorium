@@ -10,6 +10,7 @@
  */
 class ChallengesController extends AppController {
   var $uses = array('User', 'Document', 'CriteriasUser', 'CriteriasDocument', 'Criteria', 'RepositoriesUser','Attachfile');
+  var $helpers = array('Mime');
 
   /**
    * User Model

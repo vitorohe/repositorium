@@ -114,9 +114,20 @@
 						}
 						echo '</ol>';
 
-						if(count($d['files']) === 1)
-							echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" target="_blank" style="margin: 0 0 0 10px;">
+						if(count($d['files']) === 1){
+							$extension = end(explode('.', $file['Attachfile']['name']));
+							if(empty($extension))
+								$mime_type = null;
+							else
+								$mime_type = $this->Mime->getMimeType($extension);
+
+							if(!is_null($mime_type))
+								echo '<a href="../documents/getFile?title='.$d['Document']['name'].'&id='.$d['Document']['id'].'&filename='.$file['Attachfile']['name'].'&mime='.$mime_type.'" style="margin: 0 0 0 10px;">
 									<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+							else
+								echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" target="_blank" style="margin: 0 0 0 10px;">
+									<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+						}
 
 						else				
 							echo '<a href="../documents/getZip?title='.$d['Document']['name'].'&id='.$d['Document']['id'].'" style="margin: 0 0 0 10px;">

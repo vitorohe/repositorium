@@ -2,7 +2,7 @@
 App::import('Sanitize');
 class CriteriasController extends AppController {
 
-  var $helpers = array('Zipper');
+  var $helpers = array('Mime');
 
   var $uses = array('Document', 'Criteria', 'CriteriasDocument', 'Attachfile', 'CriteriasUser', 'CategoryCriteria');
   var $paginate = array(

@@ -1,7 +1,7 @@
 <?php
 class DocumentsController extends AppController {
 	
-	var $helpers = array('Html', 'Javascript', 'Ajax');
+	var $helpers = array('Html', 'Javascript', 'Ajax', 'Mime');
 	
 	var $name = 'Documents';
 	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser', 'RepositoryRestriction');
@@ -608,6 +608,31 @@ class DocumentsController extends AppController {
     readfile($tmp_zip);
 
     unlink($tmp_zip);
+  }
+
+  function getFile() {
+
+    $title = $this->params['url']['title'];
+    $filename = $this->params['url']['filename'];
+    $extension = end(explode('.', $filename));
+    $mime = $this->params['url']['mime'];
+
+    $dir = WWW_ROOT.'uploaded_files/document_'.$this->params['url']['id'].'/'.$filename;
+
+    if(strpos(WWW_ROOT, "\\"))
+      $dir = str_replace('/', '\\', $dir);
+
+    header("Pragma: public");
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    header("Cache-Control: private", false);
+    header('Content-Type: '.$mime);
+    header('Content-disposition: attachment; filename='.$filename);
+    header("Content-Transfer-Encoding: binary");
+    header('Content-Length: ' . filesize($dir));  
+
+    readfile($dir);
+
   }
 }
 ?>
