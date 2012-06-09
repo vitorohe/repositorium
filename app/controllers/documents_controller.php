@@ -436,6 +436,7 @@ class DocumentsController extends AppController {
   	$this->data['Document']['activation_id'] = 'A';
   	$this->data['Document']['internalstate_id'] = 'A';
   	$this->data['Document']['document_state_id'] = 1;
+    $this->data['Document']['register_date'] = date('Y-m-d H:i:s');
   	$this->Document->set($this->data);
 
     if(empty($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['categories'])) {
