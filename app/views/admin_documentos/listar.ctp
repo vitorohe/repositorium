@@ -208,15 +208,15 @@
   <thead>
 	<tr class="ui-widget-header">
 	  <th width="3%" style="text-align:center;font-size:9px" class="clickable"><input type="checkbox" id="select-all" /><label for="select-all">select</label></th> 
-	  <th width="55%">Document</th>
+	  <th width="50%">Document</th>
+	  <th width="20%">Attached files</th>
 	  <th width="27%">Statistics <?php /* echo $this->Paginator->sort('Statistics', "CriteriasDocument.total_respuestas_2_{$rest}"); */ ?></th>
-	  <th width="15%">Options</th>
 	</tr>
   </thead>
   <tbody>
   <?php 
   	$i = 0;
-  	foreach($data as $d):
+  	foreach($data_with_files as $d):
   		$id = $d['Document']['id'];
   		$c_id = $d['Criteria']['id'];	
   ?>
@@ -248,6 +248,30 @@
 			</div>
 		</td>
 		<td>
+			<?php
+				if(!empty($d['files'])) {
+					echo '<br />';
+					echo '<strong>Attached files:</strong> ';
+					echo '<br />';
+					echo '<ol style="margin: 0 0 0 10px;">';
+					foreach ($d['files'] as $file) {
+						echo '<li>';
+						echo $file['Attachfile']['name'];
+						echo '</li>';
+					}
+					echo '</ol>';
+
+					if(count($d['files']) === 1)
+						echo '<a href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" target="_blank" style="margin: 0 0 0 10px;">
+						<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>';
+
+					else        
+						echo '<a href="../documents/getZip?title='.$d['Document']['name'].'&id='.$id.'" style="margin: 0 0 0 10px;">
+						<span class="ui-icon ui-icon-arrowthickstop-1-s" style="display:inline-block;"></span>Download attached files</a>'; 
+				}
+			?>
+		</td>
+		<td>
 			<!-- consenso -->
 			<?php				
 				// convencion............. 1 = no, 2 = si
@@ -274,14 +298,6 @@
 					There is no data to display yet...
 				</div>
 			<?php endif;?>
-		</td>
-		<td>
-			<!-- options -->
-			<div class="admin-doc-edit">
-				<?php echo $this->Html->link('Edit', array('action' => 'edit', $id, $criterio_n)); ?>
-				&nbsp; | &nbsp;   
-				<?php echo $this->Html->link('Remove', array('action' => 'remove', $id), array(), "Are you sure?"); ?>
-			</div>
 		</td>
 	</tr>  
   <?php 

@@ -294,8 +294,19 @@ class AdminDocumentosController extends AppController {
   	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
   	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
   	
+    $data_with_files = array();
+    if(!empty($data))
+      foreach ($data as $document) {
+        $document['files'] = array();
+        $document['files'] = $this->Attachfile->find('all' , 
+          array('conditions' => 
+            array('Attachfile.document_id' => $document['Document']['id']), 
+            'recursive' => -1, 
+            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+        $data_with_files[] = $document;
+      }
   	
-  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$this->set(compact('data_with_files', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
   	$this->render('listar');
   }
   
@@ -318,8 +329,19 @@ class AdminDocumentosController extends AppController {
   	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
   	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
   	 
-  	 
-  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$data_with_files = array();
+    if(!empty($data))
+      foreach ($data as $document) {
+        $document['files'] = array();
+        $document['files'] = $this->Attachfile->find('all' , 
+          array('conditions' => 
+            array('Attachfile.document_id' => $document['Document']['id']), 
+            'recursive' => -1, 
+            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+        $data_with_files[] = $document;
+      }
+
+  	$this->set(compact('data_with_files', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
   	$this->render('listar');
   }
   
@@ -342,8 +364,20 @@ class AdminDocumentosController extends AppController {
   	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
   	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';
   
+
+    $data_with_files = array();
+    if(!empty($data))
+      foreach ($data as $document) {
+        $document['files'] = array();
+        $document['files'] = $this->Attachfile->find('all' , 
+          array('conditions' => 
+            array('Attachfile.document_id' => $document['Document']['id']), 
+            'recursive' => -1, 
+            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+        $data_with_files[] = $document;
+      }
   
-  	$this->set(compact('data', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
+  	$this->set(compact('data_with_files', 'current', 'repo', 'menu', 'limit', 'ordering', 'filter', 'criterio_n', 'criterio_list'));
   	$this->render('listar');
   }
   
