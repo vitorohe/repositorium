@@ -116,6 +116,9 @@
                         <?php if($this->Session->check('User.esAdmin')){ ?>
 	                    <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
                     	<?php }else if($this->Session->check('User.id')){ ?>
+                    	<?php if($this->Session->check('Experto.isExperto')){?>
+                    	      	<li><?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?></li>
+                    	<?php }?>
                         <li><?php echo $this->Html->link('Manage my Documents', array('controller' => 'documents', 'action' => 'list_documents'));?></li>
                       <?php } ?>
                     	<li><?php echo $this->Html->link('Create new Repository', array('controller' => 'repositories', 'action' => 'create'));?></li>  

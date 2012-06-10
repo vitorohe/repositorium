@@ -24,7 +24,7 @@ class AdminDocumentosController extends AppController {
 
   function beforeFilter() {
   	$user = $this->getConnectedUser();
-  	$repo = $this->getCurrentRepository();
+  	$repo = $this->requireRepository();
 
 	if(is_null($repo)) {
 		$this->Session->setFlash("Must be in a repository");
@@ -264,7 +264,6 @@ class AdminDocumentosController extends AppController {
   
   
   function getCriteriasList($data){
-  	
   	$criterio_n = 0;
   	
   	$criterias = array();
@@ -284,12 +283,13 @@ class AdminDocumentosController extends AppController {
   	
   	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
   	$data = $this->paginate();
-  	$d = $this->getCriteriasList($criterias);
+  	$crit_list = $this->getCriteriasList($criterias);
+  	
   	$current = 'all';
   	$menu = 'menu_expert';
   	$criterio_n = $this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0 ? 
-  			$this->Session->read('CriteriasDocument.criterio') : $d['criterio_n'];
-  	$criterio_list = $d['criterias'];
+  			$this->Session->read('CriteriasDocument.criterio') : $crit_list['criterio_n'];
+  	$criterio_list = $crit_list['criterias'];
   	$limit = $this->Session->read('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['Criteria']['limit'];
   	$ordering = $this->Session->read('CriteriasDocument.order') ? $this->Session->read('CriteriasDocument.order') : $this->_arrayToStr($this->paginate['Criteria']['order']);
   	$filter = $this->Session->read('CriteriasDocument.filter') ? $this->Session->read('CriteriasDocument.filter') : 'all';

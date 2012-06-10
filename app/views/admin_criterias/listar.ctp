@@ -3,6 +3,9 @@
 	$this->viewVars['title_for_layout'] = $title;
 	/* breadcrumbs */
 	//$this->Html->addCrumb('Manage', '/manage/');
+	if(isset($rep)){
+		$this->Html->addCrumb($rep['Repository']['name'], '/repositories/'.$rep['Repository']['internal_name']);
+	}
 	$this->Html->addCrumb($title);
 	/* end breadcrumbs */ 
 ?>
@@ -17,10 +20,14 @@
 
 <?php echo $this->Html->image('admin.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon" style="margin-top: 15px;"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
-<?php echo 
-	  	$this->element($menu, array(
-        	'current' => $current
-		));       
+
+<?php 
+	if(isset($rep)){
+		echo 
+		  	$this->element($menu, array(
+	        	'current' => $current
+			));
+	}  
 ?> 
 
 <!-- expert tools -->
@@ -87,6 +94,8 @@
 					<?php echo $this->Html->link('Edit', array('action' => 'edit', $cr['Criteria']['id'])); ?>
 					&nbsp; | &nbsp;   
 					<?php echo $this->Html->link('Remove', array('action' => 'remove', $cr['Criteria']['id']), array(), "Are you sure to delete this criteria?"); ?>
+					&nbsp; | &nbsp;   
+					<?php echo $this->Html->link('Set Experts', array('controller' => 'admin_experts', 'action' => 'list_notexperts', $cr['Criteria']['id'])); ?>
 				</div>  				
   			</td>
   		</tr>

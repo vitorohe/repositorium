@@ -2,20 +2,24 @@
 
 class AdminCriteriasController extends AppController {
     var $name = 'AdminCriterias';
-    var $uses = array('Criteria');
-    var $helpers = array('Text', 'Number');
+    var $uses = array('Criteria', 'CriteriasUser');
+    var $helpers = array('Text', 'Number', 'Paginator');
     var $paginate = array(
      'Criteria' => array(
          'limit' => 5,
          'order' => array(
               'name' => 'desc'
-            )
-        )
+          )
+      ),
+      'User' => array(
+      	 'limit' => 5,
+      	 'order' => array(
+      		   'name' => 'desc'
+      	  )
+      )
     );
 
     function beforeFilter() {
-    	
-    	$this->requireRepository();
     	
     	if(!$this->Session->check('Experto.isExperto')) {
     		$this->Session->setFlash('You don\'t have permission to access this page');
@@ -43,14 +47,14 @@ class AdminCriteriasController extends AppController {
 
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
-
+		
         $criterias = $this->findCriteriasUserinRepo($user, $repo);
         
         $this->data = $criterias;
 
         $params = array(
            'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['Criteria']['limit'],
-           'repo' => $this->requireRepository(),
+           'rep' => $repo,
            'menu' => 'menu_expert',
            'current' => 'criteria',
            'title' => 'Criteria'
@@ -118,7 +122,7 @@ class AdminCriteriasController extends AppController {
     }
     
     function findCriteriasUserinRepo($user = array(), $repo = null){
-    	if(empty($user) || is_null($repo))
+    	if(empty($user))
     		return $user;
     
     	$this->paginate['Criteria']['joins'] = array(
@@ -148,8 +152,11 @@ class AdminCriteriasController extends AppController {
     
     	$this->paginate['Criteria']['conditions'] = array(
     			'CriteriasUser.user_id' => $user['User']['id'],
-    			'CriteriasUser.quality_user_id' => 1,
-    			'Document.repository_id' => $repo['Repository']['id']);
+    			'CriteriasUser.quality_user_id' => 1);
+    	
+    	if(!is_null($repo)){
+    		$this->paginate['Criteria']['conditions']['Document.repository_id'] =  $repo['Repository']['id'];
+    	}
     
     	$this->paginate['Criteria']['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
     			'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');
@@ -159,6 +166,7 @@ class AdminCriteriasController extends AppController {
     
     	return $this->paginate();
     }
+
 
 }
 ?>
