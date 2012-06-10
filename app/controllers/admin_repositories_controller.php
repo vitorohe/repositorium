@@ -83,7 +83,7 @@ class AdminRepositoriesController extends AppController {
 			$this->e404();
 		
 		if($this->Repository->delete($id)) {
-			$this->Session->setFlash('Repository deleted successfuly');
+			$this->Session->setFlash('Repository deleted successfuly', 'flash_green');
 			CakeLog::write('activity', 'Repository [id='.$id.'] deleted');
 		} else {
 			$this->Session->setFlash('An error ocurred deleting the repository', 'flash_errors');
