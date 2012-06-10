@@ -101,6 +101,8 @@
 
 /* Interaction Cues
 ----------------------------------*/
+.ui-state-correct {border: 1px solid #6ade63; background: #fbf9ee url(images/ui-bg_flat_100_a9f9ae_40x100.png) 50% 35% repeat-x; color: #115a13; }
+.ui-state-correct a, .ui-widget-content .ui-state-correct a,.ui-widget-header .ui-state-correct a { color: #115a13; }
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #fad42e; background: #fbec88 url(images/ui-bg_flat_55_fbec88_40x100.png) 50% 50% repeat-x; color: #363636; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #363636; }
 .ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x; color: #cd0a0a; }
@@ -122,6 +124,7 @@
 .ui-state-active .ui-icon {background-image: url(images/ui-icons_f9bd01_256x240.png); }
 .ui-state-highlight .ui-icon {background-image: url(images/ui-icons_2e83ff_256x240.png); }
 .ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_cd0a0a_256x240.png); }
+.ui-state-correct .ui-icon {background-image: url(images/ui-icons_0aa90a_256x240.png); }
 
 /* positioning */
 .ui-icon-carat-1-n { background-position: 0 0; }

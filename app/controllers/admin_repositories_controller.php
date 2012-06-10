@@ -71,7 +71,7 @@ class AdminRepositoriesController extends AppController {
 			} elseif(!$this->Repository->save()) {
 				$this->Session->setFlash('An error ocurred saving the repository. Please, blame the developer', 'flash_errors');
 			} else {
-				$this->Session->setFlash('Repository saved');
+				$this->Session->setFlash('Repository saved', 'flash_green');
 				CakeLog::write('activity', 'Repository [id='.$id.'] edited');
 				$this->redirect('index');
 			}

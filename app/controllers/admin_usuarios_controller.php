@@ -61,7 +61,7 @@ class AdminUsuariosController extends AppController {
   	$this->set(compact('current', 'menu'));	
 	if (!empty($this->data)) {
 	  if ($this->User->save($this->data)) {
-		$this->Session->setFlash('User added successfully');		
+		$this->Session->setFlash('User added successfully', 'flash_green');		
 		$this->redirect('listar');
 	  } else {
 		$this->Session->setFlash($this->User->invalidFields(), 'flash_errors');		

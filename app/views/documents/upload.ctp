@@ -25,113 +25,11 @@ $this->Html->addCrumb($title);
         echo $this->element('attachFile'."/form", array('flag' => 'value'));
         echo("<div id='checked_attachFile'></div>");
     }
-    //  }
-    //}
-    //DocumentFileAttach.value
-    //echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
 ?>
 
 </br>
 </br>
 </br>
-
-<!--INI-->
-
-<script>
-$(function() {
-    var mycounter = 0;
-    var amount = 0;
-    var total = 0;
-    $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable",    
-    }).disableSelection();
-
-    $( "#sortable3, #sortable4" ).sortable({
-        connectWith: ".connectedSortablec",    
-    }).disableSelection();
-
-    $("#sortable2").sortable({
-        update: function(event, ui) {
-            mycounter = 0;
-            amount = 0;
-            if($('#amount').val() == "")
-                amount = 0;
-            else
-                amount = parseInt($('#amount').val());
-            $('#sortable2 li').each(function(index){
-                var start = $(this).text().indexOf('-')+1;
-                var end = $(this).text().indexOf('points')-1;
-                mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            });
-            $('#sortable4 li').each(function(index){
-                var start = $(this).text().indexOf('-')+1;
-                var end = $(this).text().indexOf('points')-1;
-                mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            });
-            if(mycounter == 0) {
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            }
-        }
-    });
-
-    $("#sortable4").sortable({
-        update: function(event, ui) {
-            mycounter = 0;
-            amount = 0;
-            if($('#amount').val() == "")
-                amount = 0;
-            else
-                amount = parseInt($('#amount').val());
-            $('#sortable2 li').each(function(index){
-                var start = $(this).text().indexOf('-')+1;
-                var end = $(this).text().indexOf('points')-1;
-                mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            });
-            $('#sortable4 li').each(function(index){
-                var start = $(this).text().indexOf('-')+1;
-                var end = $(this).text().indexOf('points')-1;
-                mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            });
-            if(mycounter == 0) {
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
-            }
-        }
-    });
-
-    $('#amount').keyup(function() {
-        amount = 0;
-        if($('#amount').val() == "")
-            amount = 0;
-        else
-            amount = parseInt($('#amount').val());
-        total = mycounter*amount;
-        $('#total').val(total);
-      
-    });
-
-    $('form').submit(function(){ 
-        $('#thedata').val($( "#sortable2" ).sortable("serialize"));
-        $('#thedata2').val($( "#sortable4" ).sortable("serialize"));
-    });
-
-});
-</script>
 
 <!--Search box-->
 <div id="container">
@@ -227,12 +125,3 @@ $(function() {
 </fieldset>
 
 <br />
-
-<!-- 
-<div class="ui-widget">
-    <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 10px .7em;"> 
-        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-        <strong>Hey!</strong> You may add more tags separating them by commas (,)</p>
-    </div>
-</div>
--->

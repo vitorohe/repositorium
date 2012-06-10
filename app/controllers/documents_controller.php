@@ -514,7 +514,7 @@ class DocumentsController extends AppController {
     		}
   		//if(false){}
   		else{
-    		$this->Session->setFlash('Document saved successfully');
+    		$this->Session->setFlash('Document saved successfully', 'flash_green');
   		}
   		$this->_clean_session();
   		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['internal_name']));
