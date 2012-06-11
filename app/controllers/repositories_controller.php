@@ -66,11 +66,8 @@ class RepositoriesController extends AppController {
 						'RepositoriesUser.activation_id' => 'A'),
 	 					'recursive' => -1 
 				));				
-				//$watching = $r['RepositoriesUser']['watching'];
-				/*----------------------------INI------------------------------*/
-				$watching = $r;
 				
-				/*----------------------------FIN------------------------------*/
+				$watching = $r;
 			}
 			
 			// stats

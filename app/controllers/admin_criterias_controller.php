@@ -123,32 +123,7 @@ class AdminCriteriasController extends AppController {
     
     function findCriteriasUserinRepo($user = array(), $repo = null){
     	if(empty($user))
-    		return $user;
-    
-    	$this->paginate['Criteria']['joins'] = array(
-    			array('table' => 'criterias_users',
-    					'alias' => 'CriteriasUser',
-    					'type' => 'inner',
-    					'conditions' => array(
-    							'CriteriasUser.criteria_id = Criteria.id'
-    					)
-    			),
-    			array(
-    					'table' => 'criterias_documents',
-    					'alias' => 'CriteriasDocument',
-    					'type' => 'inner',
-    					'conditions' => array(
-    							'CriteriasDocument.criteria_id = Criteria.id')
-    			),
-    			array(
-    					'table' => 'documents',
-    					'alias' => 'Document',
-    					'type' => 'inner',
-    					'conditions' => array(
-    							'Document.id = CriteriasDocument.document_id')
-    			)
-    	);
-    
+    		return $user;    
     
     	$this->paginate['Criteria']['conditions'] = array(
     			'CriteriasUser.user_id' => $user['User']['id'],
@@ -156,7 +131,42 @@ class AdminCriteriasController extends AppController {
     	
     	if(!is_null($repo)){
     		$this->paginate['Criteria']['conditions']['Document.repository_id'] =  $repo['Repository']['id'];
-    	}
+
+            $this->paginate['Criteria']['joins'] = array(
+                array('table' => 'criterias_users',
+                        'alias' => 'CriteriasUser',
+                        'type' => 'inner',
+                        'conditions' => array(
+                                'CriteriasUser.criteria_id = Criteria.id'
+                        )
+                ),
+                array(
+                        'table' => 'criterias_documents',
+                        'alias' => 'CriteriasDocument',
+                        'type' => 'inner',
+                        'conditions' => array(
+                                'CriteriasDocument.criteria_id = Criteria.id')
+                ),
+                array(
+                        'table' => 'documents',
+                        'alias' => 'Document',
+                        'type' => 'inner',
+                        'conditions' => array(
+                                'Document.id = CriteriasDocument.document_id')
+                )
+            );
+    	}else{
+
+            $this->paginate['Criteria']['joins'] = array(
+                array('table' => 'criterias_users',
+                        'alias' => 'CriteriasUser',
+                        'type' => 'inner',
+                        'conditions' => array(
+                                'CriteriasUser.criteria_id = Criteria.id'
+                        )
+                )
+            );
+        }
     
     	$this->paginate['Criteria']['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
     			'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained');

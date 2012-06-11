@@ -19,18 +19,15 @@
         <div class="yui-u">
         	<div class="padded">
 				<strong class="mini-header">Your criterias</strong>
-				<!--<?php if(count($collaborator_repos) > 0): ?>
+				<?php if(count($your_criterias) > 0): ?>
 				<ul>
-					<?php foreach($collaborator_repos as $r) { ?>
-					<li><?php echo $this->Repo->link($r['Repository']['name'], $r['Repository']['internal_name']); ?></li>
+					<?php foreach($your_criterias as $cr) { ?>
+					<li><?php echo $this->Html->link(Sanitize::html($cr['Criteria']['name']), array('controller' => 'admin_criterias', 'action' => 'edit', $cr['Criteria']['id']));?></li>
 					<?php } ?>
 				</ul>
 				<?php else: ?>
-				<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't repositories here</span></div>
-				<?php endif; ?>-->
-                <!--INI-->
-    			<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't criterias here</span></div>
-                <!--FIN-->
+				<div style="text-align: center; font-style: italic; color: #777;"><span>There aren't criterias here</span></div>
+				<?php endif; ?>
 			</div>			
 	    </div>
     </div>

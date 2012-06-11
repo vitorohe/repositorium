@@ -53,7 +53,7 @@ class PagesController extends AppController {
  * @var array
  * @access public
  */
-	var $uses = array('Repository', 'RepositoriesUser');
+	var $uses = array('Repository', 'RepositoriesUser', 'CriteriasUser');
 	
 /**
  * @var string 
@@ -133,12 +133,18 @@ class PagesController extends AppController {
 			'conditions' => $yours,
 			'recursive' => -1
 		));
-		
-		/*$this->Expert->unbindModel(array('belongsTo' => array('User')));
-		$collaborator_repos = $this->Expert->find('all', array(
-			'conditions' => $collaborator,
-		));*/
 
+		$your_criterias = $this->CriteriasUser->find('all', array(
+			'conditions' => array(
+				'CriteriasUser.user_id' => $user['User']['id'],
+				'CriteriasUser.quality_user_id' => 1
+				)
+		));
+
+		if(!$this->Session->read('Experto.isExperto') && !empty($your_criterias))
+			$this->Session->write('Experto.isExperto', true);	
+
+		
 		$this->RepositoriesUser->unbindModel(array('belongsTo' => array('User')));
 		
 		$watching_repos = $this->RepositoriesUser->find('all', array(
@@ -152,7 +158,7 @@ class PagesController extends AppController {
 			'order' => 'Repository.created desc'
 		));
 		
-		$this->set(compact('your_repos', 'collaborator_repos', 'watching_repos', 'latest_repos'));
+		$this->set(compact('your_repos', 'your_criterias','collaborator_repos', 'watching_repos', 'latest_repos'));
 		$this->render('home_user');
 	}
 	

@@ -94,11 +94,7 @@ class AppController extends Controller {
 			$this->Session->delete('Expert');
 			
 			$this->Session->write('User.id', $user['User']['id']);
-			/*$this->Session->write('User.first_name', $user['User']['first_name']);
-			$this->Session->write('User.last_name', $user['User']['last_name']);*/
-			/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
 			$this->Session->write('User.username', $user['User']['username']);
-			/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
 
 			if($this->isAdmin()) {
 				$this->Session->write('User.esAdmin', true);
@@ -111,11 +107,8 @@ class AppController extends Controller {
 				$this->Session->write('User.points', 0);//$this->User->get_user_points($user['User']['id'], $repository['Repository']['id']));
 			}
 			
-			//$this->Session->setFlash('Welcome, ' . $user['User']['first_name']);
-			/*+++++++++++++++++++++++++++++++++INI++++++++++++++++++++++++++++++++*/
 			$this->Session->setFlash('Welcome, ' . $user['User']['username']);
-			/*+++++++++++++++++++++++++++++++++FIN++++++++++++++++++++++++++++++++*/
-			
+
 			CakeLog::write('activity',
 				'User '. $user['User']['email'] . ' (' .$user['User']['id'] . ') has logged in');
 			return true;

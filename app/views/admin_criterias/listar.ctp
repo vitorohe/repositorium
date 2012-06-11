@@ -30,7 +30,7 @@
 	}  
 ?> 
 
-<!-- expert tools -->
+
 <div id="expert-tools">
 	<!-- number of items -->
 	<div class="adm-limit" style="float: left">
@@ -49,32 +49,20 @@
 		</form>
 	</div>
 	<!-- end number of items -->
-	
-	<!-- mass edit -->
-	<div class="adm-mass">
-		<!--<span class="adm-opt">Selected Documents: </span>-->
-		<?php		
-		//	echo '&nbsp;&nbsp;&nbsp;';
-		//	echo $this->Form->button('Add new criteria', array('id' => 'adm-new-criteria'));
-		?>
-	</div>
-	<!-- end mass edit-->	
 </div>
-<!-- end expert tools -->
+
 
 <!-- core table -->
 <table id="tabla_documentos" class="ui-widget ui-widget-content tabla" style="width: 100%">
   <thead>
 	<tr class="ui-widget-header">
-	  <!--<th width="10" style="text-align:center;font-size:9px"><input type="checkbox" id="select-all" /><label for="select-all">select</label></th>--> 
 	  <th width="250"><?php echo $this->Paginator->sort('Name', 'Criteria.name'); ?></th>
-	  <th width="550"><?php echo $this->Paginator->sort('Question', 'Criteria.question'); ?></th>
+	  <th width="500"><?php echo $this->Paginator->sort('Question', 'Criteria.question'); ?></th>
 	  <th width="180" title=""><?php echo $this->Paginator->sort('Upload score', 'Criteria.upload_score'); ?></th>
 	  <th width="180"><?php echo $this->Paginator->sort('Download score', 'Criteria.download_score');?></th>
 	  <th width="180"><?php echo $this->Paginator->sort('Collaboration score', 'Criteria.collaboration_score');?></th>
 	  <th width="180"><?php echo $this->Paginator->sort('Points', 'CriteriasUser.score_obtained');?></th>
-	  <!--<th width="220"><?php //echo $this->Paginator->sort();?></th> -->
-	  <th width="150">Options</th>
+	  <th width="200">Options</th>
 	</tr>
   </thead>
   <tbody>
