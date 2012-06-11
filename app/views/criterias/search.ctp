@@ -15,7 +15,8 @@ $this->viewVars['title_for_layout'] = $title;
         $( "#dialog-confirm" ).dialog({
             autoOpen: false,
             resizable: false,
-            height:160,
+            height:300,
+            width:350,
             modal: true,
             buttons: {
                 "Search": function() {
@@ -29,7 +30,35 @@ $this->viewVars['title_for_layout'] = $title;
 
         $('form#CriteriaProcessForm').submit(function(e){
             e.preventDefault();
-            $("p#total-dialog").text($("#total").val());
+            var text_dialog = "";
+            if($('#amount').val() == "") {
+                amount = 0;
+                text_dialog +="\t\t  0 points";
+            }
+            else {
+                text_dialog += "Criterias:\n";
+
+                amount = parseInt($('#amount').val());
+                $('#sortable2 li').each(function(index){
+                    var start = $(this).text().indexOf('-')+1;
+                    var end = $(this).text().indexOf('points')-1;
+                    mycounter = parseInt($(this).text().substring(start, end));
+                    var criteria = $(this).text().substring(0, start-2);
+                    text_dialog += "   " + criteria + ":\n\t" + mycounter + " points x " + amount + " = " + mycounter*amount + " points\n";
+                });
+
+                text_dialog += "Categories:\n";
+
+                $('#sortable4 li').each(function(index){
+                    var start = $(this).text().indexOf('-')+1;
+                    var end = $(this).text().indexOf('points')-1;
+                    mycounter = parseInt($(this).text().substring(start, end));
+                    var category = $(this).text().substring(0, start-2);
+                    text_dialog += "   " + category + ":\n\t" + mycounter + " points x " + amount + " = " + mycounter*amount + " points\n";
+                });
+            }
+
+            $("pre#total-dialog").text(text_dialog);
             $('#dialog-confirm').dialog('open');
         });
 
@@ -132,8 +161,6 @@ $this->viewVars['title_for_layout'] = $title;
                         <label for="counter">Total points (1 document):</label>
                         <input type="text" disabled="disabled" id=
                         "counter" value="0"/>
-                        <label for="total">Total points to spend:</label>
-                        <input type="text" disabled="disabled" id="total" name="data[Payed_search][toal_spent_points]" value="0"/>
                     </td>
                 </tr>
             </tbody>
@@ -145,7 +172,7 @@ $this->viewVars['title_for_layout'] = $title;
 </div>
 <!--Search box-->
 <div id="dialog-confirm" title="Search documents">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <p id="total-dialog" style="color: red; font-size:1.5em;"></p> points. Are you sure?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog" style="text-align:left; color: #036633; font-size:1.0em;"></pre><br/><br/>Are you sure?</p>
 </div>
 <?php echo $this->Form->submit('Search'); ?> 
 <?php }?>
