@@ -161,6 +161,7 @@ class Document extends AppModel {
 			$this->create();
 	
 			$there_are_criterias = false;
+			$there_are_criterias_from_cat = false;
 			$dataSource = $this->getDataSource();
 			$dataSource->begin($this); // BEGIN
 			if(isset($data['Criteria']['criterias']) && !empty($data['Criteria']['criterias'])) {
