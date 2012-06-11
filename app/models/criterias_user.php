@@ -211,5 +211,54 @@ class CriteriasUser extends AppModel {
 		
 		return 'success';
 	}
+	
+	function getExpertsSubquery($critid = null, $non_experts){
+		
+		$dbo = $this->getDataSource();
+		
+		$options['recursive'] = -1;
+		$options['limit'] = $options['offset'] = $options['order'] = $options['group'] = null;
+		$options['table'] = $dbo->fullTableName($this);
+		$options['alias'] = 'CriteriasUser';
+		 
+		$options['conditions'] = array('CriteriasUser.criteria_id' => $critid, 'CriteriasUser.quality_user_id' => 1);
+		 
+		$options['fields'] = array('DISTINCT CriteriasUser.user_id');
+		 
+		$subquery = $dbo->buildStatement($options, $this);
+		if($non_experts){
+			$subquery = ' `User`.`id` NOT IN (' . $subquery . ') ';
+		}
+		else 
+			$subquery = ' `User`.`id` IN (' . $subquery . ') ';
+		$subQueryExpression = $dbo->expression($subquery);
+		
+		return $subQueryExpression;
+	}
+	
+	function setExpert($userid, $criteriaid, $qu){
+		$crus = $this->find('first', array('conditions' => array('CriteriasUser.user_id' => $userid, 'CriteriasUser.criteria_id' => $criteriaid), 
+				'recursive' => -1));	
+		
+		if(is_null($crus) || empty($crus)){
+			$crus['CriteriasUser']['activation_id'] = 'A';
+			$crus['CriteriasUser']['internalstate_id'] = 'A';
+			$crus['CriteriasUser']['score_obtained'] = 0;
+			$crus['CriteriasUser']['successful_evaluation'] = 0;
+			$crus['CriteriasUser']['negative_evaluation'] = 0;
+			$crus['CriteriasUser']['user_id'] = $userid;
+			$crus['CriteriasUser']['criteria_id'] = $criteriaid;
+		}
+		else{
+			$this->id = $crus['CriteriasUser']['id'];
+		}
+		$crus['CriteriasUser']['quality_user_id'] = $qu;
+
+		if(!$this->save($crus)){
+			return null;
+		}
+		
+		return true;
+	}
 }
 ?>

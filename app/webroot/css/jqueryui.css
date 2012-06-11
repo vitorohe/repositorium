@@ -109,6 +109,7 @@
 .ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+.ui-state-correct, .ui-widget-content .ui-state-correct, .ui-widget-header .ui-state-correct {border: 1px solid #0ACC6F; background: #E2FFD2; color: #215317; }
 
 /* Icons
 ----------------------------------*/
@@ -122,6 +123,7 @@
 .ui-state-active .ui-icon {background-image: url(images/ui-icons_f9bd01_256x240.png); }
 .ui-state-highlight .ui-icon {background-image: url(images/ui-icons_2e83ff_256x240.png); }
 .ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_cd0a0a_256x240.png); }
+.ui-state-correct .ui-icon, .ui-state-correct-text .ui-icon {background-image: url(images/ui-icons_72b42d_256x240.png); }
 
 /* positioning */
 .ui-icon-carat-1-n { background-position: 0 0; }
