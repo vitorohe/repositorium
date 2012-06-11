@@ -30,7 +30,7 @@
 
       //JQuery for search-box
       echo $this->Html->script('jquery-search');
-
+      echo $this->Html->script('search_box');
  ?>
   <script type="text/javascript" language="javascript">
     $(document).ready(function() {

@@ -147,7 +147,7 @@ class CriteriasController extends AppController {
     $this->data['Criteria']['repository_id'] = $repo['Repository']['id'];
 
     if($this->Criteria->save($this->data)) {
-      $this->Session->setFlash('Criteria added successfully');
+      $this->Session->setFlash('Criteria added successfully', 'flash_green');
       CakeLog::write('activity', 'Criteria "'.$this->data['Criteria']['question'].'" was added');
     } else {
       $this->Session->setFlash('An error occurred saving the criteria', 'flash_errors');
@@ -182,7 +182,7 @@ class CriteriasController extends AppController {
     }
   } else {
     if ($this->Criteria->save($this->data)) {
-    $this->Session->setFlash('Criteria '.$id.' was successfully modified');
+    $this->Session->setFlash('Criteria '.$id.' was successfully modified', 'flash_green');
     CakeLog::write('activity', 'Criteria '.$id.' was modified');
     $this->redirect(array('controller' => 'criterias', 'action' => 'index'));
     }
@@ -234,7 +234,7 @@ class CriteriasController extends AppController {
           $this->redirect('/');
         }
         
-        $this->Session->setFlash('Criteria successfully created');
+        $this->Session->setFlash('Criteria successfully created', 'flash_green');
         $this->redirect('/');
     
       } else {

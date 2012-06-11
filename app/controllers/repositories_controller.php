@@ -290,7 +290,7 @@ class RepositoriesController extends AppController {
 				}
 				if(!empty($this->data['Repository']['extension'])) {
 					$restrictions['extension'] = $this->data['Repository']['extension'];
-					$restrictions = trim($restrictions);
+					$restrictions['extension'] = trim($restrictions['extension']);
 
 				} else {
 					$restrictions['extension'] = "*";
@@ -312,13 +312,12 @@ class RepositoriesController extends AppController {
 					$this->redirect('/');
 				}
 
-				if(!empty($restrictions))
-
+				if(!empty($restrictions)){
 					if(!$this->RepositoryRestriction->saveRestriction($restrictions, $user['User']['id'], $repository['Repository']['id'])) {
 						$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer');
 						$this->redirect('/');
 					}
-
+				}
 
 				if(Configure::read('App.subdomains')) {
 					$dom = Configure::read('App.domain');

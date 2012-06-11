@@ -76,7 +76,7 @@ class CategoriesController extends AppController {
 	  	$this->data['Criteria']['repository_id'] = $repo['Repository']['id'];
 
 	  	if($this->Criteria->save($this->data)) {
-	  		$this->Session->setFlash('Criteria added successfully');
+	  		$this->Session->setFlash('Criteria added successfully', 'flash_green');
 	  		CakeLog::write('activity', 'Criteria "'.$this->data['Criteria']['question'].'" was added');
 	  	} else {
 	  		$this->Session->setFlash('An error occurred saving the criteria', 'flash_errors');
@@ -200,7 +200,7 @@ class CategoriesController extends AppController {
 	  			$this->Session->setFlash('An error has occurred, please blame the developer', 'flash_errors');
 	  			$this->redirect($this->referer());
 	  		}
-	  		$this->Session->setFlash('Category succesfully created');
+	  		$this->Session->setFlash('Category succesfully created','flash_green');
 	  		if(is_null($repo)){
 	  			$this->redirect('index.php');
 	  		}

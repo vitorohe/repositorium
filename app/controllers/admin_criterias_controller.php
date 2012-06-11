@@ -79,7 +79,7 @@ class AdminCriteriasController extends AppController {
 	        $this->Criteria->id = $id;
 	        
 	        if ($this->Criteria->save($this->data)) {
-	            $this->Session->setFlash('Criteria '.$this->data['Criteria']['name'].' was successfully modified');
+	            $this->Session->setFlash('Criteria '.$this->data['Criteria']['name'].' was successfully modified', 'flash_green');
 	            CakeLog::write('activity', 'Criteria '.$this->data['Criteria']['name'].' was modified');
 	            $this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
 	        }
@@ -106,7 +106,7 @@ class AdminCriteriasController extends AppController {
     		$this->e404();
     
     	if($this->Criteria->delete($id)) {
-    		$this->Session->setFlash('Criteria deleted successfuly');
+    		$this->Session->setFlash('Criteria deleted successfuly', 'flash_green');
     		CakeLog::write('activity', 'Criteria [id='.$id.'] deleted');
     	} else {
     		$this->Session->setFlash('An error ocurred deleting the criteria', 'flash_errors');

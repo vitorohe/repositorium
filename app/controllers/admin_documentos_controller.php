@@ -484,7 +484,7 @@ class AdminDocumentosController extends AppController {
 		$this->Session->setFlash(nl2br($str_doc1."\n".$str_doc2));
 		CakeLog::write('activity', 'Document '.$id_wdoc2.'\'s content modified');
 		}else{
-		$this->Session->setFlash('Document "'. $this->data['Document']['title'] .'" edited successfully');
+		$this->Session->setFlash('Document "'. $this->data['Document']['title'] .'" edited successfully', 'flash_green');
 		}
 		CakeLog::write('activity', 'Document '.$id.'\'s content modified');
 		  if($warned > 0){
