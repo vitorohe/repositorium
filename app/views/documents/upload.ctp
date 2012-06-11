@@ -10,8 +10,64 @@ $this->Html->addCrumb($title);
 <?php echo $this->Html->image('add_doc.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon" style="margin-top: 15px;"><?php echo $title;?></h1>
 <div class="clearicon"></div>
 
+
+<script>
+    $(function() {
+
+        $( "#dialog:ui-dialog" ).dialog( "destroy" );
+    
+        $( "#dialog-confirm" ).dialog({
+            autoOpen: false,
+            resizable: false,
+            height:300,
+            width:350,
+            modal: true,
+            buttons: {
+                "Upload": function() {
+                    document.getElementById('DocumentUploadForm').submit();
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+
+        $('form#DocumentUploadForm').submit(function(e){
+            e.preventDefault();
+            var text_dialog = "";
+
+            text_dialog += "Criterias:\n";
+
+            amount = parseInt($('#amount').val());
+            $('#sortable2 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter = parseInt($(this).text().substring(start, end));
+                var criteria = $(this).text().substring(0, start-2);
+                text_dialog += "   " + criteria + ":\n\t" + mycounter + " points\n";
+            });
+
+            text_dialog += "Categories:\n";
+
+            $('#sortable4 li').each(function(index){
+                var start = $(this).text().indexOf('-')+1;
+                var end = $(this).text().indexOf('points')-1;
+                mycounter = parseInt($(this).text().substring(start, end));
+                var category = $(this).text().substring(0, start-2);
+                text_dialog += "   " + category + ":\n\t" + mycounter + " points\n";
+            });
+            
+
+            $("pre#total-dialog").text(text_dialog);
+            $('#dialog-confirm').dialog('open');
+        });
+
+    });
+</script>
+
+
 <fieldset class="datafields">
-<?php echo $this->Form->create(null, array('url' => '/documents/upload', 'type' => 'file', 'inputDefaults' => array('error' => false)));?>
+<?php echo $this->Form->create(null, array('url' => '/documents/upload', 'type' => 'file', 'inputDefaults' => array('error' => false), "id" => "DocumentUploadForm"));?>
 <?php echo $this->Form->input('Document.name', array('class' => 'ingresar-documento', 'label' => 'Title', 'default' => '', 'size' => 50, 'onChange'=>"CheckTitle(DocumentTitle.value)"));?> 
 <?php echo $ajax->div('checked_title'); 
       echo $ajax->divEnd('checked_title'); ?>
@@ -120,7 +176,9 @@ $this->Html->addCrumb($title);
     </div>
 </div>
 <!--Search box-->
-
+<div id="dialog-confirm" title="Add document">
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog" style="text-align:left; color: #036633; font-size:1.0em;"></pre><br/><br/>Are you sure?</p>
+</div>
 <?php echo $this->Form->end('Done'); ?>
 </fieldset>
 
