@@ -111,8 +111,7 @@ class AdminExpertsController extends AppController {
     			'current' => 'experts',
     			'title' => 'Criteria'
     	);
-    	print_r($user['User']['id']. ' ');
-    	print_r($id);
+
     	$this->set($params);
     	$this->set(compact('users', 'criteria', 'creator', 'creator_id'));
     
