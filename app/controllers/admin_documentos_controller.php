@@ -12,7 +12,7 @@
 class AdminDocumentosController extends AppController {
   
   var $uses = array('Criteria', 'Document', 'CriteriasDocument', /*'Tag',*/ 'User', /*'Expert',*/ 'Attachfile'/*, 'ConstituentsKit'*/);
-  var $helpers = array('Text', 'Number');
+  var $helpers = array('Text', 'Number','Mime');
   var $paginate = array(
 	'Criteria' => array(
 	  'limit' => 5,
@@ -562,7 +562,7 @@ class AdminDocumentosController extends AppController {
   
   function reset_only($id = null, $criteria = null) {
   	$this->_reset_stats($id, $criteria);
-  	$this->Session->setFlash('Stats restarted successfully');
+  	$this->Session->setFlash('Stats restarted successfully', 'flash_green');
   	$this->redirect($this->referer());
   }
   
@@ -577,7 +577,7 @@ class AdminDocumentosController extends AppController {
   				$criteria = $ids[1];	
   				$this->_reset_stats($id, $criteria);  			 
   			}
-  			$this->Session->setFlash('Documents\' statistics restarted successfully');
+  			$this->Session->setFlash('Documents\' statistics restarted successfully','flash_green');
   			
   		/* validate docs */
   		} else if(strcmp($this->data['Action']['mass_action'], 'validate') == 0) {
@@ -587,7 +587,7 @@ class AdminDocumentosController extends AppController {
   				$criteria = $ids[1];
   				$this->validate_document($id, $criteria, false);
   			}  	
-  			$this->Session->setFlash('Documents changed successfully');
+  			$this->Session->setFlash('Documents changed successfully', 'flash_green');
   			
   		/* delete docs */
   		} else if(strcmp($this->data['Action']['mass_action'], 'invalidate') == 0) {
@@ -597,7 +597,7 @@ class AdminDocumentosController extends AppController {
   				$criteria = $ids[1];
   				$this->validate_document($id, $criteria ,false, false);
   			}  			
-  			$this->Session->setFlash('Documents changed successfully');
+  			$this->Session->setFlash('Documents changed successfully', 'flash_green');
   			
   		/* default */
   		} else {
