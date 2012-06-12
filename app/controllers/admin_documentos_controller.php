@@ -531,13 +531,16 @@ class AdminDocumentosController extends AppController {
 	  $this->CriteriasDocument->set(array(		
 		$field => $bool
 	  ));
+
 	  
-	  if(!$this->CriteriasDocument->save())
-		return false;
+	  if(!$this->CriteriasDocument->save()){
+	  	return false;
+	  }
 	
 	  CakeLog::write('activity', "CriteriasDocument id=$id modified: [field: $field, new value: $bool]");
 	}	
 	if($redirect) $this->redirect($this->referer());
+	return true;
   }
 
   function _reset_stats($id = null, $criteria = null) {
@@ -578,11 +581,11 @@ class AdminDocumentosController extends AppController {
   			
   		/* validate docs */
   		} else if(strcmp($this->data['Action']['mass_action'], 'validate') == 0) {
-  			foreach($this->data['Document'] as $doc) {  				
+  			foreach($this->data['Document'] as $d) {  				
   				$ids = explode(' ', $d['id']);
   				$id = $ids[0];
   				$criteria = $ids[1];
-  				$this->validate_document($id, $criteria ,false);
+  				$this->validate_document($id, $criteria, false);
   			}  	
   			$this->Session->setFlash('Documents changed successfully');
   			
@@ -614,7 +617,10 @@ class AdminDocumentosController extends AppController {
 				'CriteriasDocument.criteria_id' => $criteria)			
 		));
 						
-		$this->set_field('answer', $doc['CriteriasDocument']['id'] , $validate ? 1 : 2, false);
+		if(!$this->set_field('answer', $doc['CriteriasDocument']['id'] , $validate ? 1 : 2, false)){
+			$this->Session->setFlash('An error has occurred (in)validating a document', 'flash_errors');
+			$this->redirect($this->referer());
+		}
   	}
   	if($redirect) $this->redirect($this->referer());
   }

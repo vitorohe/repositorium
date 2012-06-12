@@ -245,6 +245,14 @@
 			<div class="created-by">
 				Created on <?php //echo $d['Document']['created']; ?> by <?php //echo $d['Document']['nombre_autor']; ?>. 
 				<br>From Criteria: <?php echo $d['Criteria']['name']?>
+				<br><?php 
+				if($d['CriteriasDocument']['answer'] == 1){
+					echo 'Validated'; 
+				}else if($d['CriteriasDocument']['answer'] == 2){
+					echo 'Invalidated';
+				}else{
+					echo 'Without evaluation';
+				} ?>
 			</div>
 		</td>
 		<td>
