@@ -212,7 +212,7 @@ class CriteriasController extends AppController {
       $cu = array('CriteriasUser' => array(
             'successful_evaluation' => 0,
             'negative_evaluation' => 0,
-            'score_obtained' => 0,
+            'score_obtained' => 3*$this->data['Criteria']['upload_score'],
             'activation_id' => 'A',
             'internalstate_id' => 'A',
             'user_id' => $user['User']['id'],

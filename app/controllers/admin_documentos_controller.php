@@ -236,7 +236,14 @@ class AdminDocumentosController extends AppController {
   					'type' => 'inner',
   					'conditions' => array(
   							'Document.id = CriteriasDocument.document_id')
-  			)
+  			),
+        array(
+            'table' => 'users',
+            'alias' => 'User',
+            'type' => 'inner',
+            'conditions' => array(
+                'Document.user_id = User.id')
+        )
   	);
   	
   	
@@ -256,7 +263,8 @@ class AdminDocumentosController extends AppController {
   	$this->paginate['Criteria']['fields'] = array('DISTINCT Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.upload_score',
   			'Criteria.download_score', 'Criteria.collaboration_score', 'CriteriasUser.score_obtained', 'CriteriasDocument.no_eval',
   			'CriteriasDocument.yes_eval', 'CriteriasDocument.answer', 
-  			'CriteriasDocument.total_eval', 'Document.id', 'Document.description', 'Document.name');
+  			'CriteriasDocument.total_eval', 'Document.id', 'Document.description', 'Document.name', 'Document.register_date',
+        'User.username');
   	
   	
   	$this->paginate['Criteria']['recursive'] = -1;
