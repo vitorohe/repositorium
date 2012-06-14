@@ -34,6 +34,7 @@ class CriteriasController extends AppController {
     $this->set($params);  
   }
   
+  /* Searchs a document given a list of criterias, and extracts points to the user if this is successful */
   function search() {
     $repo = $this->requireRepository();
   
@@ -330,7 +331,8 @@ class CriteriasController extends AppController {
 
       $options['conditions'] = array(
           'CriteriasDocument.criteria_id' => $criteria_ids,
-          'Document.repository_id' => $repo['Repository']['id']);
+          'Document.repository_id' => $repo['Repository']['id'],
+      	  'CriteriasDocument.answer' => 1);
 
 
       $options['fields'] = array(
@@ -341,6 +343,7 @@ class CriteriasController extends AppController {
       $options['recursive'] = -1;
 
       $documents = $this->CriteriasDocument->find('all', $options);
+      
       $documents_with_files = array();
       foreach ($documents as $document) {
         $document['files'] = array();
