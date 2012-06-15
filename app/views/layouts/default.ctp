@@ -14,10 +14,7 @@
   <?php echo $this->Html->charset(); ?>
   <title><?php echo $title_for_layout; ?></title>
   <?php 
-    echo $this->Html->meta('icon');
-      //echo $this->Html->css('reset');
-      //echo $this->Html->css('style');
-      //echo $this->Html->css('tabla');
+      echo $this->Html->meta('icon');
       echo $this->Html->css('reset-fonts-grids.css');      
       //Include JQuery & JQueryUI
       echo $this->Html->script('jquery.min');
@@ -25,6 +22,7 @@
       echo $this->Html->css('anchors');
       echo $this->Html->css('jqueryui');
       echo $this->Html->css('style2');
+	    echo $this->Html->css('menu_template');
 
       echo $scripts_for_layout;
 
@@ -36,25 +34,7 @@
     $(document).ready(function() {
       $('.textboxlist-autocomplete-results').hide();
     });
-    
-  /*function add_textboxlist(selector){ 
-    $("" + selector).textboxlist({
-      unique : true,
-      bitsOptions : {
-        editable : {
-          addOnBlur : true, 
-          addKeys : [188]         
-          }},
-      plugins: {
-        autocomplete: {
-          minLength: 3,
-          queryRemote: true,
-          remote: {
-            url: '<?php echo $this->Html->url(array('controller' => 'tags', 'action' => 'autocomplete')); ?>'         
-          }
-      }}});
-  }*/
-  
+
   //Improve the flashMessage
   $("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");
 
@@ -96,36 +76,62 @@
                         &nbsp;&nbsp;
                     </ul>
                 </div>
-                <div class="box optionsbox">
-                    <!--<div class="nav form">                      
-                        &nbsp;&nbsp;&nbsp;
-                    </div>-->
-                    <ul class="nav subtopmenu">
-                      <li><?php echo $this->Html->link('Create new Category', array('controller' => 'categories', 'action' => 'create'));?></li> 
-                      <li><?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?></li>  
-                      <?php if($this->Session->check('Experto.isExperto')):?>
-                      <li><?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?></li>
-                      <?php endif;?>
-                      <!--INI-->
-                      <li><?php echo $this->Html->link('Search',array('controller' => 'criterias', 'action' => 'search')); ?></li>
-                      <!--FIN-->
-                      
-                      <?php if($this->Session->check('User.esAdmin')){ ?>
-                      <li><?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?></li>
-                      <?php }else if($this->Session->check('User.id')){ ?>
-                        <li><?php echo $this->Html->link('Manage my Documents', array('controller' => 'documents', 'action' => 'list_documents'));?></li>
-                      <?php } ?>
-                      <li><?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?></li>
-                      <?php if($this->Session->check('User.id') and $this->Session->read('User.id') > 1): ?>
-                      <li><?php echo $this->Html->link('Earn points', array('controller' => 'points', 'action' => 'earn')); ?></li>
-                      <?php endif; ?>
-                      &nbsp;&nbsp;
-                    </ul>                    
+                <div class="box optionsbox"> 
+					<ul id="menu-horizontal">
+						<li>
+							<a href="javascript:void(0);">Manage</a>
+                            <ul>
+                                <?php if ($this->Session->check('User.esAdmin')): ?>
+                                    <li>
+                                        <?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?>
+                                    </li>
+                                <?php elseif ($this->Session->check('User.id')): ?>
+                                    <li>
+                                        <?php echo $this->Html->link('Manage my Documents', array('controller' => 'documents', 'action' => 'list_documents'));?>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if ($this->Session->check('Experto.isExperto')): ?>
+                                    <li>
+                                        <?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?>
+                                    </li>
+                                <?php endif; ?>
+                            </ul>
+						</li>
+						<li>
+							<a href="javascript:void(0);">Documents</a>
+                            <ul>
+                                <li>
+									<?php echo $this->Html->link('Search',array('controller' => 'criterias', 'action' => 'search')); ?>
+								</li>
+								<li>
+									<?php echo $this->Html->link('Add document', array('controller' => 'documents', 'action' => 'upload'));?>
+								</li>
+                            </ul>
+						</li>
+						<li>
+							<a href="javascript:void(0);">New</a>
+							<ul>
+								<li>
+									<?php echo $this->Html->link('Create new Repository', array('controller' => 'repositories', 'action' => 'create'));?>
+								</li>
+								<li>
+									<?php echo $this->Html->link('Create new Category', array('controller' => 'categories', 'action' => 'create'));?>
+								</li>
+								<li>
+									<?php echo $this->Html->link('Create new Criteria', array('controller' => 'criterias', 'action' => 'create'));?>
+								</li>
+							</ul>
+						</li>
+						<?php if ($this->Session->check('User.id') && $this->Session->read('User.id') > 1): ?>
+							<li>
+								<?php echo $this->Html->link('Earn points', array('controller' => 'points', 'action' => 'earn')); ?>
+							</li>
+						<?php endif; ?>
+					</ul>
                 </div>
             </div>
         </div>
-
-        <div id="bd">   
+        <div id="bd">
             <div class="content">
             <!-- real content -->
             <div id="breadcrumb"><?php echo $this->Html->getCrumbs(' > ','Home'); ?></div>
