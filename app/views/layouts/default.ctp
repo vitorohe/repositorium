@@ -29,6 +29,12 @@
       //JQuery for search-box
       echo $this->Html->script('jquery-search');
       echo $this->Html->script('search_box');
+
+      //JS fancybox
+      echo $this->Html->script('fancybox/jquery.fancybox');
+
+      //CSS fancybox
+      echo $this->Html->css('fancybox/jquery.fancybox');
  ?>
   <script type="text/javascript" language="javascript">
     $(document).ready(function() {
@@ -155,7 +161,7 @@
              ?>-->
             </div>
       </div>
-
+      
         <div id="ft">
             <div class="footer">
               <div class="box footerbox">

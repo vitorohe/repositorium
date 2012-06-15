@@ -230,8 +230,8 @@ class Attachfile extends AppModel {
 						'location' => '/uploaded_files/document_'.$document_id,
 						'activation_id' => 'A',
 						'internalstate_id' => 'A',
-						'document_id' => $document_id
-						)
+						'document_id' => $document_id,
+						'extension' => $extension						)
 					)
 				);
 
