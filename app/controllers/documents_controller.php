@@ -51,9 +51,8 @@ class DocumentsController extends AppController {
   }
   
   /**
-   * 
-   * @TODO points handling
-   * @TODO dispatch handling
+   * It allows displaying the available categories and criterias
+   * to add on a document. It also gives the repository's restricitions.
    */
   function upload() {
 
@@ -163,46 +162,6 @@ class DocumentsController extends AppController {
   	$this->set(compact('criterias', 'restrictions'));    
   }
 
-  
-  /**
-   * 
-   */
-  function download() {
-  	if($this->Session->check('Search.document_ids')) {
-  		$document_ids = $this->Session->read('Search.document_ids');  		
-  		
-  		$repo = $this->requireRepository();
-  		$doc_pack = $repo['Repository']['documentpack_size'];
-  		  		
-  		$docs = array();  		
-  		foreach($document_ids as $id) {
-  			$docs[] = $this->Document->find('first', array(
-  		 		'conditions' => array('Document.id' => $id),
-  		  		'recursive' => -1,)
-  			);
-  		}
-  		
-  		// if there are more documents, shuffle them
-  		if(count($docs) > $doc_pack) {
-  			shuffle($docs);
-  			$docs_ids = array_rand($docs, $doc_pack);
-  			$docs_ids_array = (is_array($docs_ids) ? $docs_ids : array($docs_ids));
-  			$docs = array_intersect_key($docs, array_flip($docs_ids_array));
-  		}
-  		
-  		// cgajardo: constituents to be attached
-  		$constituents = $this->ConstituentsKit->find('all', array('conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 'recursive' => 2, 'fields' => array("Constituent.sysname")));
-  		
-  		// cgajardo: attach folios that belongs to each document
-  		foreach ($docs as &$doc){
-  			$doc['files'] = array();
-  			$doc['files'] = $this->Attachfile->find('all' , array('conditions' => array('Attachfile.document_id' => $doc['Document']['id']), 'recursive' => -1, 'fields' => array("Attachfile.id","Attachfile.filename","Attachfile.type")));
-  		}
-  		
-  		$this->set(compact('docs', 'doc_pack', 'constituents'));
-  		$this->_clean_session();  			
-  	}
-  }
   
   /**
    * 
@@ -369,6 +328,11 @@ class DocumentsController extends AppController {
   }
 
 
+  /**
+   * Check the if the attached files satisfy the restrictions .
+   *
+   */
+
   function checkRestrictions(&$data, $restrictions = null) {
 
     if(empty($data)) {
@@ -388,6 +352,8 @@ class DocumentsController extends AppController {
     $res_amount = $restrictions['RepositoryRestriction']['amount'];
     $res_size = $restrictions['RepositoryRestriction']['size'];
 
+
+    /* Amount restriction */
     if($res_amount != 0)
       if(count($files) > $res_amount) {
         return false;
@@ -400,6 +366,8 @@ class DocumentsController extends AppController {
     
       if($file['size'] > 0) {
 
+
+        /* Extension restriction */
         if($res_extension != '*') { 
           $extension = end(explode('.', $file['name']));
           if(strpos($res_extension, $extension) === false){
@@ -407,6 +375,7 @@ class DocumentsController extends AppController {
           }
         }
 
+        /* Size restriction (MB) */
         if($res_size != 0) {
           if($file['size']/1048576 > $res_size){
             return false;
@@ -418,6 +387,11 @@ class DocumentsController extends AppController {
   }
 
 
+  /**
+   * Save document with its attached files and criterias.
+   *
+   */
+
   function save(&$data){
   	
   	$repo = $this->requireRepository();
@@ -425,11 +399,14 @@ class DocumentsController extends AppController {
 
     $restrictions = $this->Session->read('restrictions');
 
+
+    /* Check repository's restrictions */
     if(!empty($restrictions))
       if(!$this->checkRestrictions($this->data, $restrictions)) {
         $this->Session->setFlash('Your attached files don\'t satisfy with the restrictions');
         $this->redirect($this->referer());
       }
+
 
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
@@ -439,6 +416,8 @@ class DocumentsController extends AppController {
     $this->data['Document']['register_date'] = date('Y-m-d H:i:s');
   	$this->Document->set($this->data);
 
+
+    /* Check if user has selected at least one criteria or category */
     if(empty($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['categories'])) {
       $this->Session->setFlash('You must include at least one criteria or category');
       $this->redirect($this->referer());
@@ -458,6 +437,9 @@ class DocumentsController extends AppController {
   		$criteria_ids[] = $id;
   	}
 
+
+
+    /* Get criterias from categories */
     foreach ($categories as $category) {
       $category = substr($category, strpos($category, '=')+1);
       if(empty($category))
@@ -522,6 +504,16 @@ class DocumentsController extends AppController {
   	}
   }
 
+
+  /**
+   * List your documents in "My Documents" section.
+   * If you are in home page you'll see all your 
+   * documents.
+   * If you are in a repository you'll see all your
+   * documents you have uploaded to that repository.
+   *
+   */
+
   function list_documents(){
     $user = $this->getConnectedUser();
     $repo = $this->getCurrentRepository();
@@ -568,6 +560,12 @@ class DocumentsController extends AppController {
     $this->set($data);
   }  
 
+
+  /**
+   * Allows you to download a pack of attached files
+   * from a document, in zip format.
+   */
+
   function getZip() {
 
     $files = $this->Attachfile->find('all', array(
@@ -609,6 +607,12 @@ class DocumentsController extends AppController {
 
     unlink($tmp_zip);
   }
+
+
+  /**
+   * Allows you to download an attached file
+   * from a document.
+   */
 
   function getFile() {
 

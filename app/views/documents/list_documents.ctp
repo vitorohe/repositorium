@@ -10,6 +10,7 @@ $this->Html->addCrumb($title);
 <?php echo $this->Html->image('admin.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon" style="margin-top: 15px;"><?php echo (isset($message) ? $message : $title); ?></h1>
 <div class="clearicon"></div>
 
+<?php echo $this->element('fancybox'); ?>
 
 <?php echo $this->element('paginator_info'); ?>
 <!-- core table -->
@@ -44,14 +45,25 @@ $this->Html->addCrumb($title);
               echo '<br />';
               echo '<ol style="margin: 0 0 0 10px;">';
               foreach ($cr['files'] as $file) {
+                $extension =  $file['Attachfile']['extension'];
                 echo '<li>';
                 echo $file['Attachfile']['name'];
+                if(strtolower($extension) == 'pdf'){
+                  echo '<a class="fancybox" href="#inline1" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
+                  echo '<div id="inline1" style="width:980px; height: 500px; display: none;">
+                          <object data="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" type="application/pdf" width="100%" height="99%">
+                            <p>Your web browser doesn\'t have a PDF plugin.</p>
+                          </object>
+                        </div>';
+                }
+                else if(in_array(strtolower($extension), array('png', 'gif', 'bmp', 'jpg', 'jpeg'))){
+                  echo '<a class="fancybox-effects-a" href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
+                }
                 echo '</li>';
               }
               echo '</ol>';
 
               if(count($cr['files']) === 1){
-                $extension = end(explode('.', $file['Attachfile']['name']));
                 if(empty($extension))
                   $mime_type = null;
                 else
