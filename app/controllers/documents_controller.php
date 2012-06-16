@@ -1,7 +1,7 @@
 <?php
+App::import('Helper', 'Mime');
 class DocumentsController extends AppController {
-	
-	var $helpers = array('Html', 'Javascript', 'Ajax', 'Mime');
+	var $helpers = array('Html', 'Javascript', 'Ajax');
 	
 	var $name = 'Documents';
 	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser', 'RepositoryRestriction');
@@ -43,7 +43,7 @@ class DocumentsController extends AppController {
 	}
 	
   function index() {
-	$this->e404();
+	   $this->redirect('/');
   }
   
   function _clean_session() {
@@ -566,10 +566,11 @@ class DocumentsController extends AppController {
    * from a document, in zip format.
    */
 
-  function getZip() {
-
+  function getZip($title = null, $id = null) {
+    if($this->referer() == '/')
+      $this->redirect('/');
     $files = $this->Attachfile->find('all', array(
-      'conditions' => array('Attachfile.document_id' => $this->params['url']['id']),
+      'conditions' => array('Attachfile.document_id' => $id),
       'recursive' => -1
       )
     );
@@ -597,7 +598,7 @@ class DocumentsController extends AppController {
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header("Cache-Control: private", false);
     header('Content-Type: application/zip');
-    header('Content-disposition: attachment; filename='.$this->params['url']['title'].'.zip');
+    header('Content-disposition: attachment; filename='.$title.'.zip');
     header("Content-Transfer-Encoding: binary");
     header('Content-Length: ' . filesize($tmp_zip));
     
@@ -614,28 +615,45 @@ class DocumentsController extends AppController {
    * from a document.
    */
 
-  function getFile() {
+  function getFile($title = null, $id = null) {
+    if($this->referer() == '/')
+      $this->redirect('/');
+    $file = $this->Attachfile->find('first', array(
+      'conditions' => array('Attachfile.document_id' => $id),
+      'recursive' => -1
+      )
+    );
 
-    $title = $this->params['url']['title'];
-    $filename = $this->params['url']['filename'];
-    $extension = end(explode('.', $filename));
-    $mime = $this->params['url']['mime'];
+    $extension = end(explode('.', $file['Attachfile']['name']));
+    
+    if(empty($extension))
+      $mime = null;
+    else{
+      $this->Mime = new MimeHelper(); 
+      $mime = $this->Mime->getMimeType($extension);
+    }
 
-    $dir = WWW_ROOT.'uploaded_files/document_'.$this->params['url']['id'].'/'.$filename;
+    if(is_null($mime))
+      $this->getZip($title,$id);
 
-    if(strpos(WWW_ROOT, "\\"))
-      $dir = str_replace('/', '\\', $dir);
+    else {
 
-    header("Pragma: public");
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Cache-Control: private", false);
-    header('Content-Type: '.$mime);
-    header('Content-disposition: attachment; filename='.$filename);
-    header("Content-Transfer-Encoding: binary");
-    header('Content-Length: ' . filesize($dir));  
+      $dir = WWW_ROOT.'uploaded_files/document_'.$id.'/'.$file['Attachfile']['name'];
 
-    readfile($dir);
+      if(strpos(WWW_ROOT, "\\"))
+        $dir = str_replace('/', '\\', $dir);
+
+      header("Pragma: public");
+      header("Expires: 0");
+      header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+      header("Cache-Control: private", false);
+      header('Content-Type: '.$mime);
+      header('Content-disposition: attachment; filename='.$file['Attachfile']['name']);
+      header("Content-Transfer-Encoding: binary");
+      header('Content-Length: ' . filesize($dir));  
+
+      readfile($dir);
+    }
 
   }
 }

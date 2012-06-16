@@ -32,6 +32,12 @@ if(Configure::read('App.subdomains')) {
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
+
+/* Routes to avoid errors and get files */
+  Router::connect('/app/', array('controller' => 'pages', 'action' => 'display'));
+  Router::connect('/app/webroot/', array('controller' => 'pages', 'action' => 'display'));
+  Router::connect('/app/webroot/.*', array('controller' => 'pages', 'action' => 'display'));
+
 /**
   * custom routes
   */
