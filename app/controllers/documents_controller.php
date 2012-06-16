@@ -519,20 +519,41 @@ class DocumentsController extends AppController {
     $repo = $this->getCurrentRepository();
 
     if(is_null($repo) || empty($repo)){
-      $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id']);
-      $this->paginate['Document']['joins'] = array(
-        array('table' => 'repositories',
-            'alias' => 'Repository',
-            'type' => 'inner',
-            'conditions' => array(
-                'Document.repository_id = Repository.id'
-            )
-        )
-      );
-      $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name', 'Repository.internal_name');
+
+      if ($this->Session->check('User.esAdmin')){
+
+        $this->paginate['Document']['joins'] = array(
+          array('table' => 'repositories',
+              'alias' => 'Repository',
+              'type' => 'inner',
+              'conditions' => array(
+                  'Document.repository_id = Repository.id'
+              )
+          )
+        );
+        $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name', 'Repository.internal_name');
+
+      }
+      else{
+
+        $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id']);
+        $this->paginate['Document']['joins'] = array(
+          array('table' => 'repositories',
+              'alias' => 'Repository',
+              'type' => 'inner',
+              'conditions' => array(
+                  'Document.repository_id = Repository.id'
+              )
+          )
+        );
+        $this->paginate['Document']['fields'] = array('DISTINCT Document.id', 'Document.name', 'Document.description', 'Repository.id', 'Repository.name', 'Repository.internal_name');
+      }
     }
     else{
-      $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id'], 'Document.repository_id' => $repo['Repository']['id']);
+      if ($this->Session->check('User.esAdmin'))
+        $this->paginate['Document']['conditions'] = array('Document.repository_id' => $repo['Repository']['id']);
+      else 
+        $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id'], 'Document.repository_id' => $repo['Repository']['id']);
     }
 
     $documents = $this->paginate();
@@ -549,13 +570,24 @@ class DocumentsController extends AppController {
         $documents_with_files[] = $document;
       }
 
+    if ($this->Session->check('User.esAdmin')){
 
-    $data = array(
-      'documents_with_files' => $documents_with_files,
-      'current' => 'My documents',
-      'title' => "Documents of '{$user['User']['name']}'",
-      'cond' => 'owner',
-    );
+      $data = array(
+        'documents_with_files' => $documents_with_files,
+        'current' => 'Documents',
+        'title' => "Documents",
+        'cond' => 'owner',
+      );
+
+    }
+    else {
+      $data = array(
+        'documents_with_files' => $documents_with_files,
+        'current' => 'My documents',
+        'title' => "Documents of '{$user['User']['name']}'",
+        'cond' => 'owner',
+      );
+    }
 
     $this->set($data);
   }  
