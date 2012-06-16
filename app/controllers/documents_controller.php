@@ -1,7 +1,7 @@
 <?php
 App::import('Helper', 'Mime');
 class DocumentsController extends AppController {
-	var $helpers = array('Html', 'Javascript', 'Ajax');
+	var $helpers = array('Html', 'Javascript', 'Ajax', 'Fancybox');
 	
 	var $name = 'Documents';
 	var $uses = array('Document', 'User', 'Repository','Criteria', 'CategoryCriteria', 'Attachfile', 'CriteriasUser', 'RepositoryRestriction');
@@ -688,5 +688,6 @@ class DocumentsController extends AppController {
     }
 
   }
+
 }
 ?>

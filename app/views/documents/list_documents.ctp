@@ -57,7 +57,7 @@ $this->Html->addCrumb($title);
                         </div>';
                 }
                 else if(in_array(strtolower($extension), array('png', 'gif', 'bmp', 'jpg', 'jpeg'))){
-                  echo '<a class="fancybox-effects-a" href="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
+                  echo '<a class="fancybox-effects-a" href="'.$this->Fancybox->getUrlLightbox('http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name']).'" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
                 }
                 echo '</li>';
               }
