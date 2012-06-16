@@ -309,7 +309,7 @@ class CriteriasDocument extends AppModel {
 		
 		$info = $this->find('first', array(
 				'recursive' => -1,
-	 			'fields' => array('id' ,'answer'),
+	 			'fields' => array('id' ,'answer', 'total_eval', 'yes_eval', 'no_eval'),
 				'conditions' => array(
 					'CriteriasDocument.criteria_id' => $d['criteria_id'],
 					'CriteriasDocument.document_id' => $d['document_id']
