@@ -125,8 +125,6 @@ $this->Html->addCrumb($title);
                                     echo "id=\"categories_".$categories_ids[$i++]."\" >";
                                     echo $categories." - ".$categories_points[$categories]." points ";
                                     echo "</li>";
-                                    if($i > 8)
-                                        break;
                                 }
                             ?>
                         </ul>
@@ -151,8 +149,6 @@ $this->Html->addCrumb($title);
                                     echo "id=\"criterias_".$criterias_ids[$i]."\" >";
                                     echo $criteria." - ".$criterias_points[$i++]." points ";
                                     echo "</li>";
-                                    if($i > 8)
-                                        break;
                                 }
                             ?>
                         </ul>

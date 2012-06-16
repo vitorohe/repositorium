@@ -40,7 +40,6 @@ class CriteriasController extends AppController {
   
     $criterias = $this->Criteria->findRepoCriterias($repo['Repository']['id']);
 
-    
     $criterias_names = array();
     foreach ($criterias as $criteria) {
         $criterias_names[] = $criteria['Criteria']['name'];
@@ -232,7 +231,7 @@ class CriteriasController extends AppController {
         
       $this->Criteria->set($this->data);
       
-      /* validates view's fields */
+      /* validates view's fields and creates the criteria in bd*/
       if($this->Criteria->validates()) {
         $criteria = $this->Criteria->createNewCriteria($this->data, $cu);
         CakeLog::write('activity', "Criteria [name=\"{$criteria['Criteria']['name']}\"] created");
@@ -457,7 +456,7 @@ class CriteriasController extends AppController {
 
     foreach (array_keys($criterias_autocomplete) as $key) {
       $keys[] = $key;
-    }  
+    }
 
     $this->set(compact('search_data','criterias_autocomplete', 'keys'));
 

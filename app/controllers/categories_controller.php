@@ -285,8 +285,10 @@ class CategoriesController extends AppController {
 			}
 		}
 		
-	
-		$categories_autocomplete0 = preg_grep("/^".$search_data."/i", array_keys($categories_names));
+		if($search_data != '')
+			$categories_autocomplete0 = preg_grep("/^".$search_data."/i", array_keys($categories_names));
+		else
+			$categories_autocomplete0 = array_keys($categories_names);
 	
 		$categories_autocomplete = $this->arrayDiffEmulation($categories_autocomplete0, $categories_selected);
 	

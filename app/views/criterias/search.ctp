@@ -117,8 +117,6 @@ $this->viewVars['title_for_layout'] = $title;
                                     echo "id=\"categories_".$categories_ids[$i++]."\" >";
                                     echo key($categories_names)." - ".$categories_points[key($categories_names)]." points ";
                                     echo "</li>";
-                                    if($i > 8)
-                                        break;
                                 }
                             ?>
                         </ul>
@@ -143,8 +141,6 @@ $this->viewVars['title_for_layout'] = $title;
                                     echo "id=\"criterias_".$criterias_ids[$i]."\" >";
                                     echo $criteria." - ".$criterias_points[$i++]." points ";
                                     echo "</li>";
-                                    if($i > 8)
-                                        break;
                                 }
                             ?>
                         </ul>
