@@ -260,5 +260,16 @@ class CriteriasUser extends AppModel {
 		
 		return true;
 	}
+	
+	function getUsersPoints($criteriaid){
+		$options['conditions'] = array('CriteriasUser.criteria_id' => $criteriaid);
+		
+		$options['fields'] = array('CriteriasUser.user_id', 'CriteriasUser.score_obtained');
+		
+		$options['recursive'] = -1;
+		
+		return $this->find('list', $options);
+	}
+	
 }
 ?>

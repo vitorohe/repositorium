@@ -373,4 +373,39 @@ class Criteria extends AppModel {
 		return $row['Criteria']['questions_quantity'];
 	}
 	
+	function getCriteriaByUser($criteriaid, $userid, $qu = 1){
+		return $this->find('all', 
+    			array('conditions' => array('Criteria.id' => $criteriaid, 'CriteriasUser.user_id' => $userid, 'CriteriasUser.quality_user_id' => $qu),
+    				'fields' => array('Criteria.id', 'Criteria.name', 'Criteria.question', 'Criteria.download_score', 'Criteria.upload_score', 
+    								'Criteria.collaboration_score', 'CriteriasUser.score_obtained', 'CriteriasUser.id'),
+    				'joins' => array(
+             		   array('table' => 'criterias_users',
+                  	       'alias' => 'CriteriasUser',
+                   	       'type' => 'inner',
+                     	   'conditions' => array(
+                                'CriteriasUser.criteria_id = Criteria.id'
+                        	)
+                		)
+    				)));
+	}
+	
+	function getCriteriasForExpert($userid){
+		$options['joins'] = array(
+  			array('table' => 'criterias_users',
+  					'alias' => 'CriteriasUser',
+  					'type' => 'inner',
+  					'conditions' => array(
+  							'CriteriasUser.criteria_id = Criteria.id'
+  					)
+  			));
+		
+		$options['conditions'] = array('CriteriasUser.user_id' => $userid, 'CriteriasUser.quality_user_id' => 1);
+		
+		$options['fields'] = array('Criteria.id', 'Criteria.name');
+		
+		$options['recursive'] = -1;
+		
+		return $this->find('list', $options);
+	}
+	
 }

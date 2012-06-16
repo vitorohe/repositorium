@@ -24,16 +24,17 @@ $this->Html->addCrumb($title);
 	<div class="adm-first-row">
 		<!-- number of items -->	
 		<div class="adm-limit">
-			<?php echo $this->Form->create(null, array('url' => '/admin_points/listUserPoints', 'name' => 'select_limit')); ?>
+			<?php echo $this->Form->create(null, array('url' => '/admin_points/listUsersPoints', 'name' => 'select_limit')); ?>
 			<span class="adm-opt">Showing: </span>
 			<?php			 
 				$options = array(
-					'5' => '5 documents',
-					'10' => '10 documents',
-					'20' => '20 documents',
-					'50' => '50 documents' 
+					'5' => '5 users',
+					'10' => '10 users',
+					'20' => '20 users',
+					'50' => '50 users' 
 				);
-				echo $this->Form->select('User.limit', $options, $limit, array('empty' => false, 'onChange' => 'select_limit.submit()'));			   
+				echo $this->Form->select('User.limit', $options, $limit, array('empty' => false, 'onChange' => 'select_limit.submit()'));	
+				echo $this->Form->end();		   
 			?>
 			</form>
 		</div>
@@ -60,10 +61,10 @@ $this->Html->addCrumb($title);
 	<div class="adm-second-row">
 		<!-- select criteria -->
 		<div class="adm-criteria">
-			<?php echo $this->Form->create(null, array('url' => '/admin_points/listUserPoints', 'name' => 'select_criterio')); ?>
+			<?php echo $this->Form->create(null, array('url' => '/admin_points/listUsersPoints', 'name' => 'select_criterio')); ?>
 			<span class="adm-opt">Criteria: </span>
 			<?php			 
-				echo $this->Form->select('id', $criteria_list, $criteria_n, array('empty' => false, 'onChange' => 'select_criterio.submit()'));
+				echo $this->Form->select('Criteria.id', $criteria_list, $criteria_n, array('empty' => false, 'onChange' => 'select_criterio.submit()'));
 				echo $this->Form->end(); 
 			?>
 		</div>
@@ -84,22 +85,7 @@ $this->Html->addCrumb($title);
 			?>
 		</div>
 		<!-- end filter -->
-				
-		<!-- mass edit -->
-		<div class="adm-mass">
-		<?php echo $this->Form->create(null, array('id' => 'adm-process', 'url' => array('controller' => 'admin_documentos', 'action' => 'mass_edit'))); ?>	
-			<span class="adm-opt">Selected Documents: </span>
-			<?php		
-				echo $this->Form->hidden('Action.mass_action');
-				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Reset stats', array('id' => 'adm-mass-reset'));
-				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Invalidate', array('id' => 'adm-mass-invalidate'));
-				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Validate', array('id' => 'adm-mass-validate'));
-			?>
-		</div>
-		<!-- end mass edit-->	
+
 	</div>
 </div>
 <!-- end expert tools -->
@@ -122,9 +108,9 @@ $this->Html->addCrumb($title);
   ?>
 	<tr>
 	<?php 
-		$this->Form->create(null, array('url' => array('controller' => 'admin_points', 'action' => 'set_points')));
-		$this->Form->hidden('User.id', array('value' => $u['User']['id']));
-		$this->Form->hidden('Criteria.id', array('value' => $u['CriteriasUser']['criteria_id']));
+		echo $this->Form->create(null, array('url' => array('controller' => 'admin_points', 'action' => 'add_points')));
+		echo $this->Form->hidden('User.id', array('value' => $u['User']['id']));
+		echo $this->Form->hidden('Criteria.id', array('value' => $criteria_n));
 	?>
 		<td><?php echo $u['User']['id'];?></td>
 		<td><?php echo $u['User']['name'];?></td>
@@ -132,7 +118,15 @@ $this->Html->addCrumb($title);
 		<td><?php echo $u['User']['email'];?></td>
 		<td>
 		<?php
-			echo $this->Form->input('points', array('label' => 'Points to add (or substract)'));
+			$str = 'Current Points: ';
+			if(isset($crit_user[$u['User']['id']])){
+				$str = $str.$crit_user[$u['User']['id']];
+			}
+			else {
+				$str = $str.'0';
+			}
+			echo $str;
+			echo $this->Form->input('User.points', array('value','label' => 'Points to add (or substract)'));
 			echo $this->Form->button('Add');
 			echo $this->Form->end(); 
 		?>
