@@ -93,7 +93,7 @@ class ChallengesController extends AppController {
 
   	$documents = $this->Criteria->generateChallenge($user['User']['id'], $criterio, $repo_id);
   	
-    if(count($documents) == 0)
+    if(count($documents) <= 2)
       $this->_skip_challenge();
 
     $documents_with_files = array();

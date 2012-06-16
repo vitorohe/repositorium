@@ -28,7 +28,6 @@ class AdminPointsController extends AppController {
   }
   
   function set_paginate(){
-  	print_r($this->data);
   	if(!empty($this->data)) {
   		if(!empty($this->data['User']['limit'])) {
   			$this->Session->write('User.limit', $this->data['User']['limit']);
