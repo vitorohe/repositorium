@@ -77,12 +77,7 @@ class ChallengesController extends AppController {
   	$this->Session->delete('Challenge');
   	
   	$user = $this->getConnectedUser();
-  	$repo = $this->getCurrentRepository();
-  	
-  	if(is_null($repo)) {
-  		$this->Session->setFlash('You must be in a repository', 'flash_errors');
-  		$this->redirect('/');
-  	}
+  	$repo = $this->requireRepository();
   	
   	$repo_id = $repo['Repository']['id'];
   	
@@ -131,7 +126,7 @@ class ChallengesController extends AppController {
   	
   	if($earn) {
   		$this->Session->setFlash('Sorry, there aren\'t enough documents or criterias to play a challenge');
-  		$this->redirect('/');
+  		$this->redirect($this->referer());
   	} elseif($download || $upload) {
   		$this->redirect(array(
   			'controller' => 'documents',
