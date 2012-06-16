@@ -126,7 +126,13 @@ class ChallengesController extends AppController {
   	
   	if($earn) {
   		$this->Session->setFlash('Sorry, there aren\'t enough documents or criterias to play a challenge');
-  		$this->redirect($this->referer());
+	  	$repository = $this->requireRepository();
+		if(Configure::read('App.subdomains')) {
+			$dom = Configure::read('App.domain');
+			$this->redirect("http://{$repository['Repository']['internal_name']}.{$dom}");
+		} else {
+			$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repository['Repository']['internal_name']));
+		}
   	} elseif($download || $upload) {
   		$this->redirect(array(
   			'controller' => 'documents',
