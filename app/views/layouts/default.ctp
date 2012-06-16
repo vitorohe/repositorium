@@ -22,7 +22,7 @@
       echo $this->Html->css('anchors');
       echo $this->Html->css('jqueryui');
       echo $this->Html->css('style2');
-	    echo $this->Html->css('menu_template');
+	  echo $this->Html->css('menu_template');
 
       echo $scripts_for_layout;
 
@@ -84,6 +84,7 @@
                 </div>
                 <div class="box optionsbox"> 
 					<ul id="menu-horizontal">
+						<?php if($this->Session->check('User.esAdmin') || $this->Session->check('User.id') || $this->Session->check('Experto.isExperto')):?>
 						<li>
 							<a href="javascript:void(0);">Manage</a>
                             <ul>
@@ -103,6 +104,7 @@
                                 <?php endif; ?>
                             </ul>
 						</li>
+						<?php endif;?>
 						<li>
 							<a href="javascript:void(0);">Documents</a>
                             <ul>

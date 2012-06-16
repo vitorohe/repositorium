@@ -64,28 +64,28 @@ class CategoriesController extends AppController {
 		$this->set($params);
 		 
 		if(!empty($this->data)) {
-	  $this->Criteria->set($this->data);
-	  if($this->Criteria->validates()) {
-	  	$repo = $this->getCurrentRepository();
+	  		$this->Criteria->set($this->data);
+			if($this->Criteria->validates()) {
+	  			$repo = $this->getCurrentRepository();
 
-	  	if(is_null($repo)) {
-	  		$this->Session->setFlash('Please set a current repository first');
-	  		$this->redirect('index');
-	  	}
+	  			if(is_null($repo)) {
+	  				$this->Session->setFlash('Please set a current repository first');
+		 	 		$this->redirect('index');
+	 	 		}
+	
+		  		$this->data['Criteria']['repository_id'] = $repo['Repository']['id'];
 
-	  	$this->data['Criteria']['repository_id'] = $repo['Repository']['id'];
-
-	  	if($this->Criteria->save($this->data)) {
-	  		$this->Session->setFlash('Criteria added successfully', 'flash_green');
-	  		CakeLog::write('activity', 'Criteria "'.$this->data['Criteria']['question'].'" was added');
-	  	} else {
-	  		$this->Session->setFlash('An error occurred saving the criteria', 'flash_errors');
-	  		CakeLog::write('error', 'Criteria "'.$this->data['Criteria']['question'].'" was not added');
-	  	}
-	  	$this->redirect('index');
-	  } else {
-	  	$this->Session->setFlash($this->Criteria->invalidFields(),'flash_errors');
-	  }
+			  	if($this->Criteria->save($this->data)) {
+	  				$this->Session->setFlash('Criteria added successfully', 'flash_green');
+	  				CakeLog::write('activity', 'Criteria "'.$this->data['Criteria']['question'].'" was added');
+	 		 	} else {
+	  				$this->Session->setFlash('An error occurred saving the criteria', 'flash_errors');
+	  				CakeLog::write('error', 'Criteria "'.$this->data['Criteria']['question'].'" was not added');
+	 		 	}
+	 	 		$this->redirect('index');
+			} else {
+		  		$this->Session->setFlash($this->Criteria->invalidFields(),'flash_errors');
+	  		}
 		}
 	}
 

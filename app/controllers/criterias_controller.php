@@ -34,7 +34,7 @@ class CriteriasController extends AppController {
     $this->set($params);  
   }
   
-  /* Searchs a document given a list of criterias, and extracts points to the user if this is successful */
+  /* Controller of the search controller, sets the criterias and categories of the repository */
   function search() {
     $repo = $this->requireRepository();
   
@@ -203,12 +203,17 @@ class CriteriasController extends AppController {
     $this->redirect($this->referer());    
   }
   
+  
+  /* Controller for the creation of criterias */
   function create(){
-    if($this->getConnectedUser() == $this->anonymous)
-      $this->redirect(array('controller' => 'login'));
+  	if($this->isAnonymous()){
+		$this->Session->setFlash('You must log in first', 'flash_errors');
+		$this->redirect(array('controller' => 'login', 'action' => 'index'));
+	}
     
     if(!empty($this->data)) {
       $user = $this->getConnectedUser();
+      $repo = $this->getCurrentRepository();
 
       $cu = array('CriteriasUser' => array(
             'successful_evaluation' => 0,
@@ -226,7 +231,8 @@ class CriteriasController extends AppController {
       
         
       $this->Criteria->set($this->data);
-        
+      
+      /* validates view's fields */
       if($this->Criteria->validates()) {
         $criteria = $this->Criteria->createNewCriteria($this->data, $cu);
         CakeLog::write('activity', "Criteria [name=\"{$criteria['Criteria']['name']}\"] created");
@@ -236,7 +242,17 @@ class CriteriasController extends AppController {
         }
         
         $this->Session->setFlash('Criteria successfully created', 'flash_green');
-        $this->redirect('/');
+        
+        if(!is_null($repo)){
+	        if(Configure::read('App.subdomains')) {
+	        	$dom = Configure::read('App.domain');
+	        	$this->redirect("http://{$repo['Repository']['internal_name']}.{$dom}");
+	        } else {
+	        	$this->redirect(array('action' => 'index', $repo['Repository']['internal_name']));
+	        }
+        }
+	    else
+       		$this->redirect('/');
     
       } else {
         $this->Session->setFlash($this->Criteria->invalidFields(), 'flash_errors');
@@ -244,6 +260,7 @@ class CriteriasController extends AppController {
     }
   }
 
+  /*Process the search of documents, given a list of criterias, and discount the points of the search, if necessary*/
   function process(){
     if(!empty($this->data) && isset($this->data['Criteria']) && (isset($this->data['Criteria']['criterias']) || isset($this->data['Criteria']['categories'])) && (!empty($this->data['Criteria']['criterias']) || !empty($this->data['Criteria']['categories']))){
       $data = $this->data;
@@ -334,7 +351,6 @@ class CriteriasController extends AppController {
           'Document.repository_id' => $repo['Repository']['id'],
       	  'CriteriasDocument.answer' => 1);
 
-
       $options['fields'] = array(
           'DISTINCT Document.id', 'Document.name', 'Document.description');
 
@@ -351,7 +367,7 @@ class CriteriasController extends AppController {
           array('conditions' => 
             array('Attachfile.document_id' => $document['Document']['id']), 
             'recursive' => -1, 
-            'fields' => array("Attachfile.id","Attachfile.name","Attachfile.extension","Attachfile.location")));
+            'fields' => array("Attachfile.id", "Attachfile.name", "Attachfile.extension", "Attachfile.location")));
         $documents_with_files[] = $document;
       }
 
@@ -421,8 +437,8 @@ class CriteriasController extends AppController {
 
     $categories_selected = array();
     foreach($categories as $category) {
-
-    	$categories_selected[] = $category;
+      $categories_selected[] = $category;
+      
       foreach ($categories_names as $key => $value) {
         if(trim($key) === trim($category))
           foreach($value as $c)
@@ -430,7 +446,10 @@ class CriteriasController extends AppController {
       }    	
     }
 
-    $criterias_autocomplete0 = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
+    if($search_data != '')
+    	$criterias_autocomplete0 = preg_grep("/^".$search_data."/i", $this->Session->read('criterias_names'));
+    else
+    	$criterias_autocomplete0 = $this->Session->read('criterias_names');
     
     $criterias_autocomplete = $this->arrayDiffEmulation($criterias_autocomplete0, $criterias_selected);
     

@@ -34,6 +34,17 @@
                     }
                 });
             } else {
+            	$.get('/repositorium/index.php/criterias/autocomplete/?searchData='+searchVal+'&criterias='+$('#sortable2').text()+'&categories='+$('#sortable4').text(), function(returnData) {
+                    /* If the returnData is empty then display message to user
+                     * else our returned data results in the table.  */
+                    if (!returnData) {
+                        $('#msg').html('<p style="padding:5px;">There aren\'t criterias.</p>');
+                        $('#sortable1').html('');
+                    } else {
+                        $('#sortable1').html(returnData);
+                        $('#msg').html('');
+                    }
+                });
                 $('#msg').html('<p style="padding:5px;">Enter a search term to start filtering.</p>');
                 $('#sortable1').html('');
             }
@@ -61,6 +72,17 @@
                     }
                 });
             } else {
+            	$.get('/repositorium/index.php/categories/autocomplete/?searchData='+searchVal+'&categories='+$('#sortable4').text()+'&criterias='+$('#sortable2').text(), function(returnData) {
+                    /* If the returnData is empty then display message to user
+                     * else our returned data results in the table.  */
+                    if (!returnData) {
+                        $('#msgc').html('<p style="padding:5px;">There aren\'t criterias.</p>');
+                        $('#sortable3').html('');
+                    } else {
+                        $('#sortable3').html(returnData);
+                        $('#msgc').html('');
+                    }
+                });
                 $('#msgc').html('<p style="padding:5px;">Enter a search term to start filtering.</p>');
                 $('#sortable3').html('');
             }

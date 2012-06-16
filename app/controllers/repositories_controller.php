@@ -204,8 +204,10 @@ class RepositoriesController extends AppController {
 	
 	function create() {
 		
-		if($this->getConnectedUser() == $this->anonymous)
-			$this->redirect(array('controller' => 'login'));
+		if($this->isAnonymous()){
+	      $this->Session->setFlash('You must log in first', 'flash_errors');
+	      $this->redirect(array('controller' => 'login', 'action' => 'index'));
+	    }
 		
 		if(!empty($this->data)) {
 			$user = $this->getConnectedUser();
