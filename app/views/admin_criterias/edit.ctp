@@ -31,6 +31,7 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('collaboration_score', array('label' => 'Score of this criteria to be given, when a user evaluates documents in challenges')); ?>
 
+<?php echo $this->Form->input('score_obtained', array('label' => 'Quantity of points'));?>
 <br /><br />
 <!--  
 <div name="ponderation_div" class="yui-u padded"> 

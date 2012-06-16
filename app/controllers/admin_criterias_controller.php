@@ -67,37 +67,55 @@ class AdminCriteriasController extends AppController {
 
     }
 
+    /* Edit a criteria, given its id */
     function edit($id = null) {
+    	if(is_null($id))
+    		$this->redirect('index');
+    	
     	$params = array(
     			'menu' => 'menu_expert',
     			'current' => 'criteria',
     			'title' => 'Edit criteria',
     	);
     	$this->set($params);
+    	
+    	/*Confirm that the user is an expert of the criteria */
+    	$user = $this->getConnectedUser();
+    	
+    	$crit = $this->Criteria->getCriteriabyUser($id, $user['User']['id']);
+    	
+    	if(empty($crit)){
+    		$this->Session->setFlash('Permission Denied', 'flash_errors');
+    		$this->redirect($this->referer());
+    	}
+    	
+    	/* Save data */
     	if(!empty($this->data)){
 	
 	        $this->Criteria->id = $id;
+	        $this->CriteriasUser->id = $crit[0]['CriteriasUser']['id'];
 	        
-	        if ($this->Criteria->save($this->data)) {
+	        $this->data['CriteriasUser']['score_obtained'] = $this->data['Criteria']['score_obtained'];
+	        
+	        if ($this->Criteria->save($this->data) && $this->CriteriasUser->save($this->data)) {
 	            $this->Session->setFlash('Criteria '.$this->data['Criteria']['name'].' was successfully modified', 'flash_green');
 	            CakeLog::write('activity', 'Criteria '.$this->data['Criteria']['name'].' was modified');
 	            $this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
 	        }
 	        else{
-	        	$this->Session->setFlash('There was an error creating the criteria, please blame the developer');
+	        	$this->Session->setFlash('There was an error modifying the criteria, please blame the developer');
 	        	CakeLog::write('activity', 'There was an error creating the criteria, please blame the developer');
 	        	$this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
 	        }
     	}
-    	if(is_null($id))
-    		$this->redirect('index');
-    	$crit = $this->Criteria->read(null, $id);
-    		
+
     	if(empty($crit))
     		$this->e404();
-    		
-    	$this->data = $crit;
 
+    	$crit[0]['Criteria']['score_obtained'] = $crit[0]['CriteriasUser']['score_obtained'];	
+    	
+    	$this->data = $crit[0];
+		print_r($this->data);
     }
     
     

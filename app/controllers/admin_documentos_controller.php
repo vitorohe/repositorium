@@ -237,13 +237,13 @@ class AdminDocumentosController extends AppController {
   					'conditions' => array(
   							'Document.id = CriteriasDocument.document_id')
   			),
-        array(
-            'table' => 'users',
-            'alias' => 'User',
-            'type' => 'inner',
-            'conditions' => array(
-                'Document.user_id = User.id')
-        )
+    	    array(
+        		    'table' => 'users',
+       	   			'alias' => 'User',
+     	       		'type' => 'inner',
+     	       		'conditions' => array(
+      	          			'Document.user_id = User.id')
+       		)
   	);
   	
   	

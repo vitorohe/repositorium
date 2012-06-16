@@ -36,10 +36,16 @@ echo $this->Form->radio('radiomenu',
 								'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_documentos', 'action' => 'all')) .'";'));
 								
 echo $this->Form->radio('radiomenu',
-	        					array('criteria' => 'Criterias'),
-								array(
-									'value' => $current , 
-									'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser')) .'";'));						
+	        				array('criteria' => 'Criterias'),
+							array(
+								'value' => $current , 
+								'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser')) .'";'));
+
+echo $this->Form->radio('radiomenu',
+							array('points' => 'Points'),
+							array(
+								'value' => $current ,
+								'onClick' => 'document.location="'.$this->Html->url(array('controller' => 'admin_points', 'action' => 'listUsersPoints')) .'";'));
 									
 									
 ?>
