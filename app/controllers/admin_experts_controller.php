@@ -118,6 +118,10 @@ class AdminExpertsController extends AppController {
     }
     
     function setUserExpert($criteriaid = null, $userid = null, $qu = 1) {
+
+        if($this->referer() === '/')
+            $this->redirect('/');
+
     	if(is_null($userid) || is_null($criteriaid)){
     		$this->Session->setFlash('Invalid criteria and/or user', flash_errors);
     		$this->redirect($this->referer());

@@ -85,7 +85,7 @@ class AdminCriteriasController extends AppController {
     	$crit = $this->Criteria->getCriteriabyUser($id, $user['User']['id']);
     	
     	if(empty($crit)){
-    		$this->Session->setFlash('Permission Denied', 'flash_errors');
+    		$this->Session->setFlash('Permission Denied: you are NOT expert in this criteria', 'flash_errors');
     		$this->redirect($this->referer());
     	}
     	
@@ -115,11 +115,13 @@ class AdminCriteriasController extends AppController {
     	$crit[0]['Criteria']['score_obtained'] = $crit[0]['CriteriasUser']['score_obtained'];	
     	
     	$this->data = $crit[0];
-		print_r($this->data);
+		
     }
     
     
     function remove($id = null) {
+        if($this->referer() === '/')
+            $this->redirect('/');
     	if(is_null($id))
     		$this->e404();
     
