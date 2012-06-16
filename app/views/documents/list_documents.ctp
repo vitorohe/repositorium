@@ -48,17 +48,6 @@ $this->Html->addCrumb($title);
                 $extension =  $file['Attachfile']['extension'];
                 echo '<li>';
                 echo $file['Attachfile']['name'];
-                if(strtolower($extension) == 'pdf'){
-                  echo '<a class="fancybox" href="#inline1" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
-                  echo '<div id="inline1" style="width:980px; height: 500px; display: none;">
-                          <object data="http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name'].'" type="application/pdf" width="100%" height="99%">
-                            <p>Your web browser doesn\'t have a PDF plugin.</p>
-                          </object>
-                        </div>';
-                }
-                else if(in_array(strtolower($extension), array('png', 'gif', 'bmp', 'jpg', 'jpeg'))){
-                  echo '<a class="fancybox-effects-a" href="'.$this->Fancybox->getUrlLightbox('http://'.Configure::read('mywebroot').$file['Attachfile']['location'].'/'.$file['Attachfile']['name']).'" title="" style="color:blue; font-size: 0.8em;">(View)</a>';
-                }
                 echo '</li>';
               }
               echo '</ol>';
