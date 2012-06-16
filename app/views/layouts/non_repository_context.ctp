@@ -106,6 +106,9 @@
                                         <li>
                                             <?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?>
                                         </li>
+                                        <li>
+                                            <?php echo $this->Html->link('Manage Documents', array('controller' => 'documents', 'action' => 'list_documents'));?>
+                                        </li>
                                     <?php elseif ($this->Session->check('User.id')): ?>
                                         <li>
                                             <?php echo $this->Html->link('Manage my Documents', array('controller' => 'documents', 'action' => 'list_documents'));?>
