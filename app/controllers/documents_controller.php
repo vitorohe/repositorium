@@ -407,7 +407,6 @@ class DocumentsController extends AppController {
         $this->redirect($this->referer());
       }
 
-
   	$this->data['Document']['repository_id'] = $repo['Repository']['id'];
   	$this->data['Document']['user_id'] = $user['User']['id'];
   	$this->data['Document']['activation_id'] = 'A';
@@ -415,7 +414,6 @@ class DocumentsController extends AppController {
   	$this->data['Document']['document_state_id'] = 1;
     $this->data['Document']['register_date'] = date('Y-m-d H:i:s');
   	$this->Document->set($this->data);
-
 
     /* Check if user has selected at least one criteria or category */
     if(empty($this->data['Criteria']['criterias']) && empty($this->data['Criteria']['categories'])) {

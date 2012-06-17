@@ -18,7 +18,11 @@ class Criteria extends AppModel {
 				'forty' => array(
 						'rule' => array('forty', 'name'),
 						'message' => 'Name of the criteria must be of at most 40 characters',
-				)
+				),
+				'unique' => array(
+						'rule' => 'isUnique',
+						'message' => 'A criteria with that name already exists.'
+				),
 		),
 		'question' => array(
 			'notempty' => array(

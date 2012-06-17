@@ -247,7 +247,7 @@ class CriteriasController extends AppController {
 	        	$dom = Configure::read('App.domain');
 	        	$this->redirect("http://{$repo['Repository']['internal_name']}.{$dom}");
 	        } else {
-	        	$this->redirect(array('action' => 'index', $repo['Repository']['internal_name']));
+	        	$this->redirect(array('controller' => 'repositories','action' => 'index', $repo['Repository']['internal_name']));
 	        }
         }
 	    else
