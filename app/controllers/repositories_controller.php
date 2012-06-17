@@ -288,8 +288,12 @@ class RepositoriesController extends AppController {
 
 	}
 
-	
-	function join($id = null) {
+	/**
+	 * This function allows you to add/remove 
+	 * a repository to/from your watchlist
+	 *
+	 */
+	function watch($id = null) {
 		if(is_null($id)) {
 			$this->Session->setFlash('Repository not found');
 			$this->redirect('/');
@@ -301,12 +305,10 @@ class RepositoriesController extends AppController {
 		$user = $this->getConnectedUser(); 
 		$repo = $this->RepositoriesUser->find('first', array('conditions' => array('user_id' => $user['User']['id'], 'repository_id' => $id), 'recursive' => -1));
 		
-		/*if(empty($repo)) {
-			$this->Session->setFlash('Repository not found');
-			$this->redirect('/');
-		}*/
-		
 		$watching = false;
+
+
+		/* if repo is empty, it seems this repository is not in your watchlist */
 
 		if(empty($repo)) {
 
@@ -316,6 +318,9 @@ class RepositoriesController extends AppController {
 			}
 
 		}
+		
+		/* this repository is in your watchlist, so you are removing it */
+
 		elseif ($repo['RepositoriesUser']['activation_id'] === 'A') {
 			$repo['RepositoriesUser']['activation_id'] = 'N';
 
@@ -323,19 +328,15 @@ class RepositoriesController extends AppController {
 			$this->RepositoriesUser->save($repo);				
 			$watching = true;
 		}
+
+		/* this repository was in your watchlist, but not now, so you are adding it again */
+
 		else {
 			$repo['RepositoriesUser']['activation_id'] = 'A';
 
 			$this->create();
 			$this->RepositoriesUser->save($repo);
 		}
-
-
-//		$watching = $repo['RepositoriesUser']['watching'];
-		
-//		$this->RepositoriesUser->read(null, $repo['RepositoriesUser']['id']);
-//		$this->RepositoriesUser->set('watching', !$watching);
-//		$this->RepositoriesUser->save();
 		
 		if($watching) $msg = "You have removed this repository from your watchlist";
 		else $msg = "You have added this repository to your watchlist";
