@@ -27,7 +27,13 @@
 		  	$this->element($menu, array(
 	        	'current' => $current
 			));
-	}  
+	} 
+	else {
+		echo 
+		  	$this->element('menu_expert_mini', array(
+	        	'current' => $current
+			)); 
+	}
 ?> 
 
 

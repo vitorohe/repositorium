@@ -3,9 +3,10 @@ $title = "Administer $title";
 $this->viewVars['title_for_layout'] = $title;
 
 /* breadcrumbs */
-if(is_null($rep))
+if(isset($rep)){
 	$this->Html->addCrumb($rep['Repository']['name'], '/repositories/'.$rep['Repository']['internal_name']);
-$this->Html->addCrumb('Manage', '/manage/');	
+	$this->Html->addCrumb('Manage', '/manage/');	
+}
 $this->Html->addCrumb($title);
 /* end breadcrumbs */ 
 	 
@@ -13,10 +14,19 @@ $this->Html->addCrumb($title);
 ?>
 <?php echo $this->Html->image('admin.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon"><?php echo $title; ?></h1>
 <div class="clearicon"></div>
-<?php echo 
-	   $this->element($menu, array(
-         'current' => $current
-	   ));       
+<?php 
+	if(isset($rep)){
+		echo 
+		  	$this->element($menu, array(
+	        	'current' => $current
+			));
+	} 
+	else {
+		echo 
+		  	$this->element('menu_expert_mini', array(
+	        	'current' => $current
+			)); 
+	}     
 ?> 
 
 <!-- expert tools -->
