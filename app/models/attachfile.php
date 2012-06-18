@@ -200,8 +200,8 @@ class Attachfile extends AppModel {
 	/*save attached files*/
 	function saveAttachedFiles($data) {
 
-//		if(empty($data) || !isset($data['files']))
-//			return true;
+		if(empty($data) || !isset($data['files']))
+			return true;
 
 		$fileData = $data['files'];
 
