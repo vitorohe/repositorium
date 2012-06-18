@@ -116,7 +116,7 @@ class AdminPointsController extends AppController {
   	}
   	
   	if($this->CriteriasUser->save($row)){
-  		$this->Session->setFlash('Points added successfully to user', 'flash_green');
+  		$this->Session->setFlash('Points successfully added to user', 'flash_green');
   	}
   	else{
   		$this->Session->setFlash('There was an error, please blame the developer', 'flash_errors');
