@@ -155,8 +155,7 @@ $this->viewVars['title_for_layout'] = $title;
                         <input type="text" id=
                         "amount" name="data[Payed_search][documents_amount]" value="1"/>
                         <label for="counter">Total points (1 document):</label>
-                        <input type="text" disabled="disabled" id=
-                        "counter" value="0"/>
+                        <p id="counter">0</p>
                     </td>
                 </tr>
             </tbody>

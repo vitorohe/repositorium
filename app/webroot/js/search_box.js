@@ -36,18 +36,16 @@ $(function() {
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
-                total = mycounter*amount;
-                $('#total').val(total);
+                $('#counter').text(mycounter);
             });
             $('#sortable4 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             });
             if(mycounter == 0) {
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             }
         }
     });
@@ -77,16 +75,16 @@ $(function() {
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             });
             $('#sortable4 li').each(function(index){
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             });
             if(mycounter == 0) {
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             }
         }
     });

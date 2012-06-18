@@ -160,8 +160,7 @@ $this->Html->addCrumb($title);
                     </td>
                     <td>
                         <label for="counter">Total points to spend:</label>
-                        <input type="text" disabled="disabled" id=
-                        "counter" value="0"/>
+                        <p id="counter">0</p>
                     </td>
                 </tr>
             </tbody>
