@@ -6,7 +6,7 @@ class AdminExpertsController extends AppController {
     var $helpers = array('Text', 'Number');
     var $paginate = array(
       'User' => array(
-      	 'limit' => 5,
+      	 'limit' => 100,
       	 'order' => array(
       		   'name' => 'desc'
       	  )
@@ -75,7 +75,7 @@ class AdminExpertsController extends AppController {
     	}
     	
     	$params = array(
-    			'limit' => 5,
+    			'limit' => 100,
     			'rep' => $repo,
     			'menu' => 'menu_experts',
     			'current' => 'not_experts',
@@ -105,7 +105,7 @@ class AdminExpertsController extends AppController {
     	}
     	
     	$params = array(
-    			'limit' => 5,
+    			'limit' => 100,
     			'rep' => $repo,
     			'menu' => 'menu_experts',
     			'current' => 'experts',

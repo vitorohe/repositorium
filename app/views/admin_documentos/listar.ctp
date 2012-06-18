@@ -226,7 +226,7 @@
 		<td>
 			<!-- doc -->
 			<span class="admin-doc-titulo">
-				<?php echo $this->Html->link(Sanitize::html($d['Document']['name']), array('action' => 'edit', $id, $criterio_n), array('escape' => false)) ;?>
+				<?php echo '<strong>'.$d['Document']['name'].'</strong>';?>
 			</span>
 			<div class="admin-doc-texto">		
 				<?php
