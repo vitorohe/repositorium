@@ -84,7 +84,7 @@
                 </div>
                 <div class="box optionsbox"> 
 					<ul id="menu-horizontal">
-						<?php if($this->Session->check('User.esAdmin') || $this->Session->check('User.id') || $this->Session->check('Experto.isExperto')):?>
+						<?php if($this->Session->check('User.esAdmin') || $this->Session->check('User.id') || $this->Session->check('Experto.isExperto')): ?>
 						<li>
 							<a href="javascript:void(0);">Manage</a>
                             <ul>

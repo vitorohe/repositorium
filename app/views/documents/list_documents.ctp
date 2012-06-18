@@ -25,7 +25,7 @@ $this->Html->addCrumb($title);
 	  	<th width="10%"><?php echo $this->Paginator->sort('Repository Id', 'Repository.id');?></th>
 	  	<th width="15%"><?php echo $this->Paginator->sort('Repository Name', 'Repository.name');?></th>
 	  <?php } ?>
-	  <th width="20%">Options</th>
+	  <!--<th width="20%">Options</th>-->
 	</tr>
   </thead>
   <tbody>
@@ -66,14 +66,14 @@ $this->Html->addCrumb($title);
   				<td><?php echo $cr['Repository']['id'];?></td>
   				<td><?php echo $this->Repo->link($cr['Repository']['name'], $cr['Repository']['internal_name']);?></td>
   			<?php }?>  			
-  			<td>
+  			<!--<td>-->
   				<!-- options -->
-				<div class="admin-doc-edit">
+				<!--<div class="admin-doc-edit">
 					<?php echo $this->Html->link('Edit', array('controller' => 'documents','action' => 'edit', $cr['Document']['id'])); ?>
 					&nbsp; | &nbsp;   
 					<?php echo $this->Html->link('Remove', array('controller' => 'documents','action' => 'remove', $cr['Document']['id']), array(), "Are you sure to delete this document!? "); ?>
 				</div>  				
-  			</td>
+  			</td>-->
   		</tr>
   	<?php
   		endforeach;

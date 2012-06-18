@@ -200,6 +200,9 @@ class Attachfile extends AppModel {
 	/*save attached files*/
 	function saveAttachedFiles($data) {
 
+//		if(empty($data) || !isset($data['files']))
+//			return true;
+
 		$fileData = $data['files'];
 
 		$doc = $this->Document->query("select id from documents order by id desc limit 1");
