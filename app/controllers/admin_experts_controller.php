@@ -128,24 +128,25 @@ class AdminExpertsController extends AppController {
     	}
     	
     	$user = $this->getConnectedUser();
+    	$type = $qu == 2 ? '' : 'not';
     	 
     	$criteria = $this->Criteria->find('first', array('conditions' => array('Criteria.id' => $criteriaid),
     				'recursive' => -1));
     	if($user['User']['id'] != $criteria['Criteria']['user_id']){
     		$this->Session->setFlash('You don\'t have permission to access this page', 'flash_errors');
-    		$this->redirect($this->referer());
+    		$this->redirect('/');
     	}
     	
     	if(!$this->CriteriasUser->setExpert($userid, $criteriaid, $qu)){
     		$this->Session->setFlash('An error occurred promoting the user', flash_errors);
-    		$this->redirect($this->referer());
+    		$this->redirect(array('controller' => 'admin_experts', 'action' => 'list_'.$type.'experts', $criteriaid));
     	}
     	else{
     		if($qu == 1)
 	    		$this->Session->setFlash('The user has been promoted to an Expert of the Criteria', 'flash_green');
     		else 
     			$this->Session->setFlash('The user has been droped out from the Expertise of the Criteria', 'flash_green');
-	    	$this->redirect($this->referer());
+	    	$this->redirect(array('controller' => 'admin_experts', 'action' => 'list_'.$type.'experts', $criteriaid));
     	}
     	
     }
