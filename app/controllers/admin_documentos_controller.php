@@ -195,13 +195,12 @@ class AdminDocumentosController extends AppController {
   	
   	if(!empty($this->data)) {
   		if(!empty($this->data['Document']['limit'])) {
-  			$this->paginate['Criteria']['limit'] = $this->data['Document']['limit'];
   			$this->Session->write('CriteriasDocument.limit', $this->data['Document']['limit']);
   		}
   	
   		if(!empty($this->data['CriteriasDocument']['order'])) {
-  			$this->paginate['Criteria']['order'] = $this->_strToArray($this->data['CriteriasDocument']['order']);
-  			$this->Session->write('CriteriasDocument.order', $this->_arrayToStr($this->paginate['Criteria']['order']));
+  			$this->Session->write('CriteriasDocument.order', $this->data['CriteriasDocument']['order']);
+        $this->Session->write('CriteriasDocument.order1', $this->_strToArray($this->data['CriteriasDocument']['order']));
   		}
   	
   		if(!empty($this->data['CriteriasDocument']['filter'])) {
@@ -214,7 +213,10 @@ class AdminDocumentosController extends AppController {
   	}
   	
 
-  	
+    $this->paginate['Criteria']['order'] = $this->Session->check('CriteriasDocument.order1') ? $this->Session->read('CriteriasDocument.order1') : $this->paginate['Criteria']['order'];	
+
+    $this->paginate['Criteria']['limit'] = $this->Session->check('CriteriasDocument.limit') ? $this->Session->read('CriteriasDocument.limit') : $this->paginate['Criteria']['limit'];
+
   	$this->paginate['Criteria']['joins'] = array(
   			array('table' => 'criterias_users',
   					'alias' => 'CriteriasUser',
