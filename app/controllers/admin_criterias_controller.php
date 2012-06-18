@@ -32,7 +32,7 @@ class AdminCriteriasController extends AppController {
         $this->redirect(array('action'=>'listCriteriasUser', $this->data['Criteria']['limit']));
     }
 
-
+    /* List the criterias that the user is expert in */
     function listCriteriasUser() {
 
         if(!empty($this->params['pass']))
