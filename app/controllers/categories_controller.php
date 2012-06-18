@@ -13,45 +13,13 @@ class CategoriesController extends AppController {
 			)
 	);
 
-	//   var $helpers = array('Session', 'Form');
 
-	/*function beforeFilter() {
-	 if(!$this->isExpert()) {
-	$this->Session->setFlash('You do not have permission to access this page');
-	$this->redirect('/');
+	function beforeFilter() {
+	 
 	}
-
-	$this->requireRepository();
-
-	if($this->Session->check('Criteria.limit'))
-		$this->paginate['Criteria']['limit'] = $this->Session->read('Criteria.limit');
-	if(!isset($this->paginate['Criteria']['conditions'])) {
-	$repo = $this->requireRepository();
-
-	$this->paginate['Criteria']['conditions'] = array(
-			'Criteria.repository_id' => $repo['Repository']['id']
-	);
-	}
-	}*/
 
 	function index() {
-		if(!empty($this->data)) {
-			if(!empty($this->data['Criteria']['limit'])) {
-				$this->paginate['Criteria']['limit'] = $this->data['Criteria']['limit'];
-				$this->Session->write('Criteria.limit', $this->data['Criteria']['limit']);
-			}
-		}
-
-		$this->data = $this->paginate();
-		$params = array(
-				'limit' => $this->Session->read('Criteria.limit') ? $this->Session->read('Criteria.limit') : $this->paginate['Criteria']['limit'],
-				'repo' => $this->requireRepository(),
-				'menu' => 'menu_expert',
-				'current' => 'criteria',
-				'title' => 'Criteria'
-		);
-
-		$this->set($params);
+		$this->redirect(array('controller' => 'categories', 'action' => 'create'));
 	}
 
 	function add() {
@@ -132,6 +100,11 @@ class CategoriesController extends AppController {
 		$this->redirect($this->referer());
 	}
 
+	/**
+	 * This function allows you to create a category
+	 * based in the selection of some criterias.
+	 */
+
 	function create(){
 	  	$repo = $this->getCurrentRepository();
 	  	$user = $this->getConnectedUser();
@@ -161,12 +134,7 @@ class CategoriesController extends AppController {
 	    $this->Session->write('criterias_names',$criterias_names);
 	    $this->Session->write('criterias_ids',$criterias_ids);
 	    $this->Session->write('criterias_points',$criterias_points);
-	
-	  	//$constituents = $this->ConstituentsKit->find('list', array(
-	  		//  				'conditions' => array('ConstituentsKit.kit_id' => $repo['Repository']['kit_id'], 'ConstituentsKit.constituent_id' != '0'), 
-	  		  //				'recursive' => 1,
-	  		  	//			'fields'=>array('Constituent.sysname')));
-	  	
+		  	
 	  	if(!empty($this->data)) {
 	  		
 	  		$criterias = explode('&', $this->data['Criteria']['criterias']);
@@ -211,7 +179,6 @@ class CategoriesController extends AppController {
 	  	}
 	  	
 	  	$this->set(compact('criterias'));    
-		//$this->set(compact('constituents'));
 	}
 
 	function arrayDiffEmulation($arrayFrom, $arrayAgainst) {

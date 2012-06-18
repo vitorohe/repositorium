@@ -17,34 +17,17 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('description'); ?>
 
-<!-- source types for repo -->
-
-<!-- 
-<div class="select required">
-	<label for="constituent_id">Select some modifiers for this Repository</label>
-	<input type="hidden" name="data[Repository][Constituents][0]" value="0" id="RepositoryConstituents0">
-	<?php
-	# cgajardo: fix to persist "content" selection even when it's actually disabled, using javascript
-	/*$constituents[0] = array(
-		'name' => $constituents[0]." (required)",
-		'value' => '0',
-		'onClick' => 'this.checked=true'
-	);
-	echo $this->Form->input("Constituents", array("type"=>"select", "multiple"=>"checkbox", "default"=>"0", "options"=>$constituents));
-	*/?>
-</div> -->
-
 </br>
 
 <?php echo $this->Form->checkbox('restrictions', array('value' => 'attachfile', 'hiddenField' => false)); ?>
 
 Attach File: Allow users to attach files to Document
 
-<?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document:')); ?>
+<?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document (0: unlimited):', 'value' => 0)); ?>
 
-<?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB):')); ?>
+<?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB) (0: unlimited):', 'value' => 0)); ?>
 
-<?php echo $this->Form->input('extension', array('label' => 'File extension (eg:"jpg" or "jpg,bmp,gif"):')); ?>
+<?php echo $this->Form->input('extension', array('label' => 'File extension (eg:"jpg" or "jpg,bmp,gif") (*: any extension):' , 'value' => '*')); ?>
 
 <?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
 

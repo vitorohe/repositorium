@@ -10,8 +10,6 @@ $this->Html->addCrumb($title);
 <?php echo $this->Html->image('admin.png',array('class' => 'imgicon')) ; ?><h1 class="h1icon" style="margin-top: 15px;"><?php echo (isset($message) ? $message : $title); ?></h1>
 <div class="clearicon"></div>
 
-<?php echo $this->element('fancybox'); ?>
-
 <?php echo $this->element('paginator_info'); ?>
 <!-- core table -->
 <table id="tabla_documentos" class="ui-widget ui-widget-content tabla" style="width: 100%">

@@ -16,25 +16,15 @@ $this->Html->addCrumb($title);
 <?php echo $ajax->div('checked_title'); 
       echo $ajax->divEnd('checked_title'); ?>
 <?php
-    //foreach($constituents as $constituent){
-        echo $this->Form->input('Category.description', array('class' => 'ingresar-documento', 'label' => 'Description', 'rows' => 10, 'cols' => 50, 'default' => '', 'onChange'=>'CheckContent(DocumentContent.value)'));
+    
+    echo $this->Form->input('Category.description', array('class' => 'ingresar-documento', 'label' => 'Description', 'rows' => 10, 'cols' => 50, 'default' => '', 'onChange'=>'CheckContent(DocumentContent.value)'));
 
-    //  if ($constituent=='content'){
-
-            echo("<div id='checked_content'></div>");
-    //  }
-    //  if ($constituent=='attachFile'){
-    //  }
-    //}
-    //DocumentFileAttach.value
-    //echo '<input type="button" id="file_aux_button" name="file_aux_button" value="Check files"  OnClick="CheckFile(DocumentTitle.value)" />';
+    echo("<div id='checked_content'></div>");
 ?>
 
 </br>
 </br>
 </br>
-
-<!--INI-->
 
 <script>
 $(function() {
@@ -53,17 +43,16 @@ $(function() {
                 var start = $(this).text().indexOf('-')+1;
                 var end = $(this).text().indexOf('points')-1;
                 mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             });
             if(mycounter == 0) {
-                $('#counter').val(mycounter);
+                $('#counter').text(mycounter);
             }
         }
     });
 
     $('form').submit(function(){ 
         $('#thedata').val($( "#sortable2" ).sortable("serialize"));
-        //return false;
     });
 
 });
@@ -97,6 +86,14 @@ $(function() {
                         <div id="msg">
                         </div>
                         <ul id="sortable1" name="hola" class="connectedSortable">
+                            <?php                            
+                                foreach ($criterias as $criteria) {
+                                    echo "<li class=\"ui-state-default\" ";
+                                    echo "id=\"criterias_".$criteria['Criteria']['id']."\" >";
+                                    echo $criteria['Criteria']['name']." - ".$criteria['Criteria']['upload_score']." points ";
+                                    echo "</li>";
+                                }
+                            ?>
                         </ul>
                     </td>
                     <input type="hidden" name="data[Criteria][criterias]" id="thedata">
@@ -106,8 +103,7 @@ $(function() {
                     </td>
                     <td>
                         <label for="counter">Total points to spend:</label>
-                        <input type="text" disabled="disabled" id=
-                        "counter" value="0"/>
+                        <p id="counter">0</p>
                     </td>
                 </tr>
             </tbody>
@@ -123,12 +119,3 @@ $(function() {
 </fieldset>
 
 <br />
-
-<!-- 
-<div class="ui-widget">
-    <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 10px .7em;"> 
-        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-        <strong>Hey!</strong> You may add more tags separating them by commas (,)</p>
-    </div>
-</div>
--->
