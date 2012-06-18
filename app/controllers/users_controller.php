@@ -45,7 +45,7 @@ class UsersController extends AppController {
 		}
 	  }
 
-	  if($this->Session->read('User.esAdmin') == 0)
+	  if($this->Session->read('User.isAdmin') == 0)
 		$this->data['User']['is_administrator'] = 0;
 
 	  $this->User->set($this->data);

@@ -8,15 +8,15 @@
 
 class AdminRepositoriesController extends AppController {
 	var $name = 'AdminRepositories';
-	var $uses = array('Repository', 'RepositoriesUser', 'User');
+	var $uses = array('Repository', 'RepositoriesUser', 'User', 'RepositoryRestriction');
 	var $paginate = array(
 		'Repository' => array(
-		  'limit' => 5,
+		  'limit' => 30,
 		  'recursive' => -1,
 		  'order' => array('Repository.created' => 'desc')
 		),
 		'User' => array(
-			'limit' => 5,
+			'limit' => 30,
 			'recursive' => -1,
 			'order' => array('User.id' => 'asc')
 		)
@@ -59,18 +59,102 @@ class AdminRepositoriesController extends AppController {
 			
 			if(empty($repo))
 				$this->e404();
+
+			$repo_restrictions = $this->RepositoryRestriction->find('first', array(
+  	  				'conditions' => array(
+  	  					'RepositoryRestriction.repository_id' => $id, 
+  	  					), 
+  	   				'recursive' => -1));
 			
+			if($repo_restrictions['RepositoryRestriction']['activation_id'] == 'N')
+				$restrictions = array();
+			else
+				$restrictions = $repo_restrictions;
+
+			$this->Session->write('restrictions', $repo_restrictions);
+			$this->Session->write('repo', $repo);
+
 			$this->data = $repo;
 			$current = 'repositories';
 			$menu = 'menu_admin';
-			$this->set(compact('current', 'menu'));
+			$this->set(compact('current', 'menu', 'restrictions'));
 		} else {
 			$this->Repository->set($this->data);
+
+			$repo_restrictions = $this->Session->read('restrictions');
+			$repo = $this->Session->read('repo');
+
+			$new_restrictions = array();
+		
+			if(isset($this->data['Repository']['restrictions'])) {
+				if(empty($this->data['Repository']['max_documents']) && 
+					empty($this->data['Repository']['max_size']) && 			
+					empty($this->data['Repository']['max_extension'])) {
+					$this->Session->setFlash("You must set at least one option: max documents, max size, extension");
+					$this->redirect($this->referer());
+				}
+
+				if(!empty($this->data['Repository']['max_documents'])) {
+					$new_restrictions['amount'] = $this->data['Repository']['max_documents'];
+					if(!is_numeric($new_restrictions['amount'])) {
+						$this->Session->setFlash("Maximum of documents must be a number", flash_errors);
+						$this->redirect($this->referer());		
+					}
+				} else {
+					$new_restrictions['amount'] = 0;
+				}
+				if(!empty($this->data['Repository']['max_size'])) {
+					$new_restrictions['size'] = $this->data['Repository']['max_size'];
+					if(!is_numeric($new_restrictions['size'])) {
+						$this->Session->setFlash("Maximum size must be a number", flash_errors);
+						$this->redirect($this->referer());		
+					}
+				} else {
+					$new_restrictions['size'] = 0;
+				}
+				if(!empty($this->data['Repository']['extension'])) {
+					$new_restrictions['extension'] = $this->data['Repository']['extension'];
+					$new_restrictions['extension'] = trim($new_restrictions['extension']);
+
+				} else {
+					$new_restrictions['extension'] = "*";
+				}
+				
+			}
+			
 			if(!$this->Repository->validates()) {
 				$this->Session->setFlash($this->Repository->validationErrors, 'flash_errors');
 			} elseif(!$this->Repository->save()) {
 				$this->Session->setFlash('An error ocurred saving the repository. Please, blame the developer', 'flash_errors');
 			} else {
+
+				if(!empty($new_restrictions)){
+
+					if(empty($repo_restrictions)){
+						if(!$this->RepositoryRestriction->saveRestriction($new_restrictions, $repo['Repository']['user_id'], $repo['Repository']['id'])) {
+							$this->Session->setFlash('An error occurred creating the repository. Please, blame the developer', 'flash_errors');
+							$this->redirect('/admin_repositories/');
+						} 
+					} else {
+						$repo_restrictions['RepositoryRestriction']['activation_id'] = 'A';
+						$repo_restrictions['RepositoryRestriction']['amount'] = $new_restrictions['amount'];
+						$repo_restrictions['RepositoryRestriction']['size'] = $new_restrictions['size'];;
+						$repo_restrictions['RepositoryRestriction']['extension'] = $new_restrictions['extension'];
+
+						$this->RepositoryRestriction->save($repo_restrictions);								
+					}
+	
+				} else {
+
+					if(!empty($repo_restrictions)){
+
+						$repo_restrictions['RepositoryRestriction']['activation_id'] = 'N';
+
+						$this->RepositoryRestriction->save($repo_restrictions);		
+					}
+
+				}
+
 				$this->Session->setFlash('Repository saved', 'flash_green');
 				CakeLog::write('activity', 'Repository [id='.$id.'] edited');
 				$this->redirect('index');

@@ -150,7 +150,10 @@ class DocumentsController extends AppController {
     $this->Session->write('criterias_categories', $criterias_categories);
 
   	$restrictions = $this->RepositoryRestriction->find('first', array(
-  	  				'conditions' => array('RepositoryRestriction.repository_id' => $repo['Repository']['id']), 
+  	  				'conditions' => array(
+                'RepositoryRestriction.repository_id' => $repo['Repository']['id'],
+                'RepositoryRestriction.activation_id' => 'A'
+                ), 
   	   				'recursive' => -1));
 
     $this->Session->write('restrictions', $restrictions);
@@ -518,7 +521,7 @@ class DocumentsController extends AppController {
 
     if(is_null($repo) || empty($repo)){
 
-      if ($this->Session->check('User.esAdmin')){
+      if ($this->Session->check('User.isAdmin')){
 
         $this->paginate['Document']['joins'] = array(
           array('table' => 'repositories',
@@ -548,7 +551,7 @@ class DocumentsController extends AppController {
       }
     }
     else{
-      if ($this->Session->check('User.esAdmin'))
+      if ($this->Session->check('User.isAdmin'))
         $this->paginate['Document']['conditions'] = array('Document.repository_id' => $repo['Repository']['id']);
       else 
         $this->paginate['Document']['conditions'] = array('Document.user_id' => $user['User']['id'], 'Document.repository_id' => $repo['Repository']['id']);
@@ -568,7 +571,7 @@ class DocumentsController extends AppController {
         $documents_with_files[] = $document;
       }
 
-    if ($this->Session->check('User.esAdmin')){
+    if ($this->Session->check('User.isAdmin')){
 
       $data = array(
         'documents_with_files' => $documents_with_files,

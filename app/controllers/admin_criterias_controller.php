@@ -21,7 +21,7 @@ class AdminCriteriasController extends AppController {
 
     function beforeFilter() {
     	
-    	if(!$this->Session->check('Experto.isExperto')) {
+    	if(!$this->Session->check('Expert.isExpert')) {
     		$this->Session->setFlash('You don\'t have permission to access this page');
     		$this->redirect('/');
     	}

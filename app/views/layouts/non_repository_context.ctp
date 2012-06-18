@@ -98,11 +98,11 @@
                 </div>
                 <div class="box optionsbox"> 
 					<ul id="menu-horizontal">
-						<?php if ($this->Session->check('User.esAdmin') || $this->Session->check('User.id') || $this->Session->check('Experto.isExperto')) : ?>
+						<?php if ($this->Session->check('User.isAdmin') || $this->Session->check('User.id') || $this->Session->check('Expert.isExpert')) : ?>
                             <li>
                                 <a href="javascript:void(0);">Manage</a>
                                 <ul>
-                                    <?php if ($this->Session->check('User.esAdmin')): ?>
+                                    <?php if ($this->Session->check('User.isAdmin')): ?>
                                         <li>
                                             <?php echo $this->Html->link('Manage Site', array('controller' => 'admin_repositories'));?>
                                         </li>
@@ -114,7 +114,7 @@
                                             <?php echo $this->Html->link('Manage my Documents', array('controller' => 'documents', 'action' => 'list_documents'));?>
                                         </li>
                                     <?php endif; ?>
-                                    <?php if ($this->Session->check('Experto.isExperto')): ?>
+                                    <?php if ($this->Session->check('Expert.isExpert')): ?>
                                         <li>
                                             <?php echo $this->Html->link('Manage Criterias', array('controller' => 'admin_criterias'));?>
                                         </li>

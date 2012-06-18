@@ -69,7 +69,7 @@ var w_ids=new Array();
 
 	<?php 
   	foreach($data_table_right as $key => $d):
-		echo 'var warned_list_'.$key.'=new Array();';	//lista array
+		echo 'var warned_list_'.$key.'=new Array();';	
 		echo 'warned_list_'.$key.'_id=new Array();';
 		echo 'warned_list_'.$key.'_content=new Array();';
 		echo 'warned_list_'.$key.'_created=new Array();';

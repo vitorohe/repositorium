@@ -141,8 +141,8 @@ class PagesController extends AppController {
 				)
 		));
 
-		if(!$this->Session->read('Experto.isExperto') && !empty($your_criterias))
-			$this->Session->write('Experto.isExperto', true);	
+		if(!$this->Session->read('Expert.isExpert') && !empty($your_criterias))
+			$this->Session->write('Expert.isExpert', true);	
 
 		
 		$this->RepositoriesUser->unbindModel(array('belongsTo' => array('User')));

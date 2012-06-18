@@ -59,7 +59,7 @@ $(document).ready(function() {
 		if(ok)
 			$(window.location).attr('href', '<?php echo $this->Html->url(array('controller' => 'admin_documentos', 'action' => 'remove', $id)); ?>');
 	});
-	//deshabilita el boton de save
+	//disables the save button
 	var cmp_button=document.getElementById("save_button");
 	cmp_button.setAttribute("disabled","disabled");
 	cmp_button.setAttribute("aria-disabled","true");
@@ -227,7 +227,7 @@ echo $this->Form->end();
 	
 	$value = ($en_valid) ? 0 : 1;
 	echo "&nbsp;&nbsp;&nbsp;";
-	//Boton deshabilitado pq no esta haciendo lo que deberia
+	//Disables button, it doesn't do what it must
 	echo $this->Form->button('Save and return', array('class' => 'adm-save disabled','id'=> 'save_button'));
 	echo "&nbsp;&nbsp;&nbsp;";
 	echo $this->Form->button('Cancel', array('class' => 'adm-cancel'));

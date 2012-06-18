@@ -88,8 +88,8 @@ class RepositoriesController extends AppController {
 			
 			$cloud_data = "<tags>";
 			$tag_factor_crecimiento = 1.5;
-			$tag_min_size = 10; //tamano minimo
-			$tag_max_size = 40; //tamano maximo
+			$tag_min_size = 10;
+			$tag_max_size = 40;
 
 		  	$options['joins'] = array(
 		  			array('table' => 'criterias_documents',
@@ -132,7 +132,7 @@ class RepositoriesController extends AppController {
 			}
 			
 			if(!empty($criteriasuser) && isset($criteriasuser)) {
-				$this->Session->write('Experto.isExperto', true);	
+				$this->Session->write('Expert.isExpert', true);	
 			}			
 			
 			$this->set(compact('repository','watching', 'user', 'creator', 'documents', 'cloud_data'));
@@ -345,7 +345,4 @@ class RepositoriesController extends AppController {
 		$this->redirect(array('action' => 'set_repository_by_id', $id));
 	}
 
-	function _make_user_expert() {
-		$this->Session->write('User.esExperto', true);
-	}
 }

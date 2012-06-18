@@ -1,6 +1,6 @@
     $(document).ready(function(){
         /*
-         Set the inner html of the table, tell the user to enter a search term to get started.
+         Sets the inner html of the table, tells the user to enter a search term to get started.
          We could place this anywhere in the document. I chose to place it
          in the table.
         */

@@ -1,3 +1,4 @@
+
 <?php
 $title = "Edit Repository";	
 $this->viewVars['title_for_layout'] = $title;
@@ -12,8 +13,8 @@ $this->Html->addCrumb($title);
 <?php echo 
 	   $this->element('menu_admin', array(
 		 'isLogged' => $this->Session->check('User.id'), 
-		 'isAdmin' => $this->Session->check('User.esAdmin'),
-		 'isExpert' => false, //$this->Session->check('User.esExperto'),
+		 'isAdmin' => $this->Session->check('User.isAdmin'),
+		 'isExpert' => false,
          'current' => $current
 	   ));       
 ?> 
@@ -30,15 +31,33 @@ $this->Html->addCrumb($title);
 
 <?php echo $this->Form->input('description'); ?>
 
-<?php //echo $this->Form->input('min_points', array('label' => 'Minimum points assigned to each new user of this repository')); ?>
+<br />
 
-<?php //echo $this->Form->input('download_cost', array('label' => 'Cost (in points) of each document to be downloaded')); ?>
+<?php if(empty($restrictions)) { ?>
 
-<?php //echo $this->Form->input('upload_cost', array('label' => 'Cost (in points) of each document to be uploaded')); ?>
+	<?php echo $this->Form->checkbox('restrictions', array('value' => 'attachfile', 'hiddenField' => false)); ?>
 
-<?php //echo $this->Form->input('documentpack_size', array('label' => 'Size of each pack of documents for document download')); ?>
+	Attach File: Allow users to attach files to Document
 
-<?php //echo $this->Form->input('challenge_reward', array('label' => 'Amount of points to be rewarded after passing successfuly a challenge')); ?>
+	<?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document (0: unlimited):', 'value' => 0)); ?>
+
+	<?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB) (0: unlimited):', 'value' => 0)); ?>
+
+	<?php echo $this->Form->input('extension', array('label' => 'File extension (eg:"jpg" or "jpg,bmp,gif") (*: any extension):', 'value' => '*')); ?>
+
+<?php } else { ?>
+
+	<?php echo $this->Form->checkbox('restrictions', array('value' => 'attachfile', 'hiddenField' => false, 'checked' => 'checked')); ?>
+
+	Attach File: Allow users to attach files to Document
+
+	<?php echo $this->Form->input('max_documents', array('label' => 'Maximum amount of files to attach on a document (0: unlimited):', 'value' => $restrictions['RepositoryRestriction']['amount'])); ?>
+
+	<?php echo $this->Form->input('max_size', array('label' => 'Maximum of file size (MB) (0: unlimited):', 'value' => $restrictions['RepositoryRestriction']['size'])); ?>
+
+	<?php echo $this->Form->input('extension', array('label' => 'File extension (eg:"jpg" or "jpg,bmp,gif") (*: any extension):', 'value' => $restrictions['RepositoryRestriction']['extension'])); ?>
+
+<?php } ?>
 
 <br /><br />
 <!--  

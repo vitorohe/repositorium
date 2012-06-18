@@ -1,3 +1,4 @@
+
 <?php
 $this->viewVars['title_for_layout'] = $title;
 $this->Html->addCrumb('Criterias', '/admin_criterias');
@@ -11,8 +12,8 @@ $this->Html->addCrumb($title);
 <?php echo 
 	   $this->element($menu, array(
 		 'isLogged' => $this->Session->check('User.id'), 
-		 'isAdmin' => $this->Session->check('User.esAdmin'),
-		 'isExpert' => false, //$this->Session->check('User.esExperto'),
+		 'isAdmin' => $this->Session->check('User.isAdmin'),
+		 'isExpert' => false,
          'current' => $current
 	   ));       
 ?> 

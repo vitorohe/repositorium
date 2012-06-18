@@ -31,7 +31,7 @@ class AdminDocumentosController extends AppController {
 		$this->redirect('/');
 	}
   	
-  	if($this->isAnonymous() || !$this->Session->check('Experto.isExperto')) {
+  	if($this->isAnonymous() || !$this->Session->check('Expert.isExpert')) {
   		$this->Session->setFlash('You do not have permission to access this page');
   		$this->redirect('/');
   	}

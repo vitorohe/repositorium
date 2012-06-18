@@ -14,7 +14,7 @@ class AdminExpertsController extends AppController {
     );
 
     function beforeFilter() {
-    	if(!$this->Session->check('Experto.isExperto')) {
+    	if(!$this->Session->check('Expert.isExpert')) {
     		$this->Session->setFlash('You don\'t have permission to access this page', 'flash_errors');
     		$this->redirect('/');
     	}

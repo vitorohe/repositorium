@@ -97,7 +97,7 @@ class AppController extends Controller {
 			$this->Session->write('User.username', $user['User']['username']);
 
 			if($this->isAdmin()) {
-				$this->Session->write('User.esAdmin', true);
+				$this->Session->write('User.isAdmin', true);
 			}
 			
 			if($this->Session->check('Repository.current')) {
@@ -123,12 +123,6 @@ class AppController extends Controller {
 			$this->Session->delete('Repository');
 			$this->Session->write('Repository.current', $repo['Repository']['internal_name']);
 			$this->Session->write('Repository.name', $repo['Repository']['name']);
-		}
-		
-		if($this->isExpert()) {
-			$this->Session->write('User.esExperto', true);
-		} else {
-			$this->Session->write('User.esExperto', false);
 		}
 	}
  
@@ -195,25 +189,6 @@ class AppController extends Controller {
 		}
 		
 		return $repo;
-	}
-	
-	function isExpert() {
-		$repo = $this->requireRepository();
-		$user = $this->getConnectedUser();
-		$expert;
-		/*$expert = $this->Expert->find('first', array(
-  			'conditions' => array(
-  				'repository_id' => $repo['Repository']['id'],
-  				'user_id' => $user['User']['id']
-			),
-		  	'recursive' => -1
-		));*/
-		
-		if(empty($expert)) {
-			return false;
-		}
-		
-		return true;
 	}
 	
 	function isAnonymous() {
