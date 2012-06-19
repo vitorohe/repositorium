@@ -36,24 +36,6 @@
     $(document).ready(function() {
       $('.textboxlist-autocomplete-results').hide();
     });
-    
-  /*function add_textboxlist(selector){ 
-    $("" + selector).textboxlist({
-      unique : true,
-      bitsOptions : {
-        editable : {
-          addOnBlur : true, 
-          addKeys : [188]         
-          }},
-      plugins: {
-        autocomplete: {
-          minLength: 3,
-          queryRemote: true,
-          remote: {
-            url: '<?php echo $this->Html->url(array('controller' => 'tags', 'action' => 'autocomplete')); ?>'         
-          }
-      }}});
-  }*/
   
   //Improve the flashMessage
   $("#flashMessage").addClass("ui-state-highlight ui-corner-all flash-style");
@@ -87,9 +69,8 @@
                         <li><?php echo $this->Html->link('Log in', array('controller' => 'login'), array('escape' => false)); ?></li>
                         <?php } else {
                             $nombre = $this->Session->read('User.username');
-                            $points = $this->Session->read('User.points');
                         ?>
-                        <li>Hey, <?php echo $nombre.'!' . $points;?></li>
+                        <li>Hey, <?php echo $nombre.'!';?></li>
                         <li><?php echo $this->Html->link('Edit profile', array('controller' => 'users', 'action' => 'edit')); ?></li>
                         <li><?php echo $this->Html->link('Logout', '/logout'); ?></li>
                         <?php } ?>
