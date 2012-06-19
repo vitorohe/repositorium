@@ -40,6 +40,16 @@ class CriteriasController extends AppController {
   
     $criterias = $this->Criteria->findRepoCriterias($repo['Repository']['id']);
 
+    if(empty($criterias)){
+    	$this->Session->setFlash('There aren\'t documents in the repository');
+    	if(Configure::read('App.subdomains')) {
+    		$dom = Configure::read('App.domain');
+    		$this->redirect("http://{$repo['Repository']['internal_name']}.{$dom}");
+    	} else {
+    		$this->redirect(array('controller' => 'repositories', 'action' => 'index', $repo['Repository']['internal_name']));
+    	}
+    }
+    
     $criterias_names = array();
     foreach ($criterias as $criteria) {
         $criterias_names[] = $criteria['Criteria']['name'];

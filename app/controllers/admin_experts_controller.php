@@ -29,7 +29,7 @@ class AdminExpertsController extends AppController {
 	    					'recursive' => -1));
 	    	if(is_null($criteria) || empty($criteria)){
 	    		$this->Session->setFlash('You don\'t have permission to access this page', 'flash_errors');
-	    		$this->redirect($this->referer());
+	    		$this->redirect('/');
 	    	}
     	}
     }
@@ -42,8 +42,7 @@ class AdminExpertsController extends AppController {
     
     function set_paginate($user = null, $id = null, $non_experts = true){
     	if(is_null($user) || is_null($id)){
-    		$this->Session->setFlash('An error has occurred', flash_errors);
-    		$this->redirect($this->referer());
+    		return false;
     	}
     	
 		$subquery = $this->CriteriasUser->getExpertsSubquery($id, $non_experts);
@@ -55,6 +54,8 @@ class AdminExpertsController extends AppController {
 		
 		$this->paginate['User']['recursive'] = -1;
 		$this->paginate['User']['conditions'] = array($subquery, 'User.id <>' => $user['User']['id']);
+		
+		return true;
     	
     }
     
@@ -63,7 +64,9 @@ class AdminExpertsController extends AppController {
     	$user = $this->getConnectedUser();
     	$repo = $this->getCurrentRepository();
     	
-    	$this->set_paginate($user, $id);
+    	if(!$this->set_paginate($user, $id))
+    		$this->Session->setFlash('An error has occurred', flash_errors);
+    		$this->redirect($this->referer());
     	
     	$users = $this->paginate();
     	$criteria = $this->Criteria->find('first', array('conditions' => array('Criteria.id' => $id)));
@@ -92,7 +95,9 @@ class AdminExpertsController extends AppController {
     	$user = $this->getConnectedUser();
     	$repo = $this->getCurrentRepository();
     	 
-    	$this->set_paginate($user, $id, false);
+    	if(!$this->set_paginate($user, $id, false))
+    		$this->Session->setFlash('An error has occurred', flash_errors);
+    		$this->redirect($this->referer());
     	 
     	$users = $this->paginate();
     	$criteria = $this->Criteria->find('first', array('conditions' => array('Criteria.id' => $id)));
@@ -124,7 +129,7 @@ class AdminExpertsController extends AppController {
 
     	if(is_null($userid) || is_null($criteriaid)){
     		$this->Session->setFlash('Invalid criteria and/or user', flash_errors);
-    		$this->redirect($this->referer());
+    		$this->redirect('/');
     	}
     	
     	$user = $this->getConnectedUser();
