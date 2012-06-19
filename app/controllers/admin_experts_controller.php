@@ -48,8 +48,8 @@ class AdminExpertsController extends AppController {
 		$subquery = $this->CriteriasUser->getExpertsSubquery($id, $non_experts);
 		
 		if(is_null($subquery)){
-			$this->Session->setFlash('An error has occurred in the DB', flash_errors);
-			$this->redirect($this->referer());
+			$this->Session->setFlash('An error has occurred in the DB', 'flash_errors');
+			$this->redirect('/');
 		}
 		
 		$this->paginate['User']['recursive'] = -1;
@@ -64,9 +64,10 @@ class AdminExpertsController extends AppController {
     	$user = $this->getConnectedUser();
     	$repo = $this->getCurrentRepository();
     	
-    	if(!$this->set_paginate($user, $id))
-    		$this->Session->setFlash('An error has occurred', flash_errors);
-    		$this->redirect($this->referer());
+    	if(!$this->set_paginate($user, $id)){
+    		$this->Session->setFlash('An error has occurred', 'flash_errors');
+			$this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
+    	}
     	
     	$users = $this->paginate();
     	$criteria = $this->Criteria->find('first', array('conditions' => array('Criteria.id' => $id)));
@@ -95,9 +96,10 @@ class AdminExpertsController extends AppController {
     	$user = $this->getConnectedUser();
     	$repo = $this->getCurrentRepository();
     	 
-    	if(!$this->set_paginate($user, $id, false))
+    	if(!$this->set_paginate($user, $id, false)){
     		$this->Session->setFlash('An error has occurred', flash_errors);
-    		$this->redirect($this->referer());
+    		$this->redirect(array('controller' => 'admin_criterias', 'action' => 'listCriteriasUser'));
+    	}
     	 
     	$users = $this->paginate();
     	$criteria = $this->Criteria->find('first', array('conditions' => array('Criteria.id' => $id)));
