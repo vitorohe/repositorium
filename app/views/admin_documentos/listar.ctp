@@ -193,9 +193,9 @@
 				echo '&nbsp;&nbsp;&nbsp;';
 				echo $this->Form->button('Reset stats', array('id' => 'adm-mass-reset'));
 				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Invalidate', array('id' => 'adm-mass-invalidate'));
+				echo $this->Form->button('Validate Negative', array('id' => 'adm-mass-invalidate'));
 				echo '&nbsp;&nbsp;&nbsp;';
-				echo $this->Form->button('Validate', array('id' => 'adm-mass-validate'));
+				echo $this->Form->button('Validate Positive', array('id' => 'adm-mass-validate'));
 			?>
 		</div>
 		<!-- end mass edit-->	
@@ -247,11 +247,11 @@
 				<br>From Criteria: <?php echo $d['Criteria']['name']?>
 				<br><?php 
 				if($d['CriteriasDocument']['answer'] == 1){
-					echo 'Validated'; 
+					echo '<p style="color:green;">Validated Positive</p>'; 
 				}else if($d['CriteriasDocument']['answer'] == 2){
-					echo 'Invalidated';
+					echo '<p style="color:red;">Validated Negative</p>';
 				}else{
-					echo 'Without evaluation';
+					echo '<p style="color:black;">Without evaluation</p>';
 				} ?>
 			</div>
 		</td>
