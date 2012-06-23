@@ -89,7 +89,7 @@
 					&nbsp; | &nbsp;   
 					<?php echo $this->Html->link('Remove', array('action' => 'remove', $cr['Criteria']['id']), array(), "Are you sure to delete this criteria?"); ?>
 					<br>   
-					<?php echo $this->Html->link('Set Experts', array('controller' => 'admin_experts', 'action' => 'list_notexperts', $cr['Criteria']['id'])); ?>
+					<?php echo $this->Html->link('Manage Experts', array('controller' => 'admin_experts', 'action' => 'list_notexperts', $cr['Criteria']['id'])); ?>
 				</div>  				
   			</td>
   		</tr>
