@@ -92,7 +92,11 @@ class Criteria extends AppModel {
 			'positive' => array(
 				'rule' => array('positive', 'collaboration_score'),
 				'message' => 'Challenge reward must be a positive number',
-			)
+			),
+			'greater_or_equal' => array(
+        		'rule' => array('comparison', 'greater or equal', 'upload_score'),
+        		'message' => 'Score given in a challenge must be greater or equal to upload cost.'
+    		)
 		),
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

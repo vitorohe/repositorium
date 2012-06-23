@@ -66,7 +66,7 @@ $(function() {
 });
 </script>
 
-*Note: next representation of criterias follows this structure  <strong>name (upload score/download score/collaboration score)</strong>
+<i>*Note: next representation of criterias follows this structure  <strong>name (upload score/download score/collaboration score)</strong></i>
 
 </br>
 </br>
