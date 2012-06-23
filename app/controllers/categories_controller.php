@@ -125,15 +125,27 @@ class CategoriesController extends AppController {
 	        $criterias_ids[] = $criteria['Criteria']['id'];
 	    }
 	
-	    $criterias_points = array();
+	    $criterias_points_upload = array();
 	    foreach ($criterias as $criteria) {
-	        $criterias_points[] = $criteria['Criteria']['upload_score'];
+	        $criterias_points_upload[] = $criteria['Criteria']['upload_score'];
+	    }
+
+	    $criterias_points_download = array();
+	    foreach ($criterias as $criteria) {
+	        $criterias_points_download[] = $criteria['Criteria']['download_score'];
+	    }
+
+	    $criterias_points_collaboration = array();
+	    foreach ($criterias as $criteria) {
+	        $criterias_points_collaboration[] = $criteria['Criteria']['collaboration_score'];
 	    }
 	
 	
 	    $this->Session->write('criterias_names',$criterias_names);
 	    $this->Session->write('criterias_ids',$criterias_ids);
-	    $this->Session->write('criterias_points',$criterias_points);
+	    $this->Session->write('criterias_points_upload',$criterias_points_upload);
+	    $this->Session->write('criterias_points_download',$criterias_points_download);
+	    $this->Session->write('criterias_points_collaboration',$criterias_points_collaboration);
 		  	
 	  	if(!empty($this->data)) {
 	  		
@@ -180,6 +192,14 @@ class CategoriesController extends AppController {
 	  	
 	  	$this->set(compact('criterias'));    
 	}
+
+
+	/**
+	 * This function allows to delete the element that is
+	 * in $arrayFrom and in $arrayAgainst at the same time.
+	 * The result is the difference, i.e., it the array 
+	 * $arrayFrom without elements from $arrayAgainst 
+	 */
 
 	function arrayDiffEmulation($arrayFrom, $arrayAgainst) {
 		foreach ($arrayFrom as $key => $value) {

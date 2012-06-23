@@ -153,8 +153,8 @@ $this->viewVars['title_for_layout'] = $title;
                     <td>
                         <label for="amount">Amount of documents:</label>
                         <input type="text" id=
-                        "amount" name="data[Payed_search][documents_amount]" value="1"/>
-                        <label for="counter">Total points (1 document):</label>
+                        "amount" name="data[Payed_search][documents_amount]" value="1" maxlength="3" size="3"/>
+                        <label for="counter">Total points to <strong>search</strong> 1 document:</label>
                         <p id="counter">0</p>
                     </td>
                 </tr>
@@ -167,7 +167,7 @@ $this->viewVars['title_for_layout'] = $title;
 </div>
 <!--Search box-->
 <div id="dialog-confirm" title="Search documents">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog" style="text-align:left; color: #036633; font-size:1.0em;"></pre><br/><br/>Are you sure?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog"></pre><br/><br/>Are you sure?</p>
 </div>
 <?php echo $this->Form->submit('Search'); ?> 
 <?php }?>

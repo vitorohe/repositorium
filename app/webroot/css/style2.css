@@ -20,6 +20,27 @@
 	width: 180px; 
 }
 
+
+/* counter criterias and categories points */
+
+#counter{
+	color:green; 
+	font-size: 1.2em;
+	margin: 10px 10pc 10px 10px;
+
+}
+
+
+/* confirmation dialog in search and add document */
+
+#total-dialog {
+	margin-left: 10px; 
+	text-align:left; 
+	color: #036633; 
+	font-size:1.0em;"
+}
+
+
 .link-avoid{
 	color : #346E9C !important;
 	font-weight: bold;

@@ -11,6 +11,7 @@ $this->Html->addCrumb($title);
 <div class="clearicon"></div>
 
 <fieldset class="datafields">
+
 <?php echo $this->Form->create(null, array('url' => '/categories/create', 'type' => 'file', 'inputDefaults' => array('error' => false)));?>
 <?php echo $this->Form->input('Category.name', array('class' => 'ingresar-documento', 'label' => 'Title', 'default' => '', 'size' => 50, 'onChange'=>"CheckTitle(DocumentTitle.value)"));?> 
 <?php echo $ajax->div('checked_title'); 
@@ -23,13 +24,17 @@ $this->Html->addCrumb($title);
 ?>
 
 </br>
+
+Please, drag and drop to choose a criteria or category
 </br>
 </br>
 
 <script>
 $(function() {
 
-    var mycounter = 0;
+    var mycounter_u = 0;
+    var mycounter_d = 0;
+    var mycounter_c = 0;
 
     $( "#sortable1, #sortable2" ).sortable({
         connectWith: ".connectedSortable"
@@ -37,16 +42,19 @@ $(function() {
 
     $("#sortable2").sortable({
         update: function(event, ui) {
-            mycounter = 0;
+            mycounter_u = 0;
+            mycounter_d = 0;
+            mycounter_c = 0;
             
             $('#sortable2 li').each(function(index){
-                var start = $(this).text().indexOf('-')+1;
-                var end = $(this).text().indexOf('points')-1;
-                mycounter +=parseInt($(this).text().substring(start, end));
-                $('#counter').text(mycounter);
+                array_points = $(this).text().split("/");
+                mycounter_u += parseInt(array_points[0].substring(array_points[0].indexOf('(')+1));
+                mycounter_d += parseInt(array_points[1]);
+                mycounter_c += parseInt(array_points[2].substring(0, array_points[2].indexOf(')')));
+                $('#counter').text(mycounter_u + "/" + mycounter_d + "/" + mycounter_c);
             });
-            if(mycounter == 0) {
-                $('#counter').text(mycounter);
+            if(mycounter_u == 0 && mycounter_d == 0 && mycounter_c == 0) {
+                $('#counter').text("0/0/0");
             }
         }
     });
@@ -58,6 +66,10 @@ $(function() {
 });
 </script>
 
+*Note: next representation of criterias follows this structure  <strong>name (upload score/download score/collaboration score)</strong>
+
+</br>
+</br>
 <!--Search box-->
 <div id="container">
     <div class="ui-grid ui-widget ui-widget-content ui-corner-all">
@@ -90,7 +102,9 @@ $(function() {
                                 foreach ($criterias as $criteria) {
                                     echo "<li class=\"ui-state-default\" ";
                                     echo "id=\"criterias_".$criteria['Criteria']['id']."\" >";
-                                    echo $criteria['Criteria']['name']." - ".$criteria['Criteria']['upload_score']." points ";
+                                    echo $criteria['Criteria']['name']." (".$criteria['Criteria']['upload_score'];
+                                    echo "/".$criteria['Criteria']['download_score'];
+                                    echo "/".$criteria['Criteria']['collaboration_score'].")";
                                     echo "</li>";
                                 }
                             ?>
@@ -102,7 +116,7 @@ $(function() {
                         </ul>
                     </td>
                     <td>
-                        <label for="counter">Total points to spend:</label>
+                        <label for="counter">Total points (upload/download/collaboration):</label>
                         <p id="counter">0</p>
                     </td>
                 </tr>

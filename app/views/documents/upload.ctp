@@ -84,8 +84,12 @@ $this->Html->addCrumb($title);
 ?>
 
 </br>
+
+Please, drag and drop to choose a criteria or category
 </br>
 </br>
+
+
 
 <!--Search box-->
 <div id="container">
@@ -159,7 +163,7 @@ $this->Html->addCrumb($title);
                         </ul>
                     </td>
                     <td>
-                        <label for="counter">Total points to spend:</label>
+                        <label for="counter">Total points to spend to <strong>upload</strong> this document:</label>
                         <p id="counter">0</p>
                     </td>
                 </tr>
@@ -172,7 +176,7 @@ $this->Html->addCrumb($title);
 </div>
 <!--Search box-->
 <div id="dialog-confirm" title="Add document">
-    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog" style="text-align:left; color: #036633; font-size:1.0em;"></pre><br/><br/>Are you sure?</p>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>You are going to spend <br/><br/><br/><pre id="total-dialog"></pre><br/><br/>Are you sure?</p>
 </div>
 <?php echo $this->Form->end('Done'); ?>
 </fieldset>

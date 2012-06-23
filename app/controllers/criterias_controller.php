@@ -408,6 +408,14 @@ class CriteriasController extends AppController {
     }
   }
 
+
+  /**
+   * This function allows to delete the element that is
+   * in $arrayFrom and in $arrayAgainst at the same time.
+   * The result is the difference, i.e., it the array 
+   * $arrayFrom without elements from $arrayAgainst 
+   */
+
   function arrayDiffEmulation($arrayFrom, $arrayAgainst) {
     foreach ($arrayFrom as $key => $value) {
       if($this->in_array_($value,$arrayAgainst)) {
@@ -430,6 +438,14 @@ class CriteriasController extends AppController {
   }
 
   function autocomplete() {
+
+    $category_create = false;
+    $referer = $this->referer();
+    if(strpos($referer, 'categories/create') === false)
+      $category_create = false;
+    else
+      $category_create = true;
+    
     $search_data = $this->params['url']['searchData'];
 
     $i = 0;
@@ -468,7 +484,7 @@ class CriteriasController extends AppController {
       $keys[] = $key;
     }
 
-    $this->set(compact('search_data','criterias_autocomplete', 'keys'));
+    $this->set(compact('search_data','criterias_autocomplete', 'keys', 'category_create'));
 
     $this->render('/elements/criterias_autocomplete','ajax'); 
   }
