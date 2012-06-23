@@ -88,7 +88,7 @@
 					<?php echo $this->Html->link('Edit', array('action' => 'edit', $cr['Criteria']['id'])); ?>
 					&nbsp; | &nbsp;   
 					<?php echo $this->Html->link('Remove', array('action' => 'remove', $cr['Criteria']['id']), array(), "Are you sure to delete this criteria?"); ?>
-					&nbsp; | &nbsp;   
+					<br>   
 					<?php echo $this->Html->link('Set Experts', array('controller' => 'admin_experts', 'action' => 'list_notexperts', $cr['Criteria']['id'])); ?>
 				</div>  				
   			</td>

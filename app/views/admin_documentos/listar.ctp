@@ -251,7 +251,7 @@
 				}else if($d['CriteriasDocument']['answer'] == 2){
 					echo '<p style="color:red;">Validated Negative</p>';
 				}else{
-					echo '<p style="color:black;">Without evaluation</p>';
+					echo '<p style="color:black;">Not validated</p>';
 				} ?>
 			</div>
 		</td>
