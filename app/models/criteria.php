@@ -93,6 +93,10 @@ class Criteria extends AppModel {
 				'rule' => array('positive', 'collaboration_score'),
 				'message' => 'Challenge reward must be a positive number',
 			),
+			'positive' => array(
+					'rule' => array('gtupload', 'collaboration_score'),
+					'message' => 'Challenge reward must be greater than upload score',
+			),
 		),
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -129,6 +133,10 @@ class Criteria extends AppModel {
 	
 	function positive($value, $key) {
 		return $value[$key] >= 0;
+	}
+	
+	function gtupload($value, $key){
+		return $value[$key] >= $this->data['Criteria']['upload_score'];
 	}
 	
 	function forty($value, $key){
