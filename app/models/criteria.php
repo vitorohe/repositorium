@@ -93,23 +93,10 @@ class Criteria extends AppModel {
 				'rule' => array('positive', 'collaboration_score'),
 				'message' => 'Challenge reward must be a positive number',
 			),
-			'greater_or_equal' => array(
-        		'rule' => array('comparison', 'greater or equal', 'upload_score'),
-        		'message' => 'Score given in a challenge must be greater or equal to upload cost.'
-    		)
 		),
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-	/*var $belongsTo = array(
-		'Repository' => array(
-			'className' => 'Repository',
-			'foreignKey' => 'repository_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
-	);*/
 
 	var $hasMany = array(
 		'CriteriasDocument' => array(
