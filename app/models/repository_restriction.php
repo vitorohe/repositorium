@@ -2,6 +2,8 @@
 class RepositoryRestriction extends AppModel {
 	var $name = 'RepositoryRestriction';
 	
+	
+	/*Save a restriction for the repository*/
 	function saveRestriction($restrictions = null,$user_id = null,$repo_id = null) {
 
 		if(empty($restrictions)) {

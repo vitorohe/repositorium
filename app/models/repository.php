@@ -154,6 +154,7 @@ class Repository extends AppModel {
 
 	/*******************************************************/
 	
+	/*Create a repository*/
 	function createNewRepository($data) {
 		$ds = $this->getDataSource();		
 		$ds->begin($this);

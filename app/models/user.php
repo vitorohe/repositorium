@@ -157,7 +157,7 @@ class User extends AppModel {
 	
 	/**
 	 * DO NOT change this method unless you know what are you doing
-	 * 
+	 * Generate a private key, and generate a MAC
 	 */
 	function beforeSave($options) {
 		if(!empty($this->data['User']['password'])) {
@@ -221,77 +221,6 @@ class User extends AppModel {
 		return null;
 	}
 	
-	/**
-	 *  @TODO EXPERTS AND REPOSITORIES!!!
-	 */
-	function afterSave($created) {
-		/*if($created) {	
-			/* on create */
-			/*if(!empty($this->data['User']['es_experto'])) {
-				$this->_expert_create($this->id);
-			}			
-			$this->CriteriasUser->massCreateAfterUser($this->id);
-			$this->RepositoriesUser->massCreateAfterUser($this->id);
-			CakeLog::write('activity', 'User '.$this->id. ' created');
-		}/* else {
-			/* on update */
-			/*if($this->data['User']['es_experto'] == 1) {
-				$this->_expert_create($this->id);
-			} else {
-				$this->_expert_delete($this->id);
-			}
-			CakeLog::write('activity', 'User '.$this->id. ' updated');
-		}*/
-	}
-	
-	function _expert_create($id) {
-		$this->Expert->create();
-		$this->Expert->set(array(
-			'user_id' => $this->id,
-			'repository_id' => 1
-		));
-		$this->Expert->save();
-	}
-	
-	function _expert_delete($id) {
-		$this->Expert->deleteAll(array('Expert.user_id' => $id));
-	}
-	
-	
-	/*function afterFind($results, $primary) {
-		$i = 0;
-		foreach($results as $r) {
-			if(!empty($r['Expert'])) {
-				$results[$i]['User']['es_experto'] = 1;
-			}
-			$i += 1;
-		}
-		return $results;
-	}*/
-	
-	/**
-	 * UNTESTED
-	 * 
-	 * 
-	 * @param integer or string $user_id
-	 * @param integer or string $repo_id
-	 * @return integer or null
-	 */
-	function get_user_points($user_id, $repo_id) {
-		if(is_null($user_id) || is_null($repo_id))
-			return null;
-		
-		$points = $this->RepositoriesUser->find('first', array(
-			'conditions' => array(
-				'user_id' => $user_id,
-				'repository_id' => $repo_id
-			),
-			'fields' => array('points'),
-			'recursirve' => -1,
-		));
-		
-		return $points['RepositoriesUser']['points'];
-	}
 
 }
 ?>

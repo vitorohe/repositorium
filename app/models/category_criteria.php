@@ -23,6 +23,7 @@ class CategoryCriteria extends AppModel {
 
 	/*****************************************************************************************************************/
 
+	/*Obtain a row of CriteriasUser given the user_id and criteria_id*/
 	function _entry($user_id = null, $criteria_id = null) {
 		if(is_null($user_id) || is_null($criteria_id))
 			return null;
@@ -34,7 +35,8 @@ class CategoryCriteria extends AppModel {
 				)
 		));
 	}
-
+	
+	/*Save a row of CategoriesCriteria, given the data, and the array of criterias*/ 
 	function createNewCategoriesCriteria($data, $criteria_ids) {
 		$ds = $this->getDataSource();
 		$ds->begin($this);

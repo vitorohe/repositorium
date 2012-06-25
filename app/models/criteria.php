@@ -161,6 +161,7 @@ class Criteria extends AppModel {
 		}*/
 	}
 	
+	/*Obtain the criterias that have documents in the repository*/
 	function findRepoCriterias($repository_id){
 		$options['joins'] = array(
 				array('table' => 'criterias_documents',
@@ -194,7 +195,7 @@ class Criteria extends AppModel {
 		return $this->find('all', $options);
 	}
 	
-	
+	/*Obtain a random criteria for the challenge*/
 	function getRandomCriteria($repository_id) {
 		$criterios = $this->findRepoCriterias($repository_id);
 	
@@ -204,6 +205,10 @@ class Criteria extends AppModel {
 		return $criterios[array_rand($criterios)];
 	}
 	
+	
+	/*Obtain a list of documents from the database, that depends of the criteria
+	 *Result is shuffled, and used in a challenge 
+	 */
 	function generateChallenge($user_id = null, $criterio = null, $repository_id = null, $proportion = 0.3) {
 		if(is_null($user_id) || is_null($repository_id))
 			return null;
@@ -263,35 +268,8 @@ class Criteria extends AppModel {
 		return $challenge;
 	}
 	
-	/**
-	 * 
-	 * (untested)
-	 * @param array $documents
-	 * @param array $criterias
-	 */
-	function filterDocuments($documents = array(), $criterias = array()) {
-		if(empty($documents) || empty($criterias)) {
-			return $documents;
-		}
-		
-		$filtered = array();
-		foreach($criterias as $c) {
-			foreach($documents as $d) {
-				$cd = $this->CriteriasDocument->find('first', array(
-					'conditions' => array(
-						'document_id' => $d,
-						'criteria_id' => $c),
-					'recursive' => -1)
-				);
-				
-				if($cd['CriteriasDocument']['validated'] AND $cd['CriteriasDocument']['official_answer'] == 1) {
-					$filtered[] = $d;
-				}
-			}			
-		}
-		return array_unique($filtered);
-	}
 	
+	/*Creates a criteria, and its respective criterias_user, associated with the user that created the criteria*/
 	function createNewCriteria($data, $cruser) {
 		$ds = $this->getDataSource();
 		$crds = $this->CriteriasUser->getDataSource();
@@ -319,6 +297,7 @@ class Criteria extends AppModel {
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 	
+	/*Obtain the criterias and documents, in which the user is expert of the criteria, for evaluating a document*/
 	function findCriteriasUserinRepo($user = array(), $repo = null, $answers = array(1,2,3)){
 		if(empty($user) || is_null($repo))
 			return $user;
@@ -364,6 +343,7 @@ class Criteria extends AppModel {
 		return $this->find('all', $options);
 	}
 	
+	/*Find the quantity of questions for a challenge for a criteria*/
 	function getQ($criteria_id = null){
 		if(is_null($criteria_id))
 			return 3;
@@ -376,6 +356,7 @@ class Criteria extends AppModel {
 		return $row['Criteria']['questions_quantity'];
 	}
 	
+	/*Obtain a criterias_user, in which the user is expert*/
 	function getCriteriaByUser($criteriaid, $userid, $qu = 1){
 		return $this->find('all', 
     			array('conditions' => array('Criteria.id' => $criteriaid, 'CriteriasUser.user_id' => $userid, 'CriteriasUser.quality_user_id' => $qu),
@@ -392,6 +373,7 @@ class Criteria extends AppModel {
     				)));
 	}
 	
+	/*Obtain a list of criterias in which user is expert*/
 	function getCriteriasForExpert($userid){
 		$options['joins'] = array(
   			array('table' => 'criterias_users',

@@ -42,52 +42,7 @@ class CriteriasUser extends AppModel {
 		return $value['challenge_size'] >= 0;
 	}
 	
-	function massCreateAfterCriteria($id_criterio = null, $tamano_minimo_desafio = null) {
-		if(!is_null($id_criterio) && !is_null($tamano_minimo_desafio)) {
-			$users = $this->User->find('all', array('fields' => 'User.id', 'recursive' => -1));
-				
-			foreach($users as $user) {
-				$this->create();
-				$this->set(
-					array(
-						'user_id' => $user['User']['id'],
-						'criteria_id' => $id_criterio,
-						'challenge_size' => $tamano_minimo_desafio					
-						)
-				);
-				if(!$this->save())
-					return false;
-			}
-		}
-		return true;
-	}
-	
-	function massCreateAfterUser($user_id = null) {
-		if(is_null($user_id)) 
-			return false;
-		
-		$criterias = $this->Criteria->find('all', array('fields' => array('Criteria.id', 'Criteria.minchallenge_size'), 'recursive' => -1));
-		
-		$ds = $this->getDataSource();
-		foreach($criterias as $c) {
-			$this->create();
-			$this->set(
-				array(
-					'user_id' => $user_id,
-					'criteria_id' => $c['Criteria']['id'],
-					'challenge_size' => $c['Criteria']['minchallenge_size']
-				) 
-			);
-			
-			if(!$this->save()) {
-				$ds->rollback($this);
-				return false;
-			}				
-		}
-		$ds->commit($this);
-		return true;
-	}
-	
+	/*Gets a row of criterias user, given the user and the criteria id*/
 	function _entry($user_id = null, $criteria_id = null) {
 		if(is_null($user_id) || is_null($criteria_id))
 		return null;
@@ -100,37 +55,8 @@ class CriteriasUser extends AppModel {
 		));
 	}
 	
-	function getC($user_id = null, $criteria_id = null) {
-		$td = $this->_entry($user_id, $criteria_id);
-	
-		if($td)
-			return $td['CriteriasUser']['challenge_size'];
-	
-		return null;
-	}
-	
-	function saveNextC($user_id = null, $criteria_id = null, $challengeCorrect = false) {
-		$td = $this->_entry($user_id, $criteria_id);
-		$des = ($challengeCorrect ? 'de' : '');
-	
-		if($td) {
-			$cr = $td['Criteria'];
-			$td = $td['CriteriasUser'];
-				
-			$c = $this->getC($user_id, $criteria_id);
-			$new_value = $cr[$des.'penalization_a']*$c + $cr[$des.'penalization_b'];
-				
-			if($new_value < $cr['minchallenge_size'])
-				$new_value = $cr['minchallenge_size'];
-				
-			$this->id = $td['id'];
-			if($this->saveField('challenge_size', $new_value))
-				return true;
-		}
-	
-		return false;
-	}
-	
+
+	/*Add points to user in a given criteria*/
 	function addPoints($user_id = null, $criteria_id = null, $points = 10) {
 		if(!is_null($user_id) && !is_null($criteria_id)) {
 			$ru = $this->find('first', array('conditions' => compact('user_id', 'criteria_id'), 'recursive' => -1));
@@ -143,6 +69,7 @@ class CriteriasUser extends AppModel {
 		return false;
 	}
 	
+	/* Count the evaluation of the user, in a challenge, as positive or negative */
 	function countEvaluation($user_id = null, $criteria_id = null, $challengeCorrect = false){
 		$td = $this->_entry($user_id, $criteria_id);
 		$des = ($challengeCorrect ? 'successful' : 'negative');
@@ -174,6 +101,7 @@ class CriteriasUser extends AppModel {
 		return false;
 	}
 	
+	/*Create a row of criterias_user*/
 	function createNewCriteriasUser($data) {
 		$ds = $this->getDataSource();
 		$ds->begin($this);
@@ -188,6 +116,7 @@ class CriteriasUser extends AppModel {
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 	
+	/*Verifies if the user can pay the points for a search or upload, and save the points*/
 	function saveAndVerify($data = array(), $mode, $doc_quantity = 1){
 		if(empty($data))
 			return 'There is no data';
@@ -212,6 +141,9 @@ class CriteriasUser extends AppModel {
 		return 'success';
 	}
 	
+	/*Gets a subquery, consisting of obtaining all the experts, or all non experts
+	 * for using it in a major query
+	 */
 	function getExpertsSubquery($critid = null, $non_experts){
 		
 		$dbo = $this->getDataSource();
@@ -236,6 +168,7 @@ class CriteriasUser extends AppModel {
 		return $subQueryExpression;
 	}
 	
+	/*Sets/unset the expertise of a user*/
 	function setExpert($userid, $criteriaid, $qu){
 		$crus = $this->find('first', array('conditions' => array('CriteriasUser.user_id' => $userid, 'CriteriasUser.criteria_id' => $criteriaid), 
 				'recursive' => -1));	
@@ -261,6 +194,7 @@ class CriteriasUser extends AppModel {
 		return true;
 	}
 	
+	/*Get the points of the user in a criteria*/
 	function getUsersPoints($criteriaid){
 		$options['conditions'] = array('CriteriasUser.criteria_id' => $criteriaid);
 		

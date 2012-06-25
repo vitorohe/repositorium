@@ -72,6 +72,7 @@ class CriteriasDocument extends AppModel {
 	*/
 
 
+	/*Creates CriteriasDocument for the document recently created*/
 	function saveCriteriaDocument($criterias = null, $categories = null, $id = null) {
 
 		if(empty($criterias) && empty($categories))
@@ -124,83 +125,17 @@ class CriteriasDocument extends AppModel {
 		$ds->commit($this);
 		return true;
 	}
-
-	function massCreateAfterCriteria($id_criterio = null, $repository_id = null) {
-		if(!is_null($id_criterio) && !is_null($repository_id)) {
-			$docs = $this->Document->find('all', array(
-				'conditions' => array(
-					'Document.repository_id' => $repository_id
-				),
-				'fields' => array('Document.id'), 
-				'recursive' => -1)
-			);
-
-			foreach($docs as $doc) {
-				$this->create();
-				$this->set(
-					array(
-						'document_id' => $doc['Document']['id'],
-						'criteria_id' => $id_criterio,
-					    'total_answers_1' => 0,
-					    'total_answers_2' => 0,
-					    'validated' => false,
-					    'challengeable' => true,
-						)
-					);
-				if(!$this->save())
-					return false;
-			}
-		} else {
-			return false;
-		}
-		return true;
-	}
 	
-	function massCreateAfterDocument($id_documento = null, $repository_id = null) {
-		if(!is_null($id_documento) && !is_null($repository_id)) {
-			$criterios = $this->Criteria->find('all', array(
-				'conditions' => array(
-					'Criteria.repository_id' => $repository_id
-				),
-				'fields' => 'Criteria.id', 
-				'recursive' => -1)
-			);
-			
-			$ds = $this->getDataSource();
-			$ds->begin($this);
-			
-			foreach($criterios as $c) {
-				$this->create();
-				$this->set(
-					array(
-						'document_id' => $id_documento,
-					  	'criteria_id' => $c['Criteria']['id'],
-					  	'total_answers_1' => 0,
-					  	'total_answers_2' => 0,
-				      	'validated' => false,
-						'challengeable' => true,
-						)
-					);
-				if(!$this->save()) {
-					$ds->rollback($this);
-					return false;
-				}
-			}	
-			$ds->commit($this);
-			return true;
-		}
-		
-		return false;
-	}
 	
 	/**
 	 * $data = compact('criteria_id', 'confirmado', 'preguntable', 'quantity', 'user_id');
+	 * 
+	 * Obtain random documents, depending of the data given.
 	 */
 	function getRandomDocuments($data = null) {
 		if(!isset($data['confirmado']) || !isset($data['criteria_id']) || !isset($data['quantity']))
 			return null;
 	
-		// we only want InformacionDesafio and Documento entries
 		$this->unbindModel(array('belongsTo' => array('Criteria')));
 	
 		$preguntable 	= (isset($data['preguntable']) ? $data['preguntable'] : true) ;
@@ -321,10 +256,9 @@ class CriteriasDocument extends AppModel {
 	
 	/**
 	 *
-	 * saves answer statistics
-	 * if $correctChallenge then save all data
-	 * otherwise, only validated documents
-	 *
+	 * save answer statistics
+	 * yes, no, and total statistics are saved
+	 * 
 	 * @param array $data
 	 * @param boolean $correctChallenge
 	 */
@@ -335,8 +269,7 @@ class CriteriasDocument extends AppModel {
 			$info = $this->entry($d);
 	
 			/*
-			 * if challenge was correct, then save all documents' statistics
-			* otherwise, only validated documents' statistcs
+			 * Save statistics
 			*/
 			if($info) {
 				$id = $info['CriteriasDocument']['id'];
