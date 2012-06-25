@@ -19,6 +19,7 @@ class AdminCriteriasController extends AppController {
       )
     );
 
+    /*Function that executes when other function of this controller is invocated */
     function beforeFilter() {
     	
     	if(!$this->Session->check('Expert.isExpert')) {
@@ -27,6 +28,7 @@ class AdminCriteriasController extends AppController {
     	}
     }
     
+    /* index redirects to list criterias */
     function index() {
 
         $this->redirect(array('action'=>'listCriteriasUser', $this->data['Criteria']['limit']));
@@ -48,6 +50,7 @@ class AdminCriteriasController extends AppController {
         $user = $this->getConnectedUser();
         $repo = $this->getCurrentRepository();
 		
+        /*gets criterias */
         $criterias = $this->findCriteriasUserinRepo($user, $repo);
         
         $this->data = $criterias;
@@ -118,7 +121,7 @@ class AdminCriteriasController extends AppController {
 		
     }
     
-    
+    /* Removes a criteria, given its id. User cannot access it from browser*/
     function remove($id = null) {
         if($this->referer() === '/')
             $this->redirect('/');
@@ -141,6 +144,7 @@ class AdminCriteriasController extends AppController {
     
     }
     
+    /*Find criterias for the user that have documents in the given repository*/
     function findCriteriasUserinRepo($user = array(), $repo = null){
     	if(empty($user))
     		return $user;    

@@ -2,7 +2,7 @@
 /**
  * admin_documentos.php
  * 
- * CRUD sobre documentos
+ * CRUD about documents
  * 
  * @package   controllers
  * @author    Mauricio Quezada <mquezada@dcc.uchile.cl>
@@ -22,6 +22,7 @@ class AdminDocumentosController extends AppController {
 	)
   );
 
+  /*Function that executes before an action for a controller is called. Checks basics permission for the user */
   function beforeFilter() {
   	$user = $this->getConnectedUser();
   	$repo = $this->requireRepository();
@@ -191,6 +192,8 @@ class AdminDocumentosController extends AppController {
 	$this->render('listar_warneds');
   }	
   
+  /*Sets paginate array, preparing the pagination. Paginate searchs all the documents in a given repository
+   *in which the user is expert. Also sets the quantity of documents per page and the order*/
   function set_paginate($user, $repo){
   	
   	if(!empty($this->data)) {
@@ -272,7 +275,9 @@ class AdminDocumentosController extends AppController {
   	$this->paginate['Criteria']['recursive'] = -1;
   }
   
-  
+  /*Transform the criterias obtained from a find all search, to a "dictionary", in which the key is the criteria id, 
+   * and the value is the name of the criteria
+   */
   function getCriteriasList($data){
   	$criterio_n = 0;
   	
@@ -285,12 +290,15 @@ class AdminDocumentosController extends AppController {
   	return compact('criterio_n', 'criterias');
   }
   
+  /*Action that obtain all the documents in which the user is expert, in a given repository*/
   function all() {
   	$user = $this->getConnectedUser();
   	$repo = $this->getCurrentRepository();
   	
+  	/*Sets paginate*/
   	$this->set_paginate($user, $repo);
   	
+  	/*Find the criterias in which the user is expert, and the documents in ->paginate()*/
   	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo);
   	$data = $this->paginate();
   	$crit_list = $this->getCriteriasList($criterias);
@@ -320,16 +328,19 @@ class AdminDocumentosController extends AppController {
   	$this->render('listar');
   }
   
+  /*Action that obtain the validated documents in which the user is expert, in a given repository*/
   function validados() {
   	$user = $this->getConnectedUser();
   	$repo = $this->getCurrentRepository();
   	 
   	$this->set_paginate($user, $repo);
+  	/*Filter the documents that aren't validated*/
   	$this->paginate['Criteria']['conditions']['CriteriasDocument.answer'] = array(1, 2);
   	 
   	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo, array(1, 2));
   	$data = $this->paginate();
   	$d = $this->getCriteriasList($criterias);
+  	
   	$current = 'validados';
   	$menu = 'menu_expert';
   	$criterio_n = $this->Session->check('CriteriasDocument.criterio') && $this->Session->read('CriteriasDocument.criterio') != 0 ?
@@ -355,11 +366,13 @@ class AdminDocumentosController extends AppController {
   	$this->render('listar');
   }
   
+  /*Action that obtain not validated documents in which the user is expert, in a given repository*/
   function no_validados() {
   	$user = $this->getConnectedUser();
   	$repo = $this->getCurrentRepository();
   
   	$this->set_paginate($user, $repo);
+  	/*Obtain not validated documents*/
   	$this->paginate['Criteria']['conditions']['CriteriasDocument.answer'] = 3;
   
   	$criterias = $this->Criteria->findCriteriasUserinRepo($user, $repo, 3);
@@ -528,7 +541,7 @@ class AdminDocumentosController extends AppController {
    	if($redirect) $this->redirect($this->referer());	
   }
 
-  /* CriteriasDocument */
+  /* CriteriasDocument: sets a field in a row of the CriteriasDocument table */
   function set_field($field = null, $id = null, $bool = null, $redirect = true) {
 	if(!is_null($field) and !is_null($id) and !is_null($bool)) {
 	  
@@ -553,6 +566,7 @@ class AdminDocumentosController extends AppController {
 	return true;
   }
 
+  /*Reset statistics of the evaluation of a document*/
   function _reset_stats($id = null, $criteria = null) {
 	if(!is_null($id) && !is_null($criteria) && $id != 0 && $criteria != 0) {
 	 $this->CriteriasDocument->updateAll(
@@ -570,12 +584,14 @@ class AdminDocumentosController extends AppController {
 	return true;
   }
   
+  /*Wrapper for _reset_stats*/
   function reset_only($id = null, $criteria = null) {
   	$this->_reset_stats($id, $criteria);
   	$this->Session->setFlash('Stats restarted successfully', 'flash_green');
   	$this->redirect($this->referer());
   }
   
+  /*Validates documents*/
   function mass_edit() {
 //   	pr($this->data['Document']); exit;
   	if(!empty($this->data)) {
@@ -618,6 +634,7 @@ class AdminDocumentosController extends AppController {
   	$this->redirect($this->referer());
   }
   
+  /*Validate a single document, changing answer field*/
   function validate_document($id = null, $criteria = null, $redirect = true, $validate = true) {
   	
   	if(!is_null($id) && !is_null($criteria)  && $id != 0 && $criteria != 0) {  	  	  				
