@@ -15,96 +15,19 @@ class CategoriesController extends AppController {
 
 
 	function beforeFilter() {
-	 
+	 	//...
 	}
 
 	function index() {
 		$this->redirect(array('controller' => 'categories', 'action' => 'create'));
 	}
 
-	function add() {
-		$params = array(
-				'repo' => $this->requireRepository(),
-				'menu' => 'menu_expert',
-				'current' => 'criteria',
-				'title' => 'Add new criteria'
-		);
-		$this->set($params);
-		 
-		if(!empty($this->data)) {
-	  		$this->Criteria->set($this->data);
-			if($this->Criteria->validates()) {
-	  			$repo = $this->getCurrentRepository();
 
-	  			if(is_null($repo)) {
-	  				$this->Session->setFlash('Please set a current repository first');
-		 	 		$this->redirect('index');
-	 	 		}
-	
-		  		$this->data['Criteria']['repository_id'] = $repo['Repository']['id'];
-
-			  	if($this->Criteria->save($this->data)) {
-	  				$this->Session->setFlash('Criteria added successfully', 'flash_green');
-	  				CakeLog::write('activity', 'Criteria "'.$this->data['Criteria']['question'].'" was added');
-	 		 	} else {
-	  				$this->Session->setFlash('An error occurred saving the criteria', 'flash_errors');
-	  				CakeLog::write('error', 'Criteria "'.$this->data['Criteria']['question'].'" was not added');
-	 		 	}
-	 	 		$this->redirect('index');
-			} else {
-		  		$this->Session->setFlash($this->Criteria->invalidFields(),'flash_errors');
-	  		}
-		}
-	}
-
-	function view($id = null) {
-	}
-
-
-	function edit($id = null) {
-		$repo = $this->requireRepository();
-		$params = array(
-				'menu' => 'menu_expert',
-				'current' => 'criteria',
-				'title' => 'Edit criteria',
-				'repo' => $repo
-		);
-		$this->set($params);
-		 
-		$this->Criteria->id = $id;
-		if (empty($this->data)) {
-	  $this->data = $this->Criteria->read();
-	  if($this->data['Criteria']['repository_id'] != $repo['Repository']['id']) {
-	  	$this->Session->setFlash('This criteria does not correspond to current repository', 'flash_errors');
-	  	$this->redirect('index');
-	  }
-		} else {
-	  if ($this->Criteria->save($this->data)) {
-	  	$this->Session->setFlash('Criteria '.$id.' was successfully modified');
-	  	CakeLog::write('activity', 'Criteria '.$id.' was modified');
-	  	$this->redirect(array('controller' => 'criterias', 'action' => 'index'));
-	  }
-		}
-		$this->render('add');
-	}
-
-	function remove($id = null) {
-		if(!is_null($id)) {
-			if($this->Criteria->delete($id)) {
-				$this->Session->setFlash('Criteria '.$id.' removed');
-				CakeLog::write('activity', 'Criteria '.$id.' was removed');
-			} else {
-				$this->Session->setFlash('There was an error deleting that criteria you specified');
-			}
-		}
-		$this->redirect($this->referer());
-	}
 
 	/**
 	 * This function allows you to create a category
 	 * based in the selection of some criterias.
 	 */
-
 	function create(){
 	  	$repo = $this->getCurrentRepository();
 	  	$user = $this->getConnectedUser();
@@ -141,12 +64,14 @@ class CategoriesController extends AppController {
 	    }
 	
 	
+	    /*Set variables for the use of Jquery*/
 	    $this->Session->write('criterias_names',$criterias_names);
 	    $this->Session->write('criterias_ids',$criterias_ids);
 	    $this->Session->write('criterias_points_upload',$criterias_points_upload);
 	    $this->Session->write('criterias_points_download',$criterias_points_download);
 	    $this->Session->write('criterias_points_collaboration',$criterias_points_collaboration);
-		  	
+		  
+	    /*if data is not empty, we confirm that the quantity of criterias of the category is greater than 1, then we save*/
 	  	if(!empty($this->data)) {
 	  		
 	  		$criterias = explode('&', $this->data['Criteria']['criterias']);
@@ -231,6 +156,7 @@ class CategoriesController extends AppController {
 
 	}
 	
+	/*Function that JQuery uses for the dynamic display of categories*/
 	function autocomplete() {
 		$search_data = $this->params['url']['searchData'];
 	
@@ -240,7 +166,6 @@ class CategoriesController extends AppController {
 
 		$categories_selected = $categories;
 
-		
 		$criterias_categories = $this->Session->read('criterias_categories');
 		$categories_names = $this->Session->read('categories_names');
 		$cr_catcount = array();
@@ -251,9 +176,10 @@ class CategoriesController extends AppController {
 
 		//print_r($criterias_categories);
 
+		/*Counts criterias selected, that match a category*/
 		$criterias_selected = array();
 		foreach($criterias as $criteria) {
-			$key = $this->getKey($criteria,$criterias_categories);
+			$key = $this->getKey($criteria, $criterias_categories);
 
 			if($key === "")
 				continue;
@@ -266,6 +192,7 @@ class CategoriesController extends AppController {
 			$i++;
 		}
 
+		/*Add a category to categories_selected if all its criterias, was selected*/
 		foreach(array_keys($categories_names) as $cn){
 			if(isset($cr_catcount[$cn]) && count($categories_names[$cn]) == $cr_catcount[$cn]){
 				$categories_selected[] = $cn;
@@ -277,6 +204,7 @@ class CategoriesController extends AppController {
 		else
 			$categories_autocomplete0 = array_keys($categories_names);
 	
+		/*Categories that aren't selected*/
 		$categories_autocomplete = $this->arrayDiffEmulation($categories_autocomplete0, $categories_selected);
 	
 		$keys = array();

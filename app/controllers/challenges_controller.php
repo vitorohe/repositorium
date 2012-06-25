@@ -69,6 +69,7 @@ class ChallengesController extends AppController {
    * @see PointsController::process()
    */
   function play() {
+  	/*Filter access*/
   	if(!$this->Session->check('Challenge.play')) {  		
   		$this->Session->setFlash('In order of play a challenge, please choose an action (search, upload or earn points)');  		
   		$this->redirect('/');
@@ -81,11 +82,13 @@ class ChallengesController extends AppController {
   	
   	$repo_id = $repo['Repository']['id'];
   	
+  	/*Get a random criteria, that have documents in the repository*/
   	$criterio = $this->Criteria->getRandomCriteria($repo_id);
   	
   	if(is_null($criterio))
   		$this->_skip_challenge();
 
+  	/*Generate the documents for a challenge*/
   	$documents = $this->Criteria->generateChallenge($user['User']['id'], $criterio, $repo_id);
   	
     if(count($documents) <= 2)
@@ -175,6 +178,7 @@ class ChallengesController extends AppController {
   	$this->_dispatch($desafio_correcto);
   }
   
+  /*Shows a message when a challenge is done*/
   function _dispatch($challenge_successful = false) {
   	if($challenge_successful) {
   		$this->_process_points();  		

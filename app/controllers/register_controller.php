@@ -9,6 +9,7 @@ class RegisterController extends AppController{
 		$this->redirect('/');
   }
   
+  /*Controller in charge of the registration of new users*/
   function index() {
 	if(!empty($this->data)) {
 	  $this->User->set($this->data);		

@@ -13,6 +13,7 @@ class AdminPointsController extends AppController {
 	)
   );
 
+  /*Perform basic permission comprobations*/
   function beforeFilter() {
   	$user = $this->getConnectedUser();
   	
@@ -27,6 +28,7 @@ class AdminPointsController extends AppController {
 	$this->redirect(array('action'=>'listUserPoints'));
   }
   
+  /*Sets paginate array, sets the quantity of rows per page*/
   function set_paginate(){
   	if(!empty($this->data)) {
   		if(!empty($this->data['User']['limit'])) {
@@ -56,7 +58,9 @@ class AdminPointsController extends AppController {
   	$this->set_paginate();
   	$users = $this->paginate();
 
+  	/*Get criterias for user, in which the user is expert of the criteria*/
   	$crit_list = $this->Criteria->getCriteriasForExpert($user['User']['id']);
+  	
 	$criteria_id = array_keys($crit_list);
 	$criteria_id = $criteria_id[0];
 
@@ -76,7 +80,7 @@ class AdminPointsController extends AppController {
   }
 
 
-  /*Add points to the user in a criteria*/
+  /*Add points to the user in a given criteria*/
   function add_points(){
   	if(empty($this->data['User']['points'])){
   		$this->Session->setFlash('The quantity of points cannot be empty');
@@ -96,8 +100,10 @@ class AdminPointsController extends AppController {
   		$this->redirect('/');
   	}
 
+  	/*Get criterias user*/
   	$crit_user = $this->Criteria->getCriteriabyUser($this->data['Criteria']['id'], $this->data['User']['id'], array(1, 2));
 
+  	/*If crit_user is empty, then there wasn't a criterias_user and we create it, otherwise we only modify the points*/
   	if(empty($crit_user)){
   		$row['criteria_id'] = $this->data['Criteria']['id'];
   		$row['user_id'] = $this->data['User']['id'];

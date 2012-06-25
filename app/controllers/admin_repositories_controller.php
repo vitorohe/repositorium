@@ -37,6 +37,7 @@ class AdminRepositoriesController extends AppController {
 	
 	var $helpers = array('Text', 'Repo');
 	
+	/*Perform permission comprobation for admin*/
 	function beforeFilter() {
 		if(!$this->isAdmin()) {
 			$this->Session->setFlash('You don\'t have permission to access this page');
@@ -44,6 +45,7 @@ class AdminRepositoriesController extends AppController {
 		}		
 	}
 	
+	/*Lists all repositories*/
 	function index() {
 		$current = 'repositories';
 		$menu = 'menu_admin';
@@ -51,6 +53,7 @@ class AdminRepositoriesController extends AppController {
 		$this->set(compact('current', 'menu'));
 	}
 	
+	/*Action for the edition of a repository*/
 	function edit($id = null) {
 		if(empty($this->data)) {
 			if(is_null($id)) 
@@ -162,6 +165,7 @@ class AdminRepositoriesController extends AppController {
 		}
 	}
 	
+	/*Removes a repository, given its id */
 	function remove($id = null) {
 		if(is_null($id))
 			$this->e404();
@@ -182,6 +186,7 @@ class AdminRepositoriesController extends AppController {
 		
 	}
 	
+	/*List collaboratos of a repository*/ 
 	function users($id = null) {
 		if(is_null($id))
 			$this->e404();

@@ -12,7 +12,8 @@ class AdminExpertsController extends AppController {
       	  )
       )
     );
-
+    
+    /*Executes before an action of a controller. Perform basic permission tests*/
     function beforeFilter() {
     	if(!$this->Session->check('Expert.isExpert')) {
     		$this->Session->setFlash('You don\'t have permission to access this page', 'flash_errors');
@@ -39,12 +40,13 @@ class AdminExpertsController extends AppController {
         $this->redirect(array('action'=>'list_notexperts', $this->data['User']['limit']));
     }
 
-    
+    /*Sets paginate for this controller*/
     function set_paginate($user = null, $id = null, $non_experts = true){
     	if(is_null($user) || is_null($id)){
     		return false;
     	}
     	
+    	/*Obtain a subquery, for obtaining experts/not experts users*/
 		$subquery = $this->CriteriasUser->getExpertsSubquery($id, $non_experts);
 		
 		if(is_null($subquery)){
@@ -59,6 +61,7 @@ class AdminExpertsController extends AppController {
     	
     }
     
+    /*Controller for listing not experts users*/
     function list_notexperts($id = null) {
     
     	$user = $this->getConnectedUser();
@@ -91,6 +94,7 @@ class AdminExpertsController extends AppController {
     
     }
     
+    /*Controller for listing experts users*/
     function list_experts($id = null) {
     
     	$user = $this->getConnectedUser();
@@ -124,6 +128,7 @@ class AdminExpertsController extends AppController {
     
     }
     
+    /*Sets/unsets an user to/from expert*/
     function setUserExpert($criteriaid = null, $userid = null, $qu = 1) {
 
         if($this->referer() === '/')

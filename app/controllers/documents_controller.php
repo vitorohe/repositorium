@@ -53,6 +53,9 @@ class DocumentsController extends AppController {
   /**
    * It allows displaying the available categories and criterias
    * to add on a document. It also gives the repository's restricitions.
+   * It is the same logic of search action in criterias controller
+   * respecting to sending the criterias and categories for
+   * dynamic display of criterias and categories
    */
   function upload() {
 
@@ -510,7 +513,7 @@ class DocumentsController extends AppController {
    * List your documents in "My Documents" section.
    * If you are in home page you'll see all your 
    * documents.
-   * If you are in a repository you'll see all your
+   * If you are in a repository you'll see all the
    * documents you have uploaded to that repository.
    *
    */

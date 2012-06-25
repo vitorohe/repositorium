@@ -44,6 +44,7 @@ class RepositoriesController extends AppController {
 		return $retorno;
 	}
 	
+	/*Index of a repository. The url is given by the browser*/
 	function index($repo_url = null) {	
 		if(is_null($repo_url)) {
 			$this->redirect('/');
@@ -118,6 +119,7 @@ class RepositoriesController extends AppController {
 		  	$options['fields'] = array(
 		  			'DISTINCT Criteria.id', 'Criteria.name');
 		  
+		  	/*Find criterias that have documents in the selected repository*/
 		  	$criterias = $this->Criteria->find('all', $options);
 
 			$criteria_size = 30;
@@ -202,6 +204,7 @@ class RepositoriesController extends AppController {
 		}		
 	}
 	
+	/*Controller in charge of the creation of repositories, if data was sent*/
 	function create() {
 		
 		if($this->isAnonymous()){
@@ -213,7 +216,7 @@ class RepositoriesController extends AppController {
 			$user = $this->getConnectedUser();
 			$this->data['Repository']['user_id'] = $user['User']['id'];
 			
-			// restrictions
+			//Sets the documents's restrictions
 
 			$restrictions = array();
 

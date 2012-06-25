@@ -41,6 +41,7 @@ class AdminUsuariosController extends AppController {
 	$this->redirect('listar');
   }
 
+  /*List users of the system*/
   function listar() {
 	$this->data = $this->paginate('User');
 	
@@ -55,6 +56,7 @@ class AdminUsuariosController extends AppController {
 	$this->set($params);
   }
 
+  /*Action for adding a specific user*/
   function add() {
   	$current = 'usuarios';
   	$menu = 'menu_admin';
@@ -69,6 +71,7 @@ class AdminUsuariosController extends AppController {
 	}
   }
 
+  /*Removes a user*/
   function remove($id = null) {
 	if (!is_null($id)) {
 	  if($this->User->delete($id)) {
@@ -81,6 +84,7 @@ class AdminUsuariosController extends AppController {
    	$this->redirect($this->referer());	
   }
 
+  /*Edits user*/
   function edit($id = null) {
   	$current = 'usuarios';
   	$menu = 'menu_admin';
@@ -119,6 +123,7 @@ class AdminUsuariosController extends AppController {
 	 
   }
 
+  /*Show repositories in which the user is a collaborator*/
   function repositories($id = null) {
   	if(is_null($id))
   		$this->e404();

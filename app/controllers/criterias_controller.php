@@ -14,6 +14,7 @@ class CriteriasController extends AppController {
     )
   );
 
+  /* ??? */
   function index() {
     if(!empty($this->data)) {     
       if(!empty($this->data['Criteria']['limit'])) {
@@ -84,6 +85,7 @@ class CriteriasController extends AppController {
     			WHERE category_criterias.category_id = Category.id 
     				  AND category_criterias.criteria_id IN ('.implode(', ',$criterias_ids).'))';
     
+    /*obtain the categories of the search*/
     $categories = $this->CategoryCriteria->find('all', $options);
     
     $categories_ids = array();
@@ -106,11 +108,15 @@ class CriteriasController extends AppController {
     
     $options['conditions'] = array('Category.id' => $categories_ids);
     
+    /*obtain categories_criterias*/
     $categories = $this->CategoryCriteria->find('all', $options);
     
     $categories_names = array();
     $categories_points = array();
     $criterias_categories = array();
+    /*create two dictionaries, in one the key is a category, an the value an array with the criterias of the categories
+     * in the other, the key is a category, and the value too
+     */
     foreach($categories as $category){
     	$categories_names[$category['Category']['name']][] = $category['Criteria']['name'];
     	$criterias_categories[$category['Criteria']['name']] = $category['Category']['name'];
@@ -123,6 +129,7 @@ class CriteriasController extends AppController {
     	}
     }
 
+    /*sets session variables for the dynamic display of criterias and categories*/
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);
     $this->Session->write('criterias_points',$criterias_points);
@@ -134,7 +141,8 @@ class CriteriasController extends AppController {
     $this->set(compact('criterias'));
 
   }
-
+  /*IT IS NOT USED NOW 
+   * For adding a criteria*/
   function add() {
     $params = array(
         'repo' => $this->requireRepository(),
@@ -172,7 +180,7 @@ class CriteriasController extends AppController {
 
   function view($id = null) {  }
 
-
+  /* Edit a criteria*/
   function edit($id = null) {
     $repo = $this->requireRepository();
     $params = array(
@@ -200,6 +208,7 @@ class CriteriasController extends AppController {
   $this->render('add');
   }
 
+  /*Remove a criteria*/
   function remove($id = null) {
     if(!is_null($id)) {
       if($this->Criteria->delete($id)) {
@@ -220,6 +229,7 @@ class CriteriasController extends AppController {
 		$this->redirect(array('controller' => 'login', 'action' => 'index'));
 	}
     
+	/*if data is not empty, set de data for the criteria, and save it, otherwise load the view for this controller*/ 
     if(!empty($this->data)) {
       $user = $this->getConnectedUser();
       $repo = $this->getCurrentRepository();
@@ -290,6 +300,7 @@ class CriteriasController extends AppController {
         $this->redirect('/criterias/search');
       }
 
+      /*Get criterias selected*/
       $criterias = explode('&', $data['Criteria']['criterias']);
       $criterias = array_map("trim", $criterias);
 
@@ -323,6 +334,7 @@ class CriteriasController extends AppController {
       unset($data['Criteria']['criterias']);
       unset($data['Criteria']['categories']);
       
+      /*Get criterias_users, for getting the user's points*/
       $criterias_users = $this->CriteriasUser->find('all',
       		array('joins' => array(
       			    array('table' => 'criterias',
@@ -367,6 +379,7 @@ class CriteriasController extends AppController {
 
       $options['recursive'] = -1;
 
+      /*Find the documents that achieve the search terms*/
       $documents = $this->CriteriasDocument->find('all', $options);
       
       $documents_with_files = array();
@@ -388,7 +401,7 @@ class CriteriasController extends AppController {
         $documents_amount = count($documents_with_files);
       }
       
-      
+      /*Verify that the user has enough points to spend*/
       if(($str = $this->CriteriasUser->saveAndVerify($criterias_users, 0, $documents_amount)) != 'success'){
       	$this->Session->setFlash($str, flash_errors);
       	$this->redirect($this->referer());
@@ -437,6 +450,7 @@ class CriteriasController extends AppController {
     return false;
   }
 
+  /*Function that JQuery uses for the dynamic display of criterias*/
   function autocomplete() {
 
     $category_create = false;
@@ -460,6 +474,7 @@ class CriteriasController extends AppController {
     $categories = preg_split('/ - [0-9]+ points/', $this->params['url']['categories']);
     unset($categories[count($categories)-1]);
 
+    /*See categories selected, and add the respective criterias to selected*/
     $categories_selected = array();
     foreach($categories as $category) {
       $categories_selected[] = $category;
@@ -476,6 +491,7 @@ class CriteriasController extends AppController {
     else
     	$criterias_autocomplete0 = $this->Session->read('criterias_names');
     
+    /*Criterias that aren't selected*/
     $criterias_autocomplete = $this->arrayDiffEmulation($criterias_autocomplete0, $criterias_selected);
     
     $keys = array();
