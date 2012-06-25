@@ -256,7 +256,7 @@ class RepositoriesController extends AppController {
 				
 			}
 
-			
+			/*Saves the repository, if possible*/
 			$this->data['Repository']['activation_id'] = 'A';
 			$this->data['Repository']['internalstate_id'] = 'A';
 			
