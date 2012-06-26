@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_URI} !^app/repositorium/documents/list_documents
+	RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+	RewriteRule ^document_(.*)$ ../../../../repositorium
+	RewriteRule ^$ ../../../../repositorium
+</IfModule>
