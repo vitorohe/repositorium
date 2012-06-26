@@ -163,9 +163,9 @@ class Repository extends AppModel {
 			return null;
 		}
 				
-		//if($this->RepositoriesUser->saveRepositoryUser($data['Repository']['user_id'], $this->id, 1))	
+		
 		$ds->commit($this);
-		//else return null;
+		
 		return $this->find('first', array('conditions' => array('id' => $this->getLastInsertID()), 'recursive' => -1));
 	}
 	

@@ -70,6 +70,10 @@ class DocumentsController extends AppController {
   	
     $criterias = $this->Criteria->find('all');
 
+
+    /* These arrays allow you to display the respective name and points
+     * of criterias in the view */
+
     $criterias_names = array();
     foreach ($criterias as $criteria) {
         $criterias_names[] = $criteria['Criteria']['name'];
@@ -126,6 +130,8 @@ class DocumentsController extends AppController {
     
     $options['conditions'] = array('Category.id' => $categories_ids);
     
+    /* Here we get the categories */
+
     $categories = $this->CategoryCriteria->find('all', $options);
     
     $categories_names = array();
@@ -143,6 +149,8 @@ class DocumentsController extends AppController {
       }
     }
 
+    /* Writting this data in Session allows you to have it available
+    in the autocomplete function and its respective view */
 
     $this->Session->write('criterias_names',$criterias_names);
     $this->Session->write('criterias_ids',$criterias_ids);

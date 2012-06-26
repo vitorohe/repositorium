@@ -179,7 +179,7 @@ class Attachfile extends AppModel {
 	return 8;
 	}	
 
-
+	/* This function replace not English characters to English */
 	function normalize ($string) {
 		$table = array(
 		 'Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c',
@@ -196,15 +196,20 @@ class Attachfile extends AppModel {
  	}
 
 
-	/*+++++++++++++INI++++++++++++++*/	
 	/*save attached files*/
 	function saveAttachedFiles($data) {
+
+		/* If there are not files, there is not problem */
 
 		if(empty($data) || !isset($data['files']))
 			return true;
 
+		/* Get info files from data */
+
 		$fileData = $data['files'];
 
+
+		/* Get last created document id */
 		$doc = $this->Document->query("select id from documents order by id desc limit 1");
 
 		$doc = $doc[0];
@@ -214,16 +219,37 @@ class Attachfile extends AppModel {
 		$ds = $this->getDataSource();
 		$ds->begin($this);
 
+
+		/* Save files from data */
+
 		foreach ($fileData as $file){
+
+			/**
+			 * Data has some info if there was an error with the file, 
+			 * if it's equal to 4, we continue with the next file 
+			 */
 
 			if($file['error']==4){
 				continue;
 			}
+
+			/* Only save files with size > 0 */
+
 			if($file['size'] > 0) {
+
+				/* Get the extension from file name */
 				
 				$extension = end(explode('.', $file['name']));
 
+				/**
+				 * We normalize the file name, then there won't be problems
+				 * saving the file 
+				 */
+
 				$filename = $this->normalize($file['name']);
+
+
+				/* Set the file info */
 
 				$this->create();
 				$this->set(
@@ -245,6 +271,8 @@ class Attachfile extends AppModel {
 
 				$ds->commit($this);
 
+				/* This is the address wher the file will be saved */
+
 				$directory = WWW_ROOT.'/uploaded_files/document_'.$document_id;
 
 				if(!file_exists($directory))
@@ -252,6 +280,8 @@ class Attachfile extends AppModel {
 						return false;
 				
 				$filename_ = $directory.'/'.$filename;
+
+				/* Read original file, and then write content in new file */
 
 				$handle = fopen($file['tmp_name'],'r');
 				$content = fread($handle, filesize($file['tmp_name']));
@@ -261,14 +291,10 @@ class Attachfile extends AppModel {
 				fwrite($handle, $content);
 				fclose($handle);
 
-			} /*else{
-				$this->session->setFlash('A file is requiered');
-				return false;
-			}*/
+			}
 		}
 		return true;
 	}
 
-	/*+++++++++++++FIN++++++++++++++*/	
 }
 ?>

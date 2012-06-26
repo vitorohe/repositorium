@@ -2,7 +2,7 @@
 class Document extends AppModel {
 	var $name = 'Document';
 	var $displayField = 'name';
-	//var $actsAs = array('AttachFile');
+
 	var $validate = array(
 		'name' => array(
 			'notempty' => array(
@@ -45,20 +45,6 @@ class Document extends AppModel {
 	);
 
 	var $hasMany = array(
-		/*'Tag' => array(
-			//'className' => 'Tag',
-			'className' => 'Criteria',
-			'foreignKey' => 'document_id',
-			'dependent' => true,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),*/
 		'CriteriasDocument' => array(
 			'className' => 'CriteriasDocument',
 			'foreignKey' => array('criteria_id', 'document_id'),

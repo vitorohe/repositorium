@@ -1,8 +1,7 @@
 <?php
 /**
- * usuarios_controller.php
  * 
- * Controlador de usuarios
+ * Users controller
  * 
  */
 

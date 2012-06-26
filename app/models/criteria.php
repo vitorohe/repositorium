@@ -131,6 +131,9 @@ class Criteria extends AppModel {
 		)
 	);
 	
+
+	/* Functions for data validation */
+
 	function positive($value, $key) {
 		return $value[$key] >= 0;
 	}

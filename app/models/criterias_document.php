@@ -101,6 +101,8 @@ class CriteriasDocument extends AppModel {
 				}
 	    	}
 
+	    /* We collect all criterias and criterias from categories, and then we obtain an unique array */
+
 	    $criteria_ids = array_unique($criteria_ids);
 
 		foreach($criteria_ids as $criteria_id) {
