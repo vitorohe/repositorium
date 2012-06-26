@@ -4,4 +4,8 @@ Naming Rules:
 * All CakePHP rules must be considered.
 * Avoid the use of CakePHP and PHP keywords or reserved names to name your model entities (http://api.cakephp.org/classes http://php.net/manual/en/reserved.keywords.php)
 
+
+.htaccess
 Please check if .htaccess rules work in your host. These files were proved in localhost.
+The idea is to avoid access to app/webroot/uploaded_files folder, where the attached files
+of documents are saved. And also to redirect some urls.
