@@ -58,11 +58,15 @@ Change =<HOST>=, =<LOGIN>=, =<PASSWORD>= and =<DBNAME>= (database name) to the c
 
    =mysql -u <LOGIN> -p <PASSWORD> <DBNAME> < repositorium.sql=
 
-2) Now you have 2 users: anonymous and admin. The *admin* user has the following atributes
-    - Login: admin@example.com
-    - Password: password
+2) Now you have 3 users: anonymous, normal user and admin. The *admin* user has the following attributes
+    - Login: super@admin.com
+    - Password: superadmin
+   Normal user has the following attributes:
+    - Login: user@example.com
+    - Password: useruser
 
-3) Then add a criteria, and then some documents or users.
+3) Then create a repository, create a new criteria or category, and then add some documents (or users if you are admin).
+   You can also manage your documents and criterias where you are expert.
 
 ** Security
 
